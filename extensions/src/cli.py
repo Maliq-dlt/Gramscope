@@ -690,8 +690,16 @@ def main(argv=None):
     info.add_argument("--model", type=Path, required=True)
     listing = commands.add_parser("list", help="List validated checkpoint metadata as JSONL")
     listing.add_argument("--dir", type=Path, required=True)
+    interactive = commands.add_parser(
+        "repl", help="Read-only interactive score/top-k/checkpoint demo"
+    )
+    interactive.add_argument("--model", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == "repl":
+            from extensions.src.repl import repl
+
+            return repl(args.model)
         if args.command == "train":
             config = read_config(args.config)
             set_seed(config["seed"])
