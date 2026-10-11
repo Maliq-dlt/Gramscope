@@ -6,7 +6,7 @@
 - [x] P4 Test/lint/type/build, review, preservasi, CSV/JSON dan dokumentasi hasil.
 - [ ] Gate lapangan: label independen lokasi target untuk helm dipakai/tidak dipakai, track dan insiden. Referensi aerial tidak menutup gate ini.
 
-Hasil P1–P4: [laporan](../extensions/reports/PRIORITY_TRACKING_20261011.md), [CSV/JSON](../extensions/results/continuous_tracking_v1/README.md). Test generalisasi gagal; kandidat offline tidak dipasang ke studio. Publikasi/CI dicatat setelah run selesai.
+Hasil P1–P4: [laporan](../extensions/reports/PRIORITY_TRACKING_20261011.md), [CSV/JSON](../extensions/results/continuous_tracking_v1/README.md). Test generalisasi gagal; kandidat offline tidak dipasang ke studio. [PR #8](https://github.com/Maliq-dlt/Gramscope/pull/8) merged ke main; [CI PR](https://github.com/Maliq-dlt/Gramscope/actions/runs/38153284652) academic/studio/container success. Bukti publikasi ada di laporan.
 
 ## Siklus kualitas data dan akurasi (selesai)
 

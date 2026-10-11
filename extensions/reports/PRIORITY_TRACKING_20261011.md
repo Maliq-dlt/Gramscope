@@ -56,3 +56,10 @@ uv sync --project industrial_ai --frozen
 CLI dan sumber eksperimen dijalankan dari checkout repository; belum adapter CVAT→evaluator SDD maupun integrasi ke model studio. Data berikutnya yang bernilai adalah review lokasi CCTV sebenarnya, terutama objek jauh/gelap/teroklusi dan status helm dipakai. Mengganti model/TensorRT tidak otomatis menutup kegagalan ini. N-gram tetap untuk urutan simbol terverifikasi; pipeline visual yang salah belum mendukung klaim deteksi insiden.
 
 Verifikasi lokal:187tes akademik,26suite backend plus PPE self-check dan satu extra training smoke CPU,10suiteUI,typecheck/build/audit serta package source equality lulus. Whole-folder formatter menemukan masalah lama pada tests/e2e.py milik pengguna;77file lainnya lulus dan file pengguna tetap identik. Package check awal membaca build lama gagal, lalu rebuild final source equality lulus. Audit akhir2.987berkas: hanya indeks hasil diperbarui sengaja dengan backup yang hash-nya cocok; tidak ada berkas hilang dan15hashcore cocok. Detail command/status berada di verification_local.json. Tidak ada pelatihan kandidat baru untuk deployment. Review akhir menutup prasyarat clone bersih (manifest SDD historis, bobot terverifikasi, gate environment) dan batas agregat kolektor200MBvideo/100MBaux. Snapshot kolektor hasil tetap historis; penguatan kode setelah akuisisi tidak mengubah evaluasi test.
+
+
+## Publikasi
+
+[PR #8](https://github.com/Maliq-dlt/Gramscope/pull/8) merged ke main sebagai `4cdf53f0190a1084857c14764fc970cdbd0ebf82`. Tree merge sama dengan head `45d9f886b0174eb8959dad7f944d8e30f172184c` yang diuji. [CI PR](https://github.com/Maliq-dlt/Gramscope/actions/runs/38153284652): academic, studio dan container seluruhnya success. Ruff/format dari checkout bersih serta kedua runnable check baru lulus tanpa data/model lokal. Ini validasi fungsi/packaging; bukan replay inferensi protokol Windows/CUDA.
+
+Perubahan pengguna `industrial_ai/tests/e2e.py` dan delapan konsep brand tetap lokal dan tidak dipublikasikan. Footage, bobot, database dan prediksi individual juga tetap lokal. Data21berkas yang terikat manifest serta hasil akademik historis dipertahankan.
