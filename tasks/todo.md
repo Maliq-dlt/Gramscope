@@ -1,5 +1,7 @@
 ## Checklist pembenahan kritik akademik — 11 Oktober 2026
 
+Publikasi 12 Oktober 2026: [PR #9](https://github.com/Maliq-dlt/Gramscope/pull/9) digabung ke `main`; [CI commit bukti](https://github.com/Maliq-dlt/Gramscope/actions/runs/38158282879) lulus untuk academic, studio dan container. Dataset/bobot/raw media tetap lokal; C1b masih membutuhkan label independen lokasi target.
+
 - [x] A1 KenLM resmi berhasil dibangun; validasi eksternal dan perbedaan estimator terdokumentasi.
 - [x] A2 Korpus penuh/sampel full-article, provenance dan duplicate-aware audit siap.
 - [x] A3 Protokol dev-only/one-SE dan probe split dikunci sebelum fitting; data hasil baru tersedia.

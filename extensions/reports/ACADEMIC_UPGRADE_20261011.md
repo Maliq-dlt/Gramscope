@@ -44,6 +44,8 @@ Verifikasi lokal final: **199 tes akademik**, Ruff lint/format 93 file, Ty serta
 
 [Audit preservasi](../results/academic_upgrade_v2/preservation.json): 39.874 berkas snapshot identik, tujuh dokumen diperbarui dengan cadangan asli, tidak ada berkas hilang. Snapshot tidak atomik pada empat dokumen checklist; cadangannya cocok dengan commit baseline setelah normalisasi akhir baris. Core dan perubahan pengguna terpisah tetap dipertahankan. [Provenance kode](../results/academic_upgrade_v2/code_provenance.json) memetakan hash byte eksekusi Windows CRLF dan blob Git LF: isi cocok, hash mentah tidak selalu sama. Protokol/historis tidak ditulis ulang.
 
+Publikasi 12 Oktober 2026: [PR #9](https://github.com/Maliq-dlt/Gramscope/pull/9) digabung ke `main`; [CI commit bukti](https://github.com/Maliq-dlt/Gramscope/actions/runs/38158282879) lulus untuk academic, studio dan container. Dataset/bobot/raw media tetap lokal; C1b masih membutuhkan label independen lokasi target.
+
 ## CCTV: batas yang tetap harus dipenuhi
 
 Studi sintetis/MEVA historis serta kegagalan fragmentasi tidak ditulis ulang menjadi hasil positif. Ground-view MOT memberi diagnosis tracking yang lebih sesuai skala, tetapi bukan label helm-dipakai/tidak-dipakai di lokasi target. Recall tanpa helm 15% historis dan ketiadaan person-head association tetap kekurangan nyata. Fine-tuning crop head baru memerlukan review independen worn/not_worn/unknown; head generic SH17 tidak boleh otomatis menjadi tanpa helm. CVAT importer reviewed sudah tersedia. Tidak mengarang precision, false alerts/hour atau delay dari data yang tidak punya incident labels.
