@@ -20,7 +20,7 @@ Simpan koreksi mengubah hasil review dan revision; tidak mengubah weights. Antre
 
 Unit split = sumber rekaman asli, bukan job/segmen. Source hash dan source_group tetap satu partition. Tracking: per-frame class/box IoU >=0.5 plus ID association review. Helm: worn/not_worn/unknown hanya kepala terlihat; laporkan unknown coverage terpisah. Novelty label diberikan reviewer independen terhadap skor, dengan rubrik pola urutan jarang; bukan label bahaya. Selection minimum dev token-weighted CE; threshold dev quantile95, strict score > threshold. Test receipt immutable, tidak memilih model dari test.
 
-Dataset lokal public CC BY-SA 3.0: dua versi scaffolding merupakan satu sumber; traffic sumber kedua (original lokal belum tersedia, derivatives tersedia). Tidak cukup untuk tiga partition independen berlabel. Tidak ada precision/recall kualitas publik atau false alerts/hour sampai label dan exposure kamera tersedia. Controlled tests membuktikan fungsi, bukan akurasi pabrik. Full-session offline tidak membuktikan latensi deteksi live.
+Dataset lokal public CC BY-SA 3.0: dua versi scaffolding merupakan satu sumber; traffic sumber kedua (original dan derivatives lokal tersedia, hash sidecar diperiksa 11 Oktober 2026). Tidak cukup untuk tiga partition independen berlabel. Tidak ada precision/recall kualitas publik atau false alerts/hour sampai label dan exposure kamera tersedia. Controlled tests membuktikan fungsi, bukan akurasi pabrik. Full-session offline tidak membuktikan latensi deteksi live.
 
 
 ## Review posisi, interval dan revisi
@@ -32,3 +32,7 @@ Preview versi 2 memakai crossing kandidat dari kotak koreksi yang tersimpan. Tra
 Menarik satu anggota bundle crossing/helm menarik seluruh observasi track/revisi pada waktu yang sama, dengan alasan dan riwayat tetap tersimpan. Penambahan event pada rekaman yang sudah dipakai run juga membuat run stale. Run baru memerlukan ID baru.
 
 Source group menghubungkan hash upload asli, turunan/reanalisis, dan URL sumber yang dicatat pipeline. Versi encoding berbeda dari sumber beratribusi yang sama tetap satu split. Group deklaratif tidak membuktikan independensi rekaman tanpa audit dataset; metadata draft tidak disahkan otomatis.
+
+## Validasi tambahan 11 Oktober 2026
+
+Detector training kini memakai transitive source grouping byte asli atau URL atribusi, termasuk encoding dan reanalysis; dedup pada group+posisi asli. Signature v2 mencegah memakai receipt kandidat lama setelah kebijakan split berubah. Draft/approval tetap terpisah. Protokol benchmark baru reports/validation_protocol_20261011.json melaporkan image reference berlabel publik; data tracking SDD40,41menit berasal dari dua scene aerial campus, bukan lokasi pabrik. Source adapter runtime sebelumnya tetap bersemantik historis: eksperimen A3 duration bins belum diaktifkan otomatis pada studio. Source-level conformal study A2/A3 mempunyai kalibrasi normal terpisah; tidak mengganti threshold run novelty lama.

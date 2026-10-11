@@ -1,0 +1,313 @@
+{
+  "clips": [
+    "coupa/video0",
+    "coupa/video1",
+    "coupa/video2",
+    "coupa/video3",
+    "hyang/video0",
+    "hyang/video1"
+  ],
+  "dataset": "data/public/sdd-reference-20261011",
+  "dataset_rights": {
+    "kaggle": "https://www.kaggle.com/datasets/aryashah2k/stanford-drone-dataset",
+    "license": "CC-BY-NC-SA-3.0",
+    "license_url": "https://creativecommons.org/licenses/by-nc-sa/3.0/",
+    "mirror_discrepancy": "Kaggle mirror CC0 metadata does not override original Stanford NonCommercial ShareAlike rights.",
+    "original": "https://cvgl.stanford.edu/projects/uav_data/",
+    "reference": "Robicquet et al. Learning Social Etiquette: Human Trajectory Understanding in Crowded Scenes, ECCV 2016.",
+    "version": 1
+  },
+  "decode": "OpenCV sequential VideoCapture.read; no seeks; frame0-based raw indices; exact decoded frame count, FPS and canvas checked per clip.",
+  "device": "runtime.select_device(auto) prefers RTX4060 with >=0.5GiB free VRAM, CPU fallback. Record chosen device and reason. No retry for another device after inference begins.",
+  "exposure_definition": "Full video timeline covered at 1 in 6 frames, sequential decode; NOT continuous monitoring exposure or false-alert denominator.",
+  "frozen_utc": "2026-10-11T12:16:10.364033+00:00",
+  "ground_truth": {
+    "class": "Pedestrian",
+    "coordinates": "Scale reference-image xyxy by per-clip x/y ratios, then clamp to video canvas.",
+    "fully_outside": "Active positive-source-area GT whose clamped area is zero is excluded and counted as gt_fully_outside_excluded.",
+    "include_generated": true,
+    "include_occluded": true,
+    "lost": 0,
+    "other_class_predictions": "Person predictions overlapping other SDD classes count as FP; no ignored regions.",
+    "validation": "Validate all active Pedestrian source rows (sampled and nonsampled) before run claim; positive source area, finite coordinates; duplicate per-frame IDs rejected on sampled GT."
+  },
+  "gt_preflight": [
+    {
+      "clip": "coupa/video0",
+      "coordinate_scale": [
+        0.9878787878787879,
+        0.9881061299176578
+      ],
+      "effective_fps": 4.995,
+      "fps": 29.97,
+      "gt_counts": {
+        "gt_clamped": 0,
+        "gt_detections": 13908,
+        "gt_generated": 13664,
+        "gt_occluded": 563,
+        "lost_rows_excluded": 6658,
+        "other_class_rows_excluded": 4961
+      },
+      "raw_frames": 11966,
+      "reference_dimensions": [
+        1980,
+        1093
+      ],
+      "sampled_frames": 1995,
+      "timeline_seconds": 399.26593259926597,
+      "video_dimensions": [
+        1956,
+        1080
+      ]
+    },
+    {
+      "clip": "coupa/video1",
+      "coordinate_scale": [
+        0.9878787878787879,
+        0.9881061299176578
+      ],
+      "effective_fps": 4.995,
+      "fps": 29.97,
+      "gt_counts": {
+        "gt_clamped": 0,
+        "gt_detections": 10177,
+        "gt_generated": 9852,
+        "gt_occluded": 556,
+        "lost_rows_excluded": 7656,
+        "other_class_rows_excluded": 1750
+      },
+      "raw_frames": 11966,
+      "reference_dimensions": [
+        1980,
+        1093
+      ],
+      "sampled_frames": 1995,
+      "timeline_seconds": 399.26593259926597,
+      "video_dimensions": [
+        1956,
+        1080
+      ]
+    },
+    {
+      "clip": "coupa/video2",
+      "coordinate_scale": [
+        0.9878787878787879,
+        0.9881061299176578
+      ],
+      "effective_fps": 4.995,
+      "fps": 29.97,
+      "gt_counts": {
+        "gt_clamped": 0,
+        "gt_detections": 9588,
+        "gt_generated": 9361,
+        "gt_occluded": 513,
+        "lost_rows_excluded": 8306,
+        "other_class_rows_excluded": 1576
+      },
+      "raw_frames": 11966,
+      "reference_dimensions": [
+        1980,
+        1093
+      ],
+      "sampled_frames": 1995,
+      "timeline_seconds": 399.26593259926597,
+      "video_dimensions": [
+        1956,
+        1080
+      ]
+    },
+    {
+      "clip": "coupa/video3",
+      "coordinate_scale": [
+        0.9878787878787879,
+        0.9881061299176578
+      ],
+      "effective_fps": 4.995,
+      "fps": 29.97,
+      "gt_counts": {
+        "gt_clamped": 1,
+        "gt_detections": 26588,
+        "gt_generated": 26151,
+        "gt_occluded": 487,
+        "lost_rows_excluded": 7720,
+        "other_class_rows_excluded": 1742
+      },
+      "raw_frames": 11966,
+      "reference_dimensions": [
+        1980,
+        1093
+      ],
+      "sampled_frames": 1995,
+      "timeline_seconds": 399.26593259926597,
+      "video_dimensions": [
+        1956,
+        1080
+      ]
+    },
+    {
+      "clip": "hyang/video0",
+      "coordinate_scale": [
+        0.5608247422680412,
+        0.561038961038961
+      ],
+      "effective_fps": 4.995,
+      "fps": 29.97,
+      "gt_counts": {
+        "gt_clamped": 0,
+        "gt_detections": 27042,
+        "gt_generated": 26194,
+        "gt_occluded": 148,
+        "lost_rows_excluded": 22495,
+        "other_class_rows_excluded": 12914
+      },
+      "raw_frames": 11368,
+      "reference_dimensions": [
+        1455,
+        1925
+      ],
+      "sampled_frames": 1895,
+      "timeline_seconds": 379.31264597931266,
+      "video_dimensions": [
+        816,
+        1080
+      ]
+    },
+    {
+      "clip": "hyang/video1",
+      "coordinate_scale": [
+        0.5397923875432526,
+        0.5394605394605395
+      ],
+      "effective_fps": 4.995,
+      "fps": 29.97,
+      "gt_counts": {
+        "gt_clamped": 1,
+        "gt_detections": 18440,
+        "gt_generated": 18083,
+        "gt_occluded": 525,
+        "lost_rows_excluded": 8234,
+        "other_class_rows_excluded": 4544
+      },
+      "raw_frames": 13438,
+      "reference_dimensions": [
+        1445,
+        2002
+      ],
+      "sampled_frames": 2240,
+      "timeline_seconds": 448.38171504838175,
+      "video_dimensions": [
+        780,
+        1080
+      ]
+    }
+  ],
+  "inference_kwargs": {
+    "agnostic_nms": false,
+    "augment": false,
+    "batch": 1,
+    "classes": [
+      0
+    ],
+    "compile": false,
+    "conf": 0.35,
+    "deterministic": true,
+    "dnn": false,
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300,
+    "nms": null,
+    "persist": true,
+    "quantize": null,
+    "rect": true,
+    "save": false,
+    "seed": 0,
+    "show": false,
+    "stream": false,
+    "tracker": "bytetrack.yaml",
+    "verbose": false
+  },
+  "limitations": [
+    "Six videos from only two aerial campus source scenes (coupa and hyang); no factory/customer CCTV domain validation.",
+    "Sampled 4.995Hz timeline is not uninterrupted monitoring or false alerts per hour evidence.",
+    "Pedestrian tracking only; no helmets, hazard intervals, incident labels, delay labels or personal identity ground truth.",
+    "Generated/interpolated and occluded Pedestrian GT retained as declared; compressed-video/reference coordinate scaling applies.",
+    "YOLO26n weights are used as-is, with no adaptation on evaluation clips; possible pretraining overlap with public SDD is unknown.",
+    "Fixed parameters and six-clip snapshot selected before any tracking inference; results are a public reference, not operational readiness.",
+    "TrackEval maintained PyPI fork 1.3.0 is declared; official Identity/CLEAR metric family implementation, no HOTA claimed.",
+    "ByteTrack buffer30 spans about6s at sampled cadence and differs from30Hz continuous processing."
+  ],
+  "manifest_sha256": "ea559f511deb459fa2cfec557be44ea96d534b981cfe4a5abcedf8f5fbb23a15",
+  "metrics": {
+    "aggregation": "Native combine_sequences sums counts then recomputes ratios; never average clip IDF1.",
+    "family": "TrackEval native Identity and CLEAR only; no HOTA",
+    "input": "All raw pairwise IoU values; no pre-Hungarian filtering. Map identities to contiguous sequence-local IDs.",
+    "iou_threshold": 0.5
+  },
+  "native": {
+    "sources": {
+      "byte_tracker.py": "7efb1474decb1a244b4f94cd5bdf363288f6994c965d4130a2ce67164cb36590",
+      "bytetrack.yaml": "395701d947a749179dee3e327b1181b730c4ca98e7cac5a2ab05280aae573b8b",
+      "clear.py": "35789c3cfc39825fb0905ee51b0dd0fb8f4b66fca9fdfc7fc875faac1af56c40",
+      "default.yaml": "1299e8ad7adaa983f45e2f12835bf4f2f4cc149c5178adf524a8478a19a53477",
+      "identity.py": "6e0d4832aa021a326a6bb51b4c403e50bd4b409f59c18271a6c2bc9bd0dee47c",
+      "model.py": "19c8dbb3e6b982fd8a17a087dfc3c6abcbad1d153c180a6d9a90df5b4a665ad8",
+      "predictor.py": "94464add6678fbfdd41fc9c90959f3e738fc5f6e5385c1c56523907e642d86cd",
+      "track.py": "b502cb5e7db83549d8089925294cf989ea07bb6192b0f08ae1953fd80e784e28"
+    },
+    "versions": {
+      "numpy": "2.4.6",
+      "opencv-python": "5.0.0.93",
+      "scipy": "1.17.1",
+      "torch": "2.14.1+cu130",
+      "trackeval": "1.3.0",
+      "ultralytics": "8.4.174"
+    }
+  },
+  "person_class": 0,
+  "phase": "C3-tracking-reference",
+  "precision": "Native Ultralytics 8.4.174 quantize=None (FP32); half parameter is deprecated and not supplied.",
+  "predictions": {
+    "coordinates": "Persist raw pixel xyxy then clamp to canvas; count clamped and zero-area boxes.",
+    "missing_id": "Persist track_id=null and assign unique temporary one-frame identity only inside metric adapter; count untracked detections.",
+    "raw_receipt": "raw_predictions.jsonl: native boxes.data each sampled frame before adapter validation. Nonfinite raw floats stringify for failure diagnostics. Valid canonical prediction receipt disallows nonfinite values.",
+    "validation": "Finite confidence0..1 and coordinates, ordered xyxy, nonnegative integral persistent IDs, duplicate per-frame persistent IDs rejected.",
+    "zero_area": "Native/clipped zero-area ordered predictions retained with IoU 0 and counted as false positives."
+  },
+  "run_id": "sdd-tracking-20261011",
+  "run_policy": "One exclusive .tmp/tracking_runs/sdd-tracking-20261011.json claim before device selection/model inference. Fresh output only; no resume or re-inference after interrupted/failed run. Metrics can recompute from complete receipts.",
+  "sample_offset": 0,
+  "sampled_frames": 12115,
+  "sampled_timeline_minutes": 40.41263488333333,
+  "sampled_timeline_seconds": 2424.758093,
+  "source_hashes": {
+    "models/yolo26n.pt": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+    "prepare_tracking_reference.py": "03465ad880205f5ecc9614e7a6dac7b0bd7bf20edaff7f22ed8f05180bebfacd",
+    "runtime.py": "b2b5a4956384e299f854f290d56e81fe9dc99102c8aefa36d31489573c680558",
+    "tests/tracking_benchmark_check.py": "c3598a0f8aca948760540d0576b5589baedf9f20585617a8f2cad676b6b98928",
+    "tracking_benchmark.py": "4a12a5ea7d49a18f02ddf653da01255cff52e9f41027dd237b60d4c03a52401d",
+    "uv.lock": "744b69b16800680deace86f33f427bd1ce81dbd27c3ae181b6caeb82a521b475",
+    "vision.py": "82338cfb85b9b4e7ac4fa57464e5554200512bbc884d63e53ef285f1cddff147"
+  },
+  "stride": 6,
+  "tracker_parameters": {
+    "fuse_score": true,
+    "match_thresh": 0.8,
+    "new_track_thresh": 0.25,
+    "track_buffer": 30,
+    "track_high_thresh": 0.25,
+    "track_low_thresh": 0.1,
+    "tracker_type": "bytetrack"
+  },
+  "tracker_reset": "Fresh YOLO object per clip; persist True within clip; IDs local to clip.",
+  "tracker_time_ceiling": "ByteTrack max_frames_lost equals track_buffer 30 sampled updates; at 4.995 Hz this is approximately 6.006 seconds, not 30Hz behavior. No interval-aware tracker retuning.",
+  "trackeval_provenance": {
+    "compatibility": "Maintained fork uses native NumPy2-compatible code; no runtime NumPy aliases, monkey patch or vendoring.",
+    "license": "MIT",
+    "maintained_fork": "https://github.com/kovalp/TrackEval",
+    "original_reference": "https://github.com/JonathonLuiten/TrackEval",
+    "package": "trackeval==1.3.0",
+    "wheel_sha256": "bf5ed90f7b5a3eafc6dcfce36fb900259a587e8f3b2438ef23d72e7d4ab94efb"
+  },
+  "version": 1,
+  "weights": "models/yolo26n.pt"
+}

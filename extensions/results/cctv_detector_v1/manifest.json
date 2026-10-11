@@ -1,0 +1,9 @@
+{
+  "files": {
+    "metrics.csv": "41193915bcc4e542efb6a5ebd465e2f35b6cc906a048c00ff02a1eb1c8435783",
+    "provenance.json": "768f568374ce00e4cfd3a22033cb4df717975efca14c5577b52051cf2344b895",
+    "summary.json": "436368138b3291f7e0b2ed39f7bc65e16f5910f8bf1f9595ee7d9528f92d2cb2"
+  },
+  "schema": 1,
+  "status": "verified numeric export"
+}

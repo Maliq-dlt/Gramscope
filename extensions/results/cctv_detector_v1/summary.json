@@ -1,0 +1,139 @@
+{
+  "date": "2026-10-11",
+  "schema": 1,
+  "splits": {
+    "test": {
+      "degenerate_predictions": {
+        "Hardhat": {
+          "all_confidences": 2,
+          "operating_confidence": 0
+        },
+        "NO-Hardhat": {
+          "all_confidences": 0,
+          "operating_confidence": 0
+        },
+        "person": {
+          "all_confidences": 0,
+          "operating_confidence": 0
+        }
+      },
+      "image_count": 141,
+      "map50": 0.519108084256101,
+      "map50_95": 0.20306596309757605,
+      "native_max_f1_ignored": true,
+      "operating_iou": 0.5,
+      "per_class": [
+        {
+          "ap50": 0.7751138870634495,
+          "ap50_95": 0.32626173579433476,
+          "class": "person",
+          "confidence": 0.35,
+          "fn": 48,
+          "fp": 67,
+          "precision": 0.7372549019607844,
+          "recall": 0.7966101694915254,
+          "support": 236,
+          "tp": 188
+        },
+        {
+          "ap50": 0.6827323267109278,
+          "ap50_95": 0.26531570840920404,
+          "class": "Hardhat",
+          "confidence": 0.45,
+          "fn": 81,
+          "fp": 50,
+          "precision": 0.6894409937888198,
+          "recall": 0.578125,
+          "support": 192,
+          "tp": 111
+        },
+        {
+          "ap50": 0.09947803899392588,
+          "ap50_95": 0.01762044508918929,
+          "class": "NO-Hardhat",
+          "confidence": 0.45,
+          "fn": 34,
+          "fp": 22,
+          "precision": 0.21428571428571427,
+          "recall": 0.15,
+          "support": 40,
+          "tp": 6
+        }
+      ],
+      "timing": {
+        "image_wall_ms_p50": 24.63930000521941,
+        "image_wall_ms_p95": 64.78549999883398,
+        "model_load_seconds": 0.050461799997719936,
+        "timing_notice": "cold first inference/warmup included; per-image wall includes both heads and decode; interrupted sessions/diagnostic/cache reuse, not continuous throughput",
+        "total_seconds": 4.88844429999881
+      }
+    },
+    "val": {
+      "degenerate_predictions": {
+        "Hardhat": {
+          "all_confidences": 0,
+          "operating_confidence": 0
+        },
+        "NO-Hardhat": {
+          "all_confidences": 0,
+          "operating_confidence": 0
+        },
+        "person": {
+          "all_confidences": 0,
+          "operating_confidence": 0
+        }
+      },
+      "image_count": 143,
+      "map50": 0.5110877909065008,
+      "map50_95": 0.19642501450966268,
+      "native_max_f1_ignored": true,
+      "operating_iou": 0.5,
+      "per_class": [
+        {
+          "ap50": 0.8231047146171047,
+          "ap50_95": 0.3240467738582514,
+          "class": "person",
+          "confidence": 0.35,
+          "fn": 42,
+          "fp": 66,
+          "precision": 0.7490494296577946,
+          "recall": 0.8242677824267782,
+          "support": 239,
+          "tp": 197
+        },
+        {
+          "ap50": 0.6273750558191342,
+          "ap50_95": 0.24983794364643086,
+          "class": "Hardhat",
+          "confidence": 0.45,
+          "fn": 91,
+          "fp": 53,
+          "precision": 0.6748466257668712,
+          "recall": 0.5472636815920398,
+          "support": 201,
+          "tp": 110
+        },
+        {
+          "ap50": 0.08278360228326344,
+          "ap50_95": 0.015390326024305739,
+          "class": "NO-Hardhat",
+          "confidence": 0.45,
+          "fn": 39,
+          "fp": 22,
+          "precision": 0.21428571428571427,
+          "recall": 0.13333333333333333,
+          "support": 45,
+          "tp": 6
+        }
+      ],
+      "timing": {
+        "image_wall_ms_p50": 19.6219999997993,
+        "image_wall_ms_p95": 36.14141000143719,
+        "model_load_seconds": 0.08598350000102073,
+        "timing_notice": "cold first inference/warmup included; per-image wall includes both heads and decode",
+        "total_seconds": 6.792100600003323
+      }
+    }
+  },
+  "unit": "image"
+}

@@ -1,0 +1,147 @@
+{
+  "dataset": {
+    "author": "Mrunmayee Dalvi; Niyati Singh; Sahil Bhingarde; Ketaki Chalke",
+    "class_mapping": {
+      "0 helmet": "1 Hardhat",
+      "6 Person": "0 person",
+      "7 no_helmet": "2 NO-Hardhat"
+    },
+    "data_yaml_sha256": "bfbc2471c75a82beaca2c255b7814d7eaf3087f191f1c7e43c8d8e90a27e961a",
+    "documentation_url": "https://docs.ultralytics.com/datasets/detect/construction-ppe/",
+    "evaluated_splits": [
+      "val",
+      "test"
+    ],
+    "exact_cross_split_duplicates": 0,
+    "license": "AGPL-3.0 as listed by Ultralytics",
+    "license_sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+    "license_url": "https://www.gnu.org/licenses/agpl-3.0.html",
+    "name": "Construction-PPE",
+    "orphan_train_labels_preserved": 10,
+    "other_label_classes_ignored": true,
+    "publisher": "Ultralytics",
+    "reference": "supplied YOLO labels; no_helmet box extent varies; not operational PPE truth",
+    "source_archive_sha256": "bef8dcb599aa4e9d9f5e602cb6fa7143d3c84d7f6a0ff40463d7f2a4c2632ccc",
+    "source_file_count": 2845,
+    "source_inventory_sha256": "45997b31d661ccaf48ec340cf2724343d1a234e61a1722b667644f9fee10ce31",
+    "source_metadata_sha256": "8d3e751a87a5e6fb5a89b8143ed4a3138535e1c5b82e46fc97400614997e73cb",
+    "source_url": "https://github.com/ultralytics/assets/releases/download/v0.0.0/construction-ppe.zip",
+    "split_image_counts": {
+      "test": 141,
+      "train": 1132,
+      "val": 143
+    }
+  },
+  "date": "2026-10-11",
+  "environment": {
+    "device": {
+      "compiled_cuda": "13.0",
+      "cuda_available": true,
+      "fallback": false,
+      "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "requested": "auto",
+      "selected": "cuda:0"
+    },
+    "native_code": {
+      "metrics.py": "f9b4061aa893ee502c986585ff0a6a4e6175b04f7b0d0c6cb5f2859d6477e25b",
+      "validator.py": "086a61141f91ea8e8750805627c9f636152159ae1ac88848d1583f858542a78a"
+    },
+    "versions": {
+      "Pillow": "12.3.0",
+      "numpy": "2.4.6",
+      "torch": "2.14.1+cu130",
+      "torchvision": "0.29.1+cu130",
+      "ultralytics": "8.4.174"
+    }
+  },
+  "evaluator_source_sha256": {
+    "original": "7f25d0d9ad08391823345964877e0add9f1bbe015e425d08d823390334c841a0",
+    "recovery": "d79f109fd154edf73bdf11af3eb55ebed271d607472feed3b3c302b3840a7697"
+  },
+  "frozen_protocol": {
+    "agnostic_nms": false,
+    "inference": {
+      "augment": false,
+      "batch": 1,
+      "confidence_min": 0.001,
+      "device": "auto CUDA0 if available",
+      "half": false,
+      "imgsz": 640,
+      "iou_nms": 0.7,
+      "max_det": 300,
+      "seed": 42
+    },
+    "matching": "class-aware greedy IoU>=.5 operatingpoint; native AP50:.95",
+    "operating_confidence": {
+      "Hardhat": 0.45,
+      "NO-Hardhat": 0.45,
+      "person": 0.35
+    },
+    "rect": true,
+    "selection": "no model/confidence tuning; studio defaults; val/test once each",
+    "sha256": "84b2768453ebaa8ef21c642dfabded907dbf9ca2ff956a2c80ca45feaaa36753",
+    "unconditional_heads": true
+  },
+  "limits": [
+    "pretraining overlap unknown",
+    "nearduplicate/site leakage unassessed;exact crosssplit SHA duplicates0",
+    "train10orphanlabels preserved",
+    "AP optimalF1 P/R ignored",
+    "person-gated helmet association separate",
+    "val143/test141images",
+    "Supplied labels vary in no_helmet box extent and include non-construction scenes; this is not operational PPE truth.",
+    "No site/identity ground truth, incident exposure/onset labels, or independent camera trial was evaluated.",
+    "Explicit redistribution license for helmet model remains unresolved; binaries and source images are not exported.",
+    "NO-Hardhat test recall is 0.15 at frozen operating confidence; result does not establish reliable PPE alarms.",
+    "Test recovery total_seconds covers the continuation session, not end-to-end time for all 141 observations."
+  ],
+  "model_sources_sha256": {
+    "helmet.pt": "05ed3a517485292d42d6eb6c9be3987ea51cd162e04807d2741eadcac8a19e6c",
+    "yolo26n.pt": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef"
+  },
+  "receipts": {
+    "test": {
+      "evaluator_sha256": "d79f109fd154edf73bdf11af3eb55ebed271d607472feed3b3c302b3840a7697",
+      "manifest_sha256": "fd3b35f07eae0597c8fabaf680e739c31e0798452d117b540a472197039a4d82",
+      "metrics_sha256": "834526128b19c9636534f1a08eaceb41fb6b53c40e5f8d912bec17acab80d61a",
+      "snapshot_sha256": "225ff543211ec5ddfc79a04d3cc3f9dd8dda2d4231a82e19dd4eb815b5f244a1",
+      "source_inventory_sha256": "74e6fb18bc47ba8f27f2d1298b1dc0fc2fc7382d47b7bf769389217496a383f6",
+      "summary_sha256": "fdaf8e9bd607f817f9a807d2931b606b77c9f1df914b05314c00aebd2239afef"
+    },
+    "val": {
+      "evaluator_sha256": "7f25d0d9ad08391823345964877e0add9f1bbe015e425d08d823390334c841a0",
+      "manifest_sha256": "62a640e5e152b581c3de1f1fe7208c6249a7fc6738066a1bcf924277c5b26c99",
+      "metrics_sha256": "b173042ac83e9e72e62180ab1ed50061297e8e84f7b008bef27f37c3114584fe",
+      "snapshot_sha256": "abdf49bcaba9cf865824979c4520d22da76f0c71f59ddf4be31f5eab04e02f5b",
+      "source_inventory_sha256": "9cb538acd5f56ff0869f1cf20b4072d947ab068afb983d87a6ea862596c510eb",
+      "summary_sha256": "622d4832285915afd7a75a819031eb4b4177260ceb2709d83e8c84693e4ce66c"
+    }
+  },
+  "recovery": {
+    "all_reference_images_accounted": 141,
+    "correction": "native zero-area predictions retained as false positives; targets positive",
+    "deviation": "original failed image output was lost before cache; one isolated diagnostic repeat reused",
+    "diagnosis_manifest_sha256": "10e5c70f6661ac4d8b0aa19596023b42119a522ddf95653f39a062168d1a0855",
+    "diagnostic_device_evidence": "diagnostic command explicitly selected cuda:0; device/name was not independently stored in raw metadata",
+    "isolated_diagnostic_observations_reused": 1,
+    "new_native_head_cache_count": 222,
+    "new_observations_with_both_native_heads_saved": 111,
+    "no_threshold_or_model_tuning": true,
+    "original_cache_and_claims_preserved": true,
+    "original_cached_observations_reused_byte_identically": 29,
+    "original_failed_snapshot_sha256": "f6d9a3dea2acf528ba159c048203ffca83659e7c709eac12c1d9c69da8296bf5",
+    "original_failure_sha256": "1bd49faccd3ff713eadc4ae5989a955a143d785296e90222bd8f521a861aaa56",
+    "original_test_claim_sha256": "a7c45c2fb9e9182ea6f04c751fb1fac031e8c16f61ea38f62d94f2841083ab58",
+    "timing_notice": "diagnostic image wall is sum of head walls; interrupted sessions are not continuous throughput"
+  },
+  "schema": 1,
+  "scope": "public still-image detector reference benchmark; no CCTV tracking/incident/operational PPE claim",
+  "verification": {
+    "cache_manifest_and_source_hashes_verified": true,
+    "cached_native_metric_parity": true,
+    "new_inference_during_export": false,
+    "operating_counts_recomputed_from_cached_predictions": true,
+    "precision_recall_arithmetic_verified": true,
+    "raw_head_to_prediction_parity_verified": true
+  }
+}

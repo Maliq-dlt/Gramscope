@@ -1,0 +1,85 @@
+{
+  "export_files": {
+    "metrics.json": "9e3ec860cbec567fe7090b1d399588fff17ffe2538a62a15f22cc0cc7e8a757f",
+    "protocol.json": "71c7f343cb5536d6b86c57d8af44a060a0469ec00d2ab583f374e475877dd7d1",
+    "summary.md": "8849defea93abe07f6a1438544968a7200a89ce61b5b99209503b460607e31f5"
+  },
+  "native": {
+    "sources": {
+      "byte_tracker.py": "7efb1474decb1a244b4f94cd5bdf363288f6994c965d4130a2ce67164cb36590",
+      "bytetrack.yaml": "395701d947a749179dee3e327b1181b730c4ca98e7cac5a2ab05280aae573b8b",
+      "clear.py": "35789c3cfc39825fb0905ee51b0dd0fb8f4b66fca9fdfc7fc875faac1af56c40",
+      "default.yaml": "1299e8ad7adaa983f45e2f12835bf4f2f4cc149c5178adf524a8478a19a53477",
+      "identity.py": "6e0d4832aa021a326a6bb51b4c403e50bd4b409f59c18271a6c2bc9bd0dee47c",
+      "model.py": "19c8dbb3e6b982fd8a17a087dfc3c6abcbad1d153c180a6d9a90df5b4a665ad8",
+      "predictor.py": "94464add6678fbfdd41fc9c90959f3e738fc5f6e5385c1c56523907e642d86cd",
+      "track.py": "b502cb5e7db83549d8089925294cf989ea07bb6192b0f08ae1953fd80e784e28"
+    },
+    "versions": {
+      "numpy": "2.4.6",
+      "opencv-python": "5.0.0.93",
+      "scipy": "1.17.1",
+      "torch": "2.14.1+cu130",
+      "trackeval": "1.3.0",
+      "ultralytics": "8.4.174"
+    }
+  },
+  "native_denominator_issue": "CLEAR1.3.0 empty-tracker sequence early return omits CLR_Frames; native evidence preserved, sampled companion explicitly derived.",
+  "privacy": "Aggregate evidence only; no bbox, images or per-object track IDs exported.",
+  "run_id": "sdd-tracking-20261011",
+  "source_dataset": {
+    "clip_count": 6,
+    "kaggle_url": "https://www.kaggle.com/datasets/aryashah2k/stanford-drone-dataset",
+    "kaggle_version": 1,
+    "license": "CC-BY-NC-SA-3.0",
+    "manifest_sha256": "ea559f511deb459fa2cfec557be44ea96d534b981cfe4a5abcedf8f5fbb23a15",
+    "original_url": "https://cvgl.stanford.edu/projects/uav_data/",
+    "source_scene_count": 2
+  },
+  "source_receipts": {
+    "device": {
+      "path": "industrial_ai/.tmp/sdd-tracking-20261011/device.json",
+      "sha256": "02d2374e808c55663f06c00cc9cae69a8adc5d501a2d90cc08eed314f73108ac"
+    },
+    "frozen_evaluator": {
+      "path": "industrial_ai/tracking_benchmark.py",
+      "sha256": "4a12a5ea7d49a18f02ddf653da01255cff52e9f41027dd237b60d4c03a52401d"
+    },
+    "frozen_protocol": {
+      "path": "industrial_ai/reports/tracking_protocol_20261011.json",
+      "sha256": "71c7f343cb5536d6b86c57d8af44a060a0469ec00d2ab583f374e475877dd7d1"
+    },
+    "inference_complete": {
+      "path": "industrial_ai/.tmp/sdd-tracking-20261011/inference_complete.json",
+      "sha256": "447a919b58d904fd0deb4bddb54763c2402fc134d8553a3ad53524246bcc9cc0"
+    },
+    "native_metrics": {
+      "path": "industrial_ai/.tmp/sdd-tracking-20261011/metrics.json",
+      "sha256": "c8cb6a5b89ebbfc9ec0b1d85daab4d6389d1700062339b3257ba62d365457505"
+    },
+    "predictions": {
+      "path": "industrial_ai/.tmp/sdd-tracking-20261011/predictions.jsonl",
+      "sha256": "5cf519a2b632b38426d9e7491db4b5feb8c733baa728b90ebfe8d628e6d2f560"
+    },
+    "raw_predictions": {
+      "path": "industrial_ai/.tmp/sdd-tracking-20261011/raw_predictions.jsonl",
+      "sha256": "a2da813daa48b78a5b523b2bf35be3925f8e07cee58b8350c16da69593d70f85"
+    },
+    "receipt": {
+      "path": "industrial_ai/.tmp/sdd-tracking-20261011/receipt.json",
+      "sha256": "baff61956a1ebe69ef09781c0656e881f7cf7c398b5915b7b23c7a726f023493"
+    }
+  },
+  "status": "complete-negative-public-reference",
+  "verification": {
+    "all12115sampledrows_present": true,
+    "frozen_evaluator_sha256": "4a12a5ea7d49a18f02ddf653da01255cff52e9f41027dd237b60d4c03a52401d",
+    "frozen_protocol_sha256": "71c7f343cb5536d6b86c57d8af44a060a0469ec00d2ab583f374e475877dd7d1",
+    "full_dataset_and_source_preflight_passed": true,
+    "metrics_recompute_exact": true,
+    "native_prediction_rows_dropped_by_adapter": 0,
+    "no_reinference": true,
+    "raw_canonical_detection_count_equal": true,
+    "raw_canonical_frame_alignment_exact": true
+  }
+}

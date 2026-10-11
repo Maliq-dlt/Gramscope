@@ -1,0 +1,386 @@
+{
+  "diagnostics": {
+    "adapter_dropped_native_rows": 0,
+    "all_gt_fraction_with_either_edge_below16px": 0.7525509962834419,
+    "canonical_prediction_count": 2,
+    "cause_boundary": "Tiny aerial people and fixed conf0.35/imgsz640 plus native ByteTrack confirmation constrain this reference. Exact contributions cannot be separated because pretracking predictions were not recorded. No tuning/reinference performed.",
+    "gt_size_at640_equivalent": {
+      "coupa/video0": {
+        "box_count": 13908,
+        "fraction_with_either_edge_below16px": 0.7057089444923785,
+        "height_pixels_p10_p50_p90": [
+          10.345814693616376,
+          14.872108622073526,
+          20.69162938723275
+        ],
+        "width_pixels_p10_p50_p90": [
+          12.606060606060607,
+          17.777777777777754,
+          24.88888888888887
+        ]
+      },
+      "coupa/video1": {
+        "box_count": 10177,
+        "fraction_with_either_edge_below16px": 0.5577282106711211,
+        "height_pixels_p10_p50_p90": [
+          10.34581469361638,
+          16.165335458775587,
+          22.631469642285815
+        ],
+        "width_pixels_p10_p50_p90": [
+          13.252525252525253,
+          22.94949494949495,
+          31.030303030303042
+        ]
+      },
+      "coupa/video2": {
+        "box_count": 9588,
+        "fraction_with_either_edge_below16px": 0.5430746766791823,
+        "height_pixels_p10_p50_p90": [
+          10.345814693616408,
+          16.165335458775587,
+          23.60138976981235
+        ],
+        "width_pixels_p10_p50_p90": [
+          14.222222222222232,
+          20.36363636363637,
+          29.09090909090912
+        ]
+      },
+      "coupa/video3": {
+        "box_count": 26588,
+        "fraction_with_either_edge_below16px": 0.6739882653828795,
+        "height_pixels_p10_p50_p90": [
+          10.992428111967401,
+          14.54880191289803,
+          21.33824280558377
+        ],
+        "width_pixels_p10_p50_p90": [
+          13.252525252525253,
+          18.424242424242408,
+          26.505050505050505
+        ]
+      },
+      "hyang/video0": {
+        "box_count": 27042,
+        "fraction_with_either_edge_below16px": 0.8540788403224614,
+        "height_pixels_p10_p50_p90": [
+          14.62857142857141,
+          21.277922077922085,
+          30.587012987012912
+        ],
+        "width_pixels_p10_p50_p90": [
+          7.976174112256591,
+          11.964261168384871,
+          16.949369988545254
+        ]
+      },
+      "hyang/video1": {
+        "box_count": 18440,
+        "fraction_with_either_edge_below16px": 0.9687093275488069,
+        "height_pixels_p10_p50_p90": [
+          13.426573426573398,
+          18.54145854145854,
+          26.533466533466537
+        ],
+        "width_pixels_p10_p50_p90": [
+          6.397539407920029,
+          9.276432141484056,
+          14.394463667820066
+        ]
+      }
+    },
+    "nonempty_prediction_max_iou": [
+      {
+        "clip": "coupa/video1",
+        "maximum_pedestrian_iou": 0.3695829698080279,
+        "prediction_count": 1
+      },
+      {
+        "clip": "coupa/video2",
+        "maximum_pedestrian_iou": 0.314797036271024,
+        "prediction_count": 1
+      }
+    ],
+    "raw_native_prediction_count": 2,
+    "raw_native_sampled_rows": 12115,
+    "raw_receipt_stage": "Ultralytics result.boxes after ByteTrack postprocess; NOT pretracking detector candidates.",
+    "size_derivation": "Clamped GT pixel widths/heights \u00d7640/max(video width,height); letterbox padding does not change object scale."
+  },
+  "native_result": {
+    "combined": {
+      "CLEAR": {
+        "CLR_F1": 0.0,
+        "CLR_FN": 105743,
+        "CLR_FP": 2,
+        "CLR_Frames": 3990,
+        "CLR_Pr": 0.0,
+        "CLR_Re": 0.0,
+        "CLR_TP": 0,
+        "FP_per_frame": 0.0005012531328320802,
+        "Frag": 0,
+        "IDSW": 0,
+        "ML": 552,
+        "MLR": 1.0,
+        "MODA": -1.8913781526909584e-05,
+        "MOTA": -1.8913781526909584e-05,
+        "MOTAL": -1.8913781526909584e-05,
+        "MOTP": 0.0,
+        "MOTP_sum": 0.0,
+        "MT": 0,
+        "MTR": 0.0,
+        "PT": 0,
+        "PTR": 0.0,
+        "sMOTA": -1.8913781526909584e-05
+      },
+      "Identity": {
+        "IDF1": 0.0,
+        "IDFN": 105743,
+        "IDFP": 2,
+        "IDP": 0.0,
+        "IDR": 0.0,
+        "IDTP": 0
+      }
+    },
+    "limitations": [
+      "Six videos from only two aerial campus source scenes (coupa and hyang); no factory/customer CCTV domain validation.",
+      "Sampled 4.995Hz timeline is not uninterrupted monitoring or false alerts per hour evidence.",
+      "Pedestrian tracking only; no helmets, hazard intervals, incident labels, delay labels or personal identity ground truth.",
+      "Generated/interpolated and occluded Pedestrian GT retained as declared; compressed-video/reference coordinate scaling applies.",
+      "YOLO26n weights are used as-is, with no adaptation on evaluation clips; possible pretraining overlap with public SDD is unknown.",
+      "Fixed parameters and six-clip snapshot selected before any tracking inference; results are a public reference, not operational readiness.",
+      "TrackEval maintained PyPI fork 1.3.0 is declared; official Identity/CLEAR metric family implementation, no HOTA claimed.",
+      "ByteTrack buffer30 spans about6s at sampled cadence and differs from30Hz continuous processing."
+    ],
+    "per_clip": {
+      "coupa/video0": {
+        "CLEAR": {
+          "CLR_F1": 0.0,
+          "CLR_FN": 13908,
+          "CLR_FP": 0,
+          "CLR_Frames": 0,
+          "CLR_Pr": 0.0,
+          "CLR_Re": 0.0,
+          "CLR_TP": 0,
+          "FP_per_frame": 0.0,
+          "Frag": 0,
+          "IDSW": 0,
+          "ML": 79,
+          "MLR": 1.0,
+          "MODA": 0.0,
+          "MOTA": 0.0,
+          "MOTAL": 0.0,
+          "MOTP": 0.0,
+          "MOTP_sum": 0.0,
+          "MT": 0,
+          "MTR": 0.0,
+          "PT": 0,
+          "PTR": 0.0,
+          "sMOTA": 0.0
+        },
+        "Identity": {
+          "IDF1": 0.0,
+          "IDFN": 13908,
+          "IDFP": 0,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDTP": 0
+        }
+      },
+      "coupa/video1": {
+        "CLEAR": {
+          "CLR_F1": 0.0,
+          "CLR_FN": 10177,
+          "CLR_FP": 1,
+          "CLR_Frames": 1995,
+          "CLR_Pr": 0.0,
+          "CLR_Re": 0.0,
+          "CLR_TP": 0,
+          "FP_per_frame": 0.0005012531328320802,
+          "Frag": 0,
+          "IDSW": 0,
+          "ML": 54,
+          "MLR": 1.0,
+          "MODA": -9.826078412105728e-05,
+          "MOTA": -9.826078412105728e-05,
+          "MOTAL": -9.826078412105728e-05,
+          "MOTP": 0.0,
+          "MOTP_sum": 0.0,
+          "MT": 0,
+          "MTR": 0.0,
+          "PT": 0,
+          "PTR": 0.0,
+          "sMOTA": -9.826078412105728e-05
+        },
+        "Identity": {
+          "IDF1": 0.0,
+          "IDFN": 10177,
+          "IDFP": 1,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDTP": 0
+        }
+      },
+      "coupa/video2": {
+        "CLEAR": {
+          "CLR_F1": 0.0,
+          "CLR_FN": 9588,
+          "CLR_FP": 1,
+          "CLR_Frames": 1995,
+          "CLR_Pr": 0.0,
+          "CLR_Re": 0.0,
+          "CLR_TP": 0,
+          "FP_per_frame": 0.0005012531328320802,
+          "Frag": 0,
+          "IDSW": 0,
+          "ML": 65,
+          "MLR": 1.0,
+          "MODA": -0.00010429703796412182,
+          "MOTA": -0.00010429703796412182,
+          "MOTAL": -0.00010429703796412182,
+          "MOTP": 0.0,
+          "MOTP_sum": 0.0,
+          "MT": 0,
+          "MTR": 0.0,
+          "PT": 0,
+          "PTR": 0.0,
+          "sMOTA": -0.00010429703796412182
+        },
+        "Identity": {
+          "IDF1": 0.0,
+          "IDFN": 9588,
+          "IDFP": 1,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDTP": 0
+        }
+      },
+      "coupa/video3": {
+        "CLEAR": {
+          "CLR_F1": 0.0,
+          "CLR_FN": 26588,
+          "CLR_FP": 0,
+          "CLR_Frames": 0,
+          "CLR_Pr": 0.0,
+          "CLR_Re": 0.0,
+          "CLR_TP": 0,
+          "FP_per_frame": 0.0,
+          "Frag": 0,
+          "IDSW": 0,
+          "ML": 93,
+          "MLR": 1.0,
+          "MODA": 0.0,
+          "MOTA": 0.0,
+          "MOTAL": 0.0,
+          "MOTP": 0.0,
+          "MOTP_sum": 0.0,
+          "MT": 0,
+          "MTR": 0.0,
+          "PT": 0,
+          "PTR": 0.0,
+          "sMOTA": 0.0
+        },
+        "Identity": {
+          "IDF1": 0.0,
+          "IDFN": 26588,
+          "IDFP": 0,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDTP": 0
+        }
+      },
+      "hyang/video0": {
+        "CLEAR": {
+          "CLR_F1": 0.0,
+          "CLR_FN": 27042,
+          "CLR_FP": 0,
+          "CLR_Frames": 0,
+          "CLR_Pr": 0.0,
+          "CLR_Re": 0.0,
+          "CLR_TP": 0,
+          "FP_per_frame": 0.0,
+          "Frag": 0,
+          "IDSW": 0,
+          "ML": 164,
+          "MLR": 1.0,
+          "MODA": 0.0,
+          "MOTA": 0.0,
+          "MOTAL": 0.0,
+          "MOTP": 0.0,
+          "MOTP_sum": 0.0,
+          "MT": 0,
+          "MTR": 0.0,
+          "PT": 0,
+          "PTR": 0.0,
+          "sMOTA": 0.0
+        },
+        "Identity": {
+          "IDF1": 0.0,
+          "IDFN": 27042,
+          "IDFP": 0,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDTP": 0
+        }
+      },
+      "hyang/video1": {
+        "CLEAR": {
+          "CLR_F1": 0.0,
+          "CLR_FN": 18440,
+          "CLR_FP": 0,
+          "CLR_Frames": 0,
+          "CLR_Pr": 0.0,
+          "CLR_Re": 0.0,
+          "CLR_TP": 0,
+          "FP_per_frame": 0.0,
+          "Frag": 0,
+          "IDSW": 0,
+          "ML": 97,
+          "MLR": 1.0,
+          "MODA": 0.0,
+          "MOTA": 0.0,
+          "MOTAL": 0.0,
+          "MOTP": 0.0,
+          "MOTP_sum": 0.0,
+          "MT": 0,
+          "MTR": 0.0,
+          "PT": 0,
+          "PTR": 0.0,
+          "sMOTA": 0.0
+        },
+        "Identity": {
+          "IDF1": 0.0,
+          "IDFN": 18440,
+          "IDFP": 0,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDTP": 0
+        }
+      }
+    },
+    "predictions_sha256": "5cf519a2b632b38426d9e7491db4b5feb8c733baa728b90ebfe8d628e6d2f560",
+    "protocol_sha256": "71c7f343cb5536d6b86c57d8af44a060a0469ec00d2ab583f374e475877dd7d1",
+    "run_id": "sdd-tracking-20261011",
+    "sampled_frames": 12115,
+    "sampled_timeline_seconds": 2424.758093
+  },
+  "report_scope": "Negative public-reference finding; six clips/two campus scenes, no operational CCTV readiness or confidence interval.",
+  "run_id": "sdd-tracking-20261011",
+  "runtime": {
+    "actual_device": "cuda:0",
+    "device_name": "NVIDIA GeForce RTX4060 Laptop GPU",
+    "elapsed_seconds": 330.2615239000006,
+    "peak_cuda_allocated_bytes": 73475072
+  },
+  "sampled_denominator_companion": {
+    "derivation": "Sum sampled_frames from completed per-clip inference receipts; divide native CLR_FP=2 by all12115 sampled frames.",
+    "identity_clear_counts_unchanged": true,
+    "interpretation": "False-positive TRACK DETECTIONS per sampled frame. Not incident false alerts per hour; no continuous monitoring denominator.",
+    "native_CLR_Frames": 3990,
+    "native_FP_per_frame": 0.0005012531328320802,
+    "reason": "TrackEval CLEAR1.3.0 returns early with CLR_Frames0 for sequences with zero tracker detections (four clips), before assigning num_timesteps. Native combined3990 omits8125 sampled frames.",
+    "sampled_fp_per_frame": 0.0001650846058605035,
+    "sampled_frame_count": 12115,
+    "tracking_false_positive_detections": 2
+  }
+}

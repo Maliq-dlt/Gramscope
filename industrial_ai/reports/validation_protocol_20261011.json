@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "date": "2026-10-11",
+  "academic_gate": "A5 completed185tests",
+  "scope": "local upload CCTV; no factory claim; preserve drafts/weights/results",
+  "phases": {
+    "C1": "source grouping fix+regression",
+    "C2": "image benchmark supplied labels, frozen defaults",
+    "C3": "tracking/incident/workload evaluator and GT/exposure gates",
+    "C4": "sensitive GET audit,retention/backup/licensing",
+    "C5": "regressions,type/build,preservation,review,publish"
+  },
+  "benchmark": {
+    "dataset": "industrial_ai/data/public/construction-ppe",
+    "reference": "supplied YOLO labels; no_helmet box extent varies; not operational PPE truth",
+    "split": [
+      "val",
+      "test"
+    ],
+    "classes": {
+      "6 Person": "0 person",
+      "0 helmet": "1 Hardhat",
+      "7 no_helmet": "2 NO-Hardhat"
+    },
+    "weights": {
+      "yolo26n.pt": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+      "helmet.pt": "05ed3a517485292d42d6eb6c9be3987ea51cd162e04807d2741eadcac8a19e6c"
+    },
+    "inference": {
+      "imgsz": 640,
+      "confidence_min": 0.001,
+      "iou_nms": 0.7,
+      "max_det": 300,
+      "batch": 1,
+      "device": "auto CUDA0 if available",
+      "augment": false,
+      "half": false,
+      "seed": 42
+    },
+    "operating_confidence": {
+      "person": 0.35,
+      "Hardhat": 0.45,
+      "NO-Hardhat": 0.45
+    },
+    "matching": "class-aware greedy IoU>=.5 operatingpoint; native AP50:.95",
+    "selection": "no model/confidence tuning; studio defaults; val/test once each",
+    "test_policy": "protocol,data,weight,code hashes before claim;exclusive outputs;derive from cache",
+    "limits": [
+      "pretraining overlap unknown",
+      "nearduplicate/site leakage unassessed;exact crosssplit SHA duplicates0",
+      "train10orphanlabels preserved",
+      "AP optimalF1 P/R ignored",
+      "person-gated helmet association separate",
+      "val143/test141images"
+    ]
+  },
+  "unmet": [
+    "30min site/reference identityGT",
+    "incident labels/exposure/onset",
+    "helmetweights explicit license"
+  ]
+}

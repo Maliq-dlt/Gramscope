@@ -1,0 +1,11 @@
+{
+  "files": {
+    "metrics.csv": "2cad9f7900a536ef9ce8a1841fe60c2bc8ffacb850cb91adc5931303827663de",
+    "metrics.json": "9e3ec860cbec567fe7090b1d399588fff17ffe2538a62a15f22cc0cc7e8a757f",
+    "protocol.json": "71c7f343cb5536d6b86c57d8af44a060a0469ec00d2ab583f374e475877dd7d1",
+    "provenance.json": "c3c863b4fb0487dcd316470d4c2c6e7d8fa5d1bd00ec166dab53801040ceb938",
+    "summary.md": "8849defea93abe07f6a1438544968a7200a89ce61b5b99209503b460607e31f5"
+  },
+  "kind": "aggregate public tracking data only",
+  "schema": 1
+}

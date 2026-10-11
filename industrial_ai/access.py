@@ -9,6 +9,7 @@ import hmac
 import io
 import json
 import os
+import re
 import unicodedata
 import warnings
 from contextvars import ContextVar
@@ -20,6 +21,7 @@ from fastapi import File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse, Response
 from PIL import Image, ImageOps, UnidentifiedImageError
 from pydantic import BaseModel, Field, field_validator
+from starlette.routing import Match
 
 import runtime
 from storage import Store
@@ -251,6 +253,66 @@ class NewUser(BaseModel):
     role: str = Field(pattern="^(admin|reviewer|viewer)$")
 
 
+READ_ROUTES = {
+    "/api/jobs",
+    "/api/jobs/{job_id}",
+    "/api/jobs/{job_id}/suggestions/{frame_index}",
+    "/api/training",
+    "/api/training/eligible",
+    "/api/training/{training_id}",
+    "/api/jobs/{job_id}/summary",
+    "/api/jobs/{job_id}/frame/{frame_index}",
+    "/api/jobs/{job_id}/corrections",
+    "/api/jobs/{job_id}/overlays",
+    "/api/jobs/{job_id}/review-queue",
+    "/api/jobs/{job_id}/annotations",
+    "/api/jobs/{job_id}/dataset",
+    "/api/jobs/{job_id}/media/{name}",
+    "/api/ledger/events",
+    "/api/ledger/facts",
+    "/api/ledger/export",
+    "/api/ledger/jobs/{job_id}/preview",
+    "/api/ledger/events/{event_id}/proof",
+    "/api/ledger/novelty/runs",
+    "/api/ledger/novelty/runs/{run_id}",
+}
+
+
+def audit_read(request: Request, user: dict | None, status: int):
+    """Audit sensitive GET attempts without query, credentials, body or response data."""
+    if request.method != "GET":
+        return
+    for route in request.app.routes:
+        template = getattr(route, "path", "")
+        match, scope = route.matches(request.scope)
+        if match != Match.FULL:
+            continue
+        if template not in READ_ROUTES:
+            return
+        resource = {}
+        patterns = {
+            "job_id": r"[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}",
+            "training_id": r"[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}",
+            "event_id": r"[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}",
+            "run_id": r"[A-Za-z0-9_-]{1,80}",
+            "frame_index": r"[0-9]{1,10}",
+            "name": r"original\.mp4|tracked\.mp4|corrected_c[0-9]{1,10}_a[0-9]{1,10}\.mp4|"
+            r"(?:evidence|helmet|annotation)_[0-9]{1,10}\.jpg|summary\.json|upload\.bin",
+        }
+        for key, value in scope.get("path_params", {}).items():
+            value = str(value)
+            if key in patterns and re.fullmatch(patterns[key], value):
+                resource[key] = value
+        store().audit(
+            "http:GET:" + template,
+            user_id=user["id"] if user else None,
+            workspace_id=user["workspace_id"] if user else None,
+            resource=json.dumps(resource, sort_keys=True) if resource else None,
+            outcome=str(status),
+        )
+        return
+
+
 def install(app, max_upload: int):
     public_url()
     hosts = os.environ.get("INSIGHT_HOSTS", "127.0.0.1,localhost,[::1],testserver").split(",")
@@ -326,6 +388,10 @@ def install(app, max_upload: int):
                 principal.reset(context)
         except HTTPException as error:
             response = JSONResponse({"detail": error.detail}, status_code=error.status_code)
+        except Exception:
+            audit_read(request, value, 500)
+            raise
+        audit_read(request, value, response.status_code)
         if unsafe and path.startswith("/api/"):
             store().audit(
                 "http:" + request.method + ":" + path.split("?")[0],

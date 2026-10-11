@@ -379,7 +379,7 @@ video asal pada split yang sama, termasuk setelah analisis ulang.
 | `review.py` / `corrections.py` | Antrean review / ekspor MP4 |
 | `detector_training.py` | Dataset lintas-sumber dan training kandidat |
 | `operations.py` | Pembatalan serta proses native |
-| `index.html` / `dashboard.js` / `frontend/auth.ts` / `ui.css` | Dashboard, anotasi, dan auth DOM bertipe |
+| `frontend/` / `index.html` / `ui.css` | React/TypeScript, controller dan aset dashboard |
 | `storage.py` / `access.py` | SQLite, sesi, workspace/role, audit, dan CLI akses |
 | `academic.py` / `event_ledger.py` | Lab Python read-only, ledger observasi dan absensi manual |
 | `frontend/NgramLab.tsx` / `frontend/EventLedger.tsx` | UI lab, metric tables dan review ledger |
@@ -404,3 +404,7 @@ buatan. Tidak ada signup publik; akun tim dibuat administrator.
 
 Referensi dan atribusi: [design](docs/DESIGN.md),
 [logo](docs/brand/guidelines.md), [verifikasi UI](docs/VERIFICATION_UI.md), [lisensi UI](assets/THIRD_PARTY_LICENSES.txt).
+
+## Pengukuran terbaru
+
+[Validasi akademik dan CCTV 11 Oktober 2026](reports/VALIDATION_20261011.md): data baru, detector berlabel, tracking publik dan batas nyata. Model tanpa helm masih lemah; pipeline640px gagal pada objek aerial kecil. [Data policy](docs/DATA_POLICY.md) menjelaskan akses, read audit, retensi, backup dan lisensi.

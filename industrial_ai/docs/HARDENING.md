@@ -5,7 +5,7 @@
 | Fase | Hasil | Status |
 | --- | --- | --- |
 | 1. Akses dan data | Login, RBAC, workspace, SQLite, CSRF, rate limit, audit, backup database | Diterapkan dan diuji |
-| 2. Dashboard | Akses TypeScript, menu akun, kontrol lanjutan dilipat, viewer hanya baca | Diterapkan; editor tetap JavaScript |
+| 2. Dashboard | Akses TypeScript, menu akun, kontrol lanjutan dilipat, viewer hanya baca | React/TypeScript; build dan regresi tersedia |
 | 3. Deployment | Container CPU, proxy HTTPS, pengujian otomatis CI | CI container/HTTPS lulus; domain publik belum diaktifkan |
 | 4. Absensi wajah | Enrollment, verifikasi identitas, PAD, aturan absensi | Rencana lanjutan, belum mengumpulkan biometrik |
 
@@ -36,9 +36,11 @@
   Administrator host yang menguasai key dan anchor dapat memalsukannya.
 - Upload/path/ukuran/durasi/resolusi dan kotak divalidasi. FFmpeg membatasi protokol
   `file,pipe` dan format input. Proses dibatalkan melalui jalur native yang tersedia.
-- Auth UI memakai TypeScript strict tanpa React; token tidak disimpan di localStorage.
-  Playback dan editor masih JavaScript. Fullscreen, sidebar, form koordinat dan
+- UI React/TypeScript strict; token tidak disimpan di localStorage.
+  Controller dan build tetap mengikuti arsitektur studio. Fullscreen, sidebar, form koordinat dan
   reduced motion dipertahankan. Pemeriksaan unit tidak membuktikan browser deployment.
+
+Sensitive GET audit dan prosedur retensi/pemulihan: [Data policy](DATA_POLICY.md). Tidak ada auto-purge; read audit menyatakan permintaan/status, bukan penerimaan media penuh.
 
 ## Pengelolaan lokal
 

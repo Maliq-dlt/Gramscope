@@ -12,26 +12,133 @@ from pathlib import Path
 from access import has_document, read_document
 from runtime import MODELS
 
+GROUP_POLICY = "original-byte-or-attributed-url-transitive-v1"
 
-def collect_reviewed(folders: list[Path], group: str, *, approved_only: bool = False) -> list[dict]:
+
+def source_identity(folder: Path) -> dict:
+    """Resolve reanalysis ancestry and preserve original bytes separately from source grouping."""
+    with (folder / "upload.bin").open("rb") as stream:
+        upload_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+    original, seen = folder, set()
+    while True:
+        if original.resolve() in seen:
+            raise ValueError("Relasi sumber rekaman tidak valid.")
+        seen.add(original.resolve())
+        state = read_document(original / "state.json", {})
+        if state is None or not isinstance(state, dict):
+            raise ValueError("Metadata sumber analisis ulang tidak valid.")
+        parent = state.get("source_job_id")
+        if not parent:
+            break
+        if not isinstance(parent, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", parent):
+            raise ValueError("Relasi sumber rekaman tidak valid.")
+        original = folder.parent / parent
+        if not original.resolve().is_relative_to(folder.parent.resolve()) or not original.is_dir():
+            raise ValueError("Sumber asli analisis ulang tidak tersedia.")
+    with (original / "upload.bin").open("rb") as stream:
+        source_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+    if source_hash != upload_hash:
+        raise ValueError("Hash upload analisis ulang berbeda dari sumber asli.")
+    metadata = read_document(original / "source.json", {})
+    if metadata is None or not isinstance(metadata, dict):
+        raise ValueError("Metadata sumber segmen tidak valid.")
+    offset = metadata.get("start_seconds", 0)
+    if metadata:
+        if (
+            not isinstance(metadata.get("source_sha256"), str)
+            or not re.fullmatch(r"[0-9a-f]{64}", metadata["source_sha256"])
+            or metadata.get("segment_sha256") != upload_hash
+            or not isinstance(offset, (int, float))
+            or isinstance(offset, bool)
+            or not math.isfinite(offset)
+            or offset < 0
+        ):
+            raise ValueError("Metadata sumber segmen tidak valid atau hash upload berubah.")
+        source_hash = metadata["source_sha256"]
+    attribution = metadata.get("attribution", {})
+    url = attribution.get("source") if isinstance(attribution, dict) else None
+    if not isinstance(url, str) or not url.startswith("https://") or len(url) > 2000:
+        url = None
+    group_hash = (
+        hashlib.sha256(
+            json.dumps(
+                {"original_attributed_source": url},
+                sort_keys=True,
+                allow_nan=False,
+                separators=(",", ":"),
+            ).encode()
+        ).hexdigest()
+        if url
+        else source_hash
+    )
+    return {
+        "source_sha256": source_hash,
+        "upload_sha256": upload_hash,
+        "source_url": url,
+        "source_group_sha256": group_hash,
+        "original_job_id": original.name,
+        "start_seconds": offset,
+    }
+
+
+def canonical_groups(identities: list[dict]) -> list[dict]:
+    """Union byte identities and attribution IDs transitively, including legacy rows."""
+    parent = list(range(len(identities)))
+
+    def find(index):
+        while parent[index] != index:
+            parent[index] = parent[parent[index]]
+            index = parent[index]
+        return index
+
+    owners = {}
+    for index, row in enumerate(identities):
+        for key in ("source_sha256", "source_group_sha256"):
+            value = row.get(key, row["source_sha256"])
+            if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
+                raise ValueError("Identitas kelompok sumber tidak valid.")
+            token = (key, value)
+            if token in owners:
+                parent[find(index)] = find(owners[token])
+            owners[token] = index
+        url = row.get("source_url")
+        if isinstance(url, str) and url.startswith("https://") and len(url) <= 2000:
+            token = ("source_url", url)
+            if token in owners:
+                parent[find(index)] = find(owners[token])
+            owners[token] = index
+    members = {}
+    for index, row in enumerate(identities):
+        members.setdefault(find(index), []).append(row)
+    groups = {
+        root: min(
+            [r["source_group_sha256"] for r in rows if r.get("source_url")]
+            or [r.get("source_group_sha256", r["source_sha256"]) for r in rows]
+        )
+        for root, rows in members.items()
+    }
+    return [{**row, "source_group_sha256": groups[find(i)]} for i, row in enumerate(identities)]
+
+
+def collect_reviewed(
+    folders: list[Path],
+    group: str,
+    *,
+    approved_only: bool = False,
+    source_folders: list[Path] | None = None,
+) -> list[dict]:
     flag = "complete" if group == "objects" else "helmets_complete"
+    # Unselected or unapproved uploads may bridge byte identities and attributed URLs.
+    sources = list({f.resolve(): f for f in [*(source_folders or []), *folders]}.values())
+    identities = dict(
+        zip(
+            (f.resolve() for f in sources),
+            canonical_groups([source_identity(f) for f in sources]),
+        )
+    )
     rows = []
     for folder in folders:
-        with (folder / "upload.bin").open("rb") as source:
-            source_hash = hashlib.file_digest(source, "sha256").hexdigest()
-        origin = folder / "source.json"
-        source_meta = read_document(origin) if has_document(origin) else None
-        if source_meta is not None:
-            offset = source_meta.get("start_seconds")
-            if (
-                not re.fullmatch(r"[0-9a-f]{64}", source_meta.get("source_sha256", ""))
-                or source_meta.get("segment_sha256") != source_hash
-                or not isinstance(offset, (int, float))
-                or not math.isfinite(offset)
-                or offset < 0
-            ):
-                raise ValueError("Metadata sumber segmen tidak valid atau hash upload berubah.")
-            source_hash = source_meta["source_sha256"]
+        identity = identities[folder.resolve()]
         annotations = folder / "annotations.json"
         if not has_document(annotations):
             continue
@@ -49,30 +156,31 @@ def collect_reviewed(folders: list[Path], group: str, *, approved_only: bool = F
             image = folder / f"annotation_{frame['frame_index']}.jpg"
             if not image.is_file():
                 raise ValueError("Foto anotasi hilang; simpan koreksi kembali.")
+            seconds = frame.get("seconds", frame["frame_index"] / 10)
+            if type(seconds) not in (int, float) or not math.isfinite(seconds) or seconds < 0:
+                raise ValueError("Posisi frame sumber tidak valid.")
             rows.append(
                 {
                     "job_id": folder.name,
-                    "source_sha256": source_hash,
+                    **identity,
                     "revision": data["revision"],
                     "updated_at": frame.get("updated_at", ""),
                     "frame_index": frame["frame_index"],
                     "source_position": round(
-                        (source_meta["start_seconds"] if source_meta else 0)
-                        + frame.get("seconds", frame["frame_index"] / 10),
+                        identity["start_seconds"] + seconds,
                         6,
                     ),
                     "image": image,
                     "boxes": boxes,
                 }
             )
-    if approved_only:
-        rows = list(
-            {
-                (r["source_sha256"], r["source_position"]): r
-                for r in sorted(rows, key=lambda r: r["updated_at"])
-            }.values()
-        )
-    if len({r["source_sha256"] for r in rows}) < 2:
+    rows = list(
+        {
+            (r["source_group_sha256"], r["source_position"]): r
+            for r in sorted(rows, key=lambda r: (r["updated_at"], r["job_id"]))
+        }.values()
+    )
+    if len({r["source_group_sha256"] for r in rows}) < 2:
         raise ValueError(
             "Tambahkan koreksi lengkap dari video sumber berbeda. Minimal dua sumber diperlukan agar latihan dan evaluasi terpisah."
         )
@@ -82,18 +190,29 @@ def collect_reviewed(folders: list[Path], group: str, *, approved_only: bool = F
 
 
 def build_dataset(folder: Path, rows: list[dict], group: str, base_names: list[str]) -> dict:
+    rows = canonical_groups(rows)
+    sources = sorted({r["source_group_sha256"] for r in rows})
+    if len(sources) < 2:
+        raise ValueError("Minimal dua sumber independen diperlukan untuk train/val.")
+    assigned = {}
+    for row in rows:
+        if "split" in row:
+            assigned.setdefault(row["source_group_sha256"], set()).add(row["split"])
+    if any(len(splits) > 1 for splits in assigned.values()):
+        raise ValueError("Kelompok sumber yang sama tidak boleh melintasi train/val.")
     observed = {b["label"] for r in rows for b in r["boxes"]}
+    if not observed:
+        raise ValueError("Belum ada kotak pada kelompok yang dipilih.")
     names = base_names + sorted(observed - set(base_names))
-    sources = sorted({r["source_sha256"] for r in rows})
     val_sources = set(sources[-max(1, len(sources) // 5) :])
-    if not any(r["boxes"] for r in rows if r["source_sha256"] not in val_sources):
-        positive = next(r["source_sha256"] for r in rows if r["boxes"])
+    if not any(r["boxes"] for r in rows if r["source_group_sha256"] not in val_sources):
+        positive = next(r["source_group_sha256"] for r in rows if r["boxes"])
         val_sources.remove(positive)
         val_sources.add(next(s for s in sources if s != positive))
     counts = {"train": 0, "val": 0}
     manifest = []
     for row in rows:
-        split = "val" if row["source_sha256"] in val_sources else "train"
+        split = "val" if row["source_group_sha256"] in val_sources else "train"
         stem = f"{row['job_id']}_{row['frame_index']}"
         image_dir = folder / "dataset/images" / split
         label_dir = folder / "dataset/labels" / split
@@ -131,7 +250,8 @@ def build_dataset(folder: Path, rows: list[dict], group: str, base_names: list[s
         "learned_classes": sorted(observed),
         "frames": manifest,
         "counts": counts,
-        "split_unit": "original source SHA256; upload SHA256 for legacy jobs",
+        "split_unit": GROUP_POLICY,
+        "source_groups": sources,
         "notice": "Small local pilot. User-complete labels are not independently validated; no factory accuracy claim.",
     }
     (folder / "dataset/provenance.json").write_text(

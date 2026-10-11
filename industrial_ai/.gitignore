@@ -34,3 +34,8 @@
 /tests/runtime/
 
 !/reports/VERIFIKASI_CCTV_NGRAM.md
+
+# Frozen public benchmark protocols and compact verification only.
+!/reports/validation_protocol_20261011.json
+!/reports/tracking_protocol_20261011.json
+!/reports/VALIDATION_20261011.md

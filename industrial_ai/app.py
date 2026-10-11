@@ -1105,6 +1105,27 @@ def training_eligible():
     return items
 
 
+def training_source_folders() -> list[Path]:
+    """Complete owned uploads provide identity evidence even without usable labels."""
+    folders = []
+    for folder in access.folders("job"):
+        state = access.read_document(folder / "state.json", {})
+        upload = folder / "upload.bin"
+        if (
+            not isinstance(state, dict)
+            or state.get("status") not in {"queued", "processing", "done", "error", "cancelled"}
+            or not upload.is_file()
+        ):
+            continue
+        size, expected = upload.stat().st_size, state.get("bytes")
+        if size and (
+            (type(expected) is int and expected == size)
+            or (expected is None and state.get("status") == "done")
+        ):
+            folders.append(folder)
+    return folders
+
+
 class DetectorTrainingRequest(BaseModel):
     job_ids: list[str] = Field(min_length=2, max_length=50)
     group: Literal["objects", "helmets"] = "objects"
@@ -1184,7 +1205,12 @@ def start_detector_training(
             rows = (
                 review_snapshot
                 if review_snapshot is not None
-                else collect_reviewed(folders, request.group, approved_only=approved_only)
+                else collect_reviewed(
+                    folders,
+                    request.group,
+                    approved_only=approved_only,
+                    source_folders=training_source_folders(),
+                )
             )
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
@@ -1260,19 +1286,27 @@ def learn_corrections(job_id: str, request: LearningRequest):
             folders.append(folder)
     # Keep the latest correction of each source frame, including copied reanalyses.
     try:
-        rows = collect_reviewed(folders, request.group, approved_only=True)
+        with state_lock:
+            rows = collect_reviewed(
+                folders,
+                request.group,
+                approved_only=True,
+                source_folders=training_source_folders(),
+            )
     except ValueError as exc:
         return {"status": "waiting", "message": "Koreksi tersimpan dan bisa ditanya. " + str(exc)}
     signature = sorted(
         (
+            r["source_group_sha256"],
             r["source_sha256"],
+            r["source_url"] or "",
             r["source_position"],
             [{"label": b["label"], "bbox": b["bbox"]} for b in r["boxes"]],
         )
         for r in rows
     )
     fingerprint = hashlib.sha256(
-        json.dumps([request.group, signature], sort_keys=True).encode()
+        json.dumps(["review-source-groups-v2", request.group, signature], sort_keys=True).encode()
     ).hexdigest()
     previous = next(
         (
