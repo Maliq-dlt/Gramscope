@@ -37,14 +37,22 @@ py-modules = ["app", "vision", "chat", "runtime", "setup_models", "fine_tune_cha
 [tool.setuptools.data-files]
 "share/industrial-video-workspace" = ["index.html", "dashboard.js", "auth.js", "theme.js", "motion.js", "app.js", "Dockerfile", "compose.yaml", "Caddyfile.example", ".dockerignore"]
 "share/industrial-video-workspace/frontend" = ["frontend/App.tsx", "frontend/main.tsx", "frontend/studio.ts", "frontend/Account.tsx", "frontend/Annotation.tsx", "frontend/ChatPanel.tsx", "frontend/VideoPanel.tsx", "frontend/Workspace.tsx", "frontend/LiveViews.tsx", "frontend/NgramLab.tsx", "frontend/EventLedger.tsx", "frontend/auth.ts", "frontend/motion.ts", "frontend/tsconfig.auth.json", "frontend/tsconfig.studio.json", "frontend/tsconfig.json", "frontend/tsconfig.motion.json"]
-"share/industrial-video-workspace/docs" = ["docs/HARDENING.md", "docs/VERIFICATION_SECURITY.md", "docs/README.md", "docs/EVENT_CONTRACT.md", "docs/DATA_POLICY.md"]
+"share/industrial-video-workspace/docs" = ["docs/HARDENING.md", "docs/VERIFICATION_SECURITY.md", "docs/README.md", "docs/EVENT_CONTRACT.md", "docs/DATA_POLICY.md", "docs/TRACKING_ACCURACY.md"]
 "share/industrial-video-workspace/assets" = ["assets/dashboard.css", "assets/brand.svg", "assets/crowd.png", "assets/THIRD_PARTY_LICENSES.txt"]
 
 [tool.ruff]
 line-length = 100
 
 [dependency-groups]
-dev = ["httpx>=0.28", "ruff>=0.12", "ty>=0.0.1", "build>=1.2", "trackeval==1.3.0", "scipy==1.17.1"]
+dev = [
+    "httpx>=0.28",
+    "ruff>=0.12",
+    "ty>=0.0.1",
+    "build>=1.2",
+    "trackeval==1.3.0",
+    "scipy==1.17.1",
+    "sahi==0.12.8",
+]
 
 [tool.ty.environment]
 # The N-gram dependency is installed editable from the repository parent.

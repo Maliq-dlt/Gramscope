@@ -58,3 +58,10 @@ extensions/tests/test_meva_sequence_study.py -text whitespace=cr-at-eol
 industrial_ai/tests/test_sh17_reference.py -text whitespace=cr-at-eol
 industrial_ai/tests/test_meva_reference.py -text whitespace=cr-at-eol
 industrial_ai/tests/test_meva_diagnostics.py -text whitespace=cr-at-eol
+
+extensions/results/continuous_tracking_v1/** -text whitespace=cr-at-eol
+industrial_ai/continuous_tracking_study.py -text whitespace=cr-at-eol
+industrial_ai/cvat_reference.py -text whitespace=cr-at-eol
+industrial_ai/prepare_continuous_reference.py -text whitespace=cr-at-eol
+industrial_ai/tests/continuous_tracking_check.py -text whitespace=cr-at-eol
+industrial_ai/tests/cvat_reference_check.py -text whitespace=cr-at-eol
