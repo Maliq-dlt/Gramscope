@@ -2,7 +2,7 @@
 
 [Rencana](../../tasks/plan.md) · [Receipt fase](../../extensions/reports/validation_phases.json) · [Data untuk makalah](../../extensions/results/README.md)
 
-Fase akademik A1–A5 diselesaikan sebelum CCTV C1–C5. Implementasi dan pemeriksaan lokal selesai; status publikasi diverifikasi melalui [GitHub Actions](https://github.com/Maliq-dlt/Gramscope/actions/workflows/ci.yml). Data dan dokumentasi teknis disiapkan untuk analisis pengguna. Core dan hasil eksperimen historis dipertahankan.
+Fase akademik A1–A5 diselesaikan sebelum CCTV C1–C5. Implementasi dipublikasikan ke main pada commit `40fa3632a9339f6382cb1ead10809ee48cef2be0`. [CI pada commit tersebut](https://github.com/Maliq-dlt/Gramscope/actions/runs/38140796838) lulus untuk academic, studio dan container, termasuk deployment HTTPS. Data dan dokumentasi teknis disiapkan untuk analisis pengguna. Core dan hasil eksperimen historis dipertahankan.
 
 | Fase | Hasil dan batas |
 | --- | --- |

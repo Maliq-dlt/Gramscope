@@ -13,7 +13,7 @@ Tanggal: **11 Oktober 2026**. [Rencana aktif](plan.md) · [Bukti implementasi se
 - [x] C2 Evaluator detector berlabel publik/site; batas generalisasi jelas.
 - [x] C3 Verifikasi rules vs novelty, reviewer budget dan gate ground truth/exposure.
 - [x] C4 Read/download audit, retensi/backup/deletion dan lisensi dalam scope lokal.
-- [x] C5 Regresi, biaya, hasil dan preservasi lokal terverifikasi; status publikasi mengikuti CI. Data lokasi target tetap gate terbuka.
+- [x] C5 Regresi, biaya, hasil, preservasi dan publikasi main terverifikasi; [CI exact commit lulus](https://github.com/Maliq-dlt/Gramscope/actions/runs/38140796838). Data lokasi target tetap gate terbuka.
 
 Centang berarti hasil dan verifikasi ada; runner tidak berarti akurasi lapangan terbukti.
 

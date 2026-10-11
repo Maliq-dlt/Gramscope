@@ -18,3 +18,5 @@ git diff --check
 ```
 
 Artifact lokal `.tmp/academic-validation/` dan registry private; hasil publishable berada di direktori A2/A3/A4 terpisah. Berkas `mean_ce_nats` duration lama adalah rerata sesi; companion menamai bobot/denominator eksplisit. Protokol awal tidak ditimpa; kontrak run merinci pilihan hard path, anggaran jumlah sesi, prevalence dan batas conformal. Dokumentasi historis tetap dibaca sesuai tanggal.
+
+Publikasi akhir: implementasi `40fa363` pada main; [CI academic/studio/container lulus](https://github.com/Maliq-dlt/Gramscope/actions/runs/38140796838). Audit pasca-CCTV tetap tidak menemukan berkas hilang; satu perubahan sengaja pada indeks `extensions/results/README.md` mempunyai backup versi awal dengan hash yang cocok. Data eksperimen dan core tetap identik.

@@ -394,9 +394,9 @@
       "http_checks": 36,
       "learning": "RTX objects9/9 235tensorchanged;helmets9/9 83tensorchanged;baseweightsunchanged",
       "quality": "root/studioRuff+Ty,UItypecheck/build,audits,packageequalitypassed",
-      "remaining": "exact-commit publication CI recorded in GitHub Actions; target-site incident labels remain a separate gate",
+      "remaining": "Target-site incident/onset/exposure labels; full-studio restore/deletion remain separate operational gates.",
       "security_assertions": 108,
-      "status": "completed_local",
+      "status": "completed",
       "studio_backend_suites": 21,
       "ui_suites": 10,
       "preservation": {
@@ -414,9 +414,21 @@
         "core_manifest_files": 15,
         "user_changes_excluded": true
       },
-      "independent_review": "A2-A4 and C1-C4 source/data/CI reviews; C4 findings fixed and reviewed, no remaining blocker"
+      "independent_review": "A2-A4 and C1-C4 source/data/CI reviews; C4 findings fixed and reviewed, no remaining blocker",
+      "publication": {
+        "repository": "https://github.com/Maliq-dlt/Gramscope",
+        "branch": "main",
+        "implementation_commit": "40fa3632a9339f6382cb1ead10809ee48cef2be0",
+        "ci_url": "https://github.com/Maliq-dlt/Gramscope/actions/runs/38140796838",
+        "jobs": {
+          "studio": "success",
+          "academic": "success",
+          "container": "success"
+        },
+        "verified": "completed exact implementation commit"
+      }
     },
-    "status": "completed_local"
+    "status": "completed"
   },
   "schema_version": 1
 }
