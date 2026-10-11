@@ -1,5 +1,7 @@
 # Data akademik
 
+**Pembenahan terbaru (11 Oktober):** [data korpus penuh, KenLM, one-SE dan split study](academic_upgrade_v2/README.md). [Diagnosis MOT ground-view](mot_ground_v1/README.md). Hasil historis di bawah tetap snapshot tersendiri.
+
 [Siklus kualitas terbaru](../reports/ACCURACY_UPGRADE_20261011.md): [data sumber/detector/PPE](accuracy_data_v1/README.md), [tail sintetik](context_tail_v1/README.md), dan [MEVA sequence](meva_sequence_v1/selection.json). Q1–Q4 terverifikasi; batas data lokasi nyata tetap terbuka.
 
 | Data | Isi | Jenis bukti |

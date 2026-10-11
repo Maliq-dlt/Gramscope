@@ -1,0 +1,662 @@
+{
+  "claim": "External MKN token-score comparison; policies prevent exact equivalence",
+  "order": 2,
+  "ngram_types": {
+    "1": {
+      "local_raw": 14,
+      "kenlm_arpa": 16
+    },
+    "2": {
+      "local_raw": 170,
+      "kenlm_arpa": 170
+    }
+  },
+  "source": {
+    "url": "https://github.com/kpu/kenlm",
+    "sha": "4cb443e60b7bf2c0ddf3c745378f76cb59e254e5",
+    "local_source_diff": "diff --git a/CMakeLists.txt b/CMakeLists.txt\nindex a4e487b..5b6b58a 100644\n--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -100,7 +100,6 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)\n # We need boost\n find_package(Boost 1.41.0 REQUIRED COMPONENTS\n   program_options\n-  system\n   thread\n   unit_test_framework\n )\n",
+    "local_source_status": " M CMakeLists.txt\n",
+    "lmplz_sha256": "84d9fade6c6a9903a2c605280128ca98cfdd1cc96819a18de84c20d62ea210ba",
+    "query_sha256": "62b121a7184bee5478143866be66ae5c78dda84cc6db273692055e8eb6e04a57",
+    "adapter_sha256": "de72da38d8d2e1a80b5367aae1f34a12b875906fb2c693092a17b8418ece8a2e"
+  },
+  "corpus": {
+    "sha256": "e2e548a3067a104af9b188c24451e802329f3263246ae951dd188c24ac9a0588",
+    "bytes": 1650,
+    "sentences": 160,
+    "word_tokens": 825,
+    "vocabulary": [
+      "</s>",
+      "<UNK>",
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m"
+    ],
+    "min_count": 1
+  },
+  "probes": {
+    "sha256": "a623ef3251a46613fac696f0e9b7c6a4216eb65ff7f692eaa1eb25986927a39c",
+    "sentences": 7,
+    "predicted_tokens": 39
+  },
+  "commands": {
+    "lmplz": [
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\kenlm_build\\bin\\lmplz.exe",
+      "-o",
+      "2",
+      "--text",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_2\\corpus.txt",
+      "--arpa",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_2\\model.arpa",
+      "-T",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_2\\sort",
+      "-S",
+      "256M",
+      "--interpolate_unigrams",
+      "0",
+      "--discount_fallback",
+      "0.75",
+      "--verbose_header"
+    ],
+    "query": [
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\kenlm_build\\bin\\query.exe",
+      "-v",
+      "word",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_2\\model.arpa"
+    ]
+  },
+  "normalization": [
+    {
+      "context": [
+        "<s>"
+      ],
+      "local_sum": 1.0,
+      "kenlm_arpa_sum": 0.9999999986901413
+    },
+    {
+      "context": [
+        "a"
+      ],
+      "local_sum": 1.0,
+      "kenlm_arpa_sum": 0.9999999847478034
+    },
+    {
+      "context": [
+        "l"
+      ],
+      "local_sum": 1.0,
+      "kenlm_arpa_sum": 1.0000000402543032
+    }
+  ],
+  "unigram_unk_mass": {
+    "local": 0.0,
+    "kenlm_arpa": 0.061764709055010886,
+    "local_default_epsilon_1e_8": 5.882352935986159e-11
+  },
+  "formula_check": {
+    "direct_matched_tokens": 38,
+    "max_abs_residual_log10": 5.058385563749823e-07,
+    "mean_abs_residual_log10": 1.2212489439313388e-07,
+    "compatible_at_1e_4_log10": true,
+    "method": "Local top-order counts and context mass with KenLM printed discounts and ARPA lower-order probabilities"
+  },
+  "kenlm_fallback_orders_zero_based": [
+    0
+  ],
+  "discounts": {
+    "2": {
+      "local": [
+        0.4193548387096774,
+        0.32258064516129026,
+        1.4623655913978493
+      ],
+      "kenlm_stderr": [
+        0.419355,
+        0.322581,
+        1.46237
+      ],
+      "local_fallback": null
+    }
+  },
+  "policy_differences": [
+    "KenLM reserves <unk> and allocates probability to it; local <UNK> has zero mass with epsilon=0.",
+    "KenLM unigram ARPA includes reserved <s> and <unk>; local event unigrams omit both.",
+    "KenLM --interpolate_unigrams 0 assigns lower-order residual mass to <unk>; the local unigram uses continuation frequency without residual interpolation.",
+    "KenLM allows zero/endpoint estimated discounts; local requires 0 < D_i < i and otherwise falls back to (0.75, 0.75, 0.75).",
+    "KenLM stores rounded log10 ARPA scores; local scores are Python float probabilities.",
+    "Historical ExtensionLM defaults epsilon=1e-8; this comparison uses epsilon=0 and reports the known-token delta separately.",
+    "KenLM suppresses repeated-BOS higher-order grams; local events uses n-1 BOS prefixes, affecting trigram count-of-counts and lower-order discounts.",
+    "Both inputs are whitespace-tokenized, one sentence per line, with implicit BOS/EOS; all training and probe words are known, so no UNK mapping is compared.",
+    "Probes mix training and perturbed in-vocabulary sentences; this checks arithmetic, not held-out generalization."
+  ],
+  "summary": {
+    "tokens": 39,
+    "finite_local_tokens": 39,
+    "max_abs_delta_log10": 0.030668686018190394,
+    "mean_abs_delta_log10": 0.006254604657004823,
+    "kenlm_backed_off_tokens": 1,
+    "local_unseen_highest_order": 1,
+    "max_abs_delta_log10_default_vs_zero_epsilon": 1.7781331962396507e-10,
+    "local_probe_cross_entropy_nats": 2.4624798572567963,
+    "kenlm_probe_cross_entropy_nats": 2.4768816167025864
+  },
+  "rows": [
+    {
+      "sentence": 0,
+      "context": [
+        "<s>"
+      ],
+      "word": "e",
+      "local_count_highest_order": 13,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0931386344501497,
+      "kenlm_log10": -1.0958132,
+      "delta_log10_local_minus_kenlm": 0.0026745655498503496
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "e"
+      ],
+      "word": "h",
+      "local_count_highest_order": 4,
+      "local_context_total_highest_order": 85,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.3547983770656382,
+      "kenlm_log10": -1.3636891,
+      "delta_log10_local_minus_kenlm": 0.008890722934361772
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "h"
+      ],
+      "word": "a",
+      "local_count_highest_order": 7,
+      "local_context_total_highest_order": 59,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.9419533500474836,
+      "kenlm_log10": -0.9461343,
+      "delta_log10_local_minus_kenlm": 0.0041809499525163885
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "a"
+      ],
+      "word": "a",
+      "local_count_highest_order": 15,
+      "local_context_total_highest_order": 95,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.8063607905471987,
+      "kenlm_log10": -0.80840397,
+      "delta_log10_local_minus_kenlm": 0.0020431794528013025
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "a"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 24,
+      "local_context_total_highest_order": 95,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.6021565794219503,
+      "kenlm_log10": -0.6034322,
+      "delta_log10_local_minus_kenlm": 0.001275620578049641
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "<s>"
+      ],
+      "word": "d",
+      "local_count_highest_order": 22,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.8634451342500852,
+      "kenlm_log10": -0.86501914,
+      "delta_log10_local_minus_kenlm": 0.0015740057499148419
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "d"
+      ],
+      "word": "c",
+      "local_count_highest_order": 9,
+      "local_context_total_highest_order": 91,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0094446412255917,
+      "kenlm_log10": -1.0133072,
+      "delta_log10_local_minus_kenlm": 0.003862558774408331
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "c"
+      ],
+      "word": "b",
+      "local_count_highest_order": 12,
+      "local_context_total_highest_order": 95,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.8979155890473646,
+      "kenlm_log10": -0.9007898,
+      "delta_log10_local_minus_kenlm": 0.002874210952635403
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "b"
+      ],
+      "word": "d",
+      "local_count_highest_order": 10,
+      "local_context_total_highest_order": 110,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0455716249198732,
+      "kenlm_log10": -1.0490427,
+      "delta_log10_local_minus_kenlm": 0.0034710750801267842
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "d"
+      ],
+      "word": "j",
+      "local_count_highest_order": 7,
+      "local_context_total_highest_order": 91,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.1265890383701733,
+      "kenlm_log10": -1.1316545,
+      "delta_log10_local_minus_kenlm": 0.005065461629826684
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "j"
+      ],
+      "word": "c",
+      "local_count_highest_order": 4,
+      "local_context_total_highest_order": 42,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.069633368868808,
+      "kenlm_log10": -1.0769794,
+      "delta_log10_local_minus_kenlm": 0.007346031131191921
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "c"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 16,
+      "local_context_total_highest_order": 95,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.7760087099799509,
+      "kenlm_log10": -0.77817774,
+      "delta_log10_local_minus_kenlm": 0.0021690300200490897
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "<s>"
+      ],
+      "word": "k",
+      "local_count_highest_order": 9,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.2645881005167154,
+      "kenlm_log10": -1.2685632,
+      "delta_log10_local_minus_kenlm": 0.003975099483284561
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "k"
+      ],
+      "word": "d",
+      "local_count_highest_order": 3,
+      "local_context_total_highest_order": 26,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0551366660864425,
+      "kenlm_log10": -1.0634475,
+      "delta_log10_local_minus_kenlm": 0.00831083391355758
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "d"
+      ],
+      "word": "h",
+      "local_count_highest_order": 6,
+      "local_context_total_highest_order": 91,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.195679709767508,
+      "kenlm_log10": -1.2016248,
+      "delta_log10_local_minus_kenlm": 0.005945090232492012
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "h"
+      ],
+      "word": "d",
+      "local_count_highest_order": 8,
+      "local_context_total_highest_order": 59,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.8867616879409905,
+      "kenlm_log10": -0.8904416,
+      "delta_log10_local_minus_kenlm": 0.003679912059009527
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "d"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 14,
+      "local_context_total_highest_order": 91,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.8158942047903042,
+      "kenlm_log10": -0.81836385,
+      "delta_log10_local_minus_kenlm": 0.0024696452096958366
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "<s>"
+      ],
+      "word": "e",
+      "local_count_highest_order": 13,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0931386344501497,
+      "kenlm_log10": -1.0958132,
+      "delta_log10_local_minus_kenlm": 0.0026745655498503496
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "e"
+      ],
+      "word": "d",
+      "local_count_highest_order": 7,
+      "local_context_total_highest_order": 85,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0933135007047323,
+      "kenlm_log10": -1.0981601,
+      "delta_log10_local_minus_kenlm": 0.004846599295267762
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "d"
+      ],
+      "word": "i",
+      "local_count_highest_order": 6,
+      "local_context_total_highest_order": 91,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.195679709767508,
+      "kenlm_log10": -1.2016248,
+      "delta_log10_local_minus_kenlm": 0.005945090232492012
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "i"
+      ],
+      "word": "g",
+      "local_count_highest_order": 5,
+      "local_context_total_highest_order": 47,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.030534699845604,
+      "kenlm_log10": -1.035791,
+      "delta_log10_local_minus_kenlm": 0.005256300154395932
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "g"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 14,
+      "local_context_total_highest_order": 70,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.7059501010158391,
+      "kenlm_log10": -0.70820963,
+      "delta_log10_local_minus_kenlm": 0.00225952898416093
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "<s>"
+      ],
+      "word": "g",
+      "local_count_highest_order": 14,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0640538247370799,
+      "kenlm_log10": -1.0665545,
+      "delta_log10_local_minus_kenlm": 0.0025006752629201934
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "g"
+      ],
+      "word": "f",
+      "local_count_highest_order": 8,
+      "local_context_total_highest_order": 70,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.9490070922144752,
+      "kenlm_log10": -0.95296913,
+      "delta_log10_local_minus_kenlm": 0.003962037785524841
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "f"
+      ],
+      "word": "h",
+      "local_count_highest_order": 3,
+      "local_context_total_highest_order": 68,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.3959771425149836,
+      "kenlm_log10": -1.4080106,
+      "delta_log10_local_minus_kenlm": 0.012033457485016275
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "h"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 10,
+      "local_context_total_highest_order": 59,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.7859846637811,
+      "kenlm_log10": -0.78889996,
+      "delta_log10_local_minus_kenlm": 0.0029152962188999654
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "<s>"
+      ],
+      "word": "g",
+      "local_count_highest_order": 14,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0640538247370799,
+      "kenlm_log10": -1.0665545,
+      "delta_log10_local_minus_kenlm": 0.0025006752629201934
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "g"
+      ],
+      "word": "a",
+      "local_count_highest_order": 6,
+      "local_context_total_highest_order": 70,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0763041340255726,
+      "kenlm_log10": -1.0816239,
+      "delta_log10_local_minus_kenlm": 0.005319765974427515
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "a"
+      ],
+      "word": "d",
+      "local_count_highest_order": 6,
+      "local_context_total_highest_order": 95,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.2184548503749668,
+      "kenlm_log10": -1.2237517,
+      "delta_log10_local_minus_kenlm": 0.005296849625033184
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "d"
+      ],
+      "word": "g",
+      "local_count_highest_order": 6,
+      "local_context_total_highest_order": 91,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.195679709767508,
+      "kenlm_log10": -1.2016248,
+      "delta_log10_local_minus_kenlm": 0.005945090232492012
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "g"
+      ],
+      "word": "b",
+      "local_count_highest_order": 5,
+      "local_context_total_highest_order": 70,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.157381288214563,
+      "kenlm_log10": -1.163801,
+      "delta_log10_local_minus_kenlm": 0.006419711785436988
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "b"
+      ],
+      "word": "k",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 110,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.5890271533785347,
+      "kenlm_log10": -1.6012815,
+      "delta_log10_local_minus_kenlm": 0.012254346621465295
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "k"
+      ],
+      "word": "a",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 26,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0191812714932804,
+      "kenlm_log10": -1.026826,
+      "delta_log10_local_minus_kenlm": 0.0076447285067196
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "a"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 24,
+      "local_context_total_highest_order": 95,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.6021565794219503,
+      "kenlm_log10": -0.6034322,
+      "delta_log10_local_minus_kenlm": 0.001275620578049641
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "<s>"
+      ],
+      "word": "m",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -2.119614928060358,
+      "kenlm_log10": -2.1489208,
+      "delta_log10_local_minus_kenlm": 0.02930587193964218
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "m"
+      ],
+      "word": "l",
+      "local_count_highest_order": 0,
+      "local_context_total_highest_order": 6,
+      "kenlm_matched_order": 1,
+      "local_log10": -1.5325699139818096,
+      "kenlm_log10": -1.5632386,
+      "delta_log10_local_minus_kenlm": 0.030668686018190394
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "l"
+      ],
+      "word": "k",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 31,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.3937380576782583,
+      "kenlm_log10": -1.4099144,
+      "delta_log10_local_minus_kenlm": 0.016176342321741588
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "k"
+      ],
+      "word": "a",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 26,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0191812714932804,
+      "kenlm_log10": -1.026826,
+      "delta_log10_local_minus_kenlm": 0.0076447285067196
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "a"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 24,
+      "local_context_total_highest_order": 95,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.6021565794219503,
+      "kenlm_log10": -0.6034322,
+      "delta_log10_local_minus_kenlm": 0.001275620578049641
+    }
+  ]
+}

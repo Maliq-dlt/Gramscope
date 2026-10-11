@@ -1,3 +1,12 @@
+## Checklist pembenahan kritik akademik — 11 Oktober 2026
+
+- [x] A1 KenLM resmi berhasil dibangun; validasi eksternal dan perbedaan estimator terdokumentasi.
+- [x] A2 Korpus penuh/sampel full-article, provenance dan duplicate-aware audit siap.
+- [x] A3 Protokol dev-only/one-SE dan probe split dikunci sebelum fitting; data hasil baru tersedia.
+- [x] A4 Review, tes/lint/type/build, hash preservasi dan indeks data publik selesai.
+- [x] C1a Diagnosis MOT17 ground-view berlabel, source/protocol hashes dan test sekali; generalisasi kandidat gagal, bobot studio tidak dipromosi.
+- [ ] C1b Akurasi CCTV pada label independen lokasi target: masih gate data, tidak digantikan eksperimen sintetis/MOT.
+
 ## Prioritas data, objek kecil dan tracking (implementasi dan verifikasi lokal selesai)
 
 - [x] P1 Import referensi CVAT reviewed/coverage dan audit empat scene SDD baru, partisi/snapshot.

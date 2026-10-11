@@ -1,0 +1,11 @@
+{
+  "candidates": [
+    "standard+byte",
+    "sliced+bot"
+  ],
+  "claimed_unix_seconds": 1791737220.3932447,
+  "device_preference": "auto",
+  "phase": "test",
+  "protocol_sha256": "7dc77bbc7b8fdf9d920bcb7c634d3328c09449e52f5c86ca2f1fa0def79c2b74",
+  "selection_sha256": "edf24bc6c13fd6858c10ec32e038ff33523fbe08585e92e5e86aaa31ba51b8c7"
+}

@@ -1,0 +1,695 @@
+"""Frozen exploratory MOT17 ground-view diagnostic; no model training or deployment."""
+
+from __future__ import annotations
+
+import argparse
+import configparser
+import hashlib
+import inspect
+import json
+import math
+import os
+import re
+import tempfile
+import time
+import urllib.request
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from typing import cast
+
+# isort: off
+import runtime  # Keep temporary files and ML caches inside this workspace.
+import continuous_tracking_study as study
+import tracking_benchmark as base
+import numpy as np
+from trackeval.datasets import MotChallenge2DBox
+from trackeval.metrics import CLEAR, HOTA, Identity
+# isort: on
+
+ROOT = runtime.ROOT
+DATASET = ROOT / "data/public/mot-ground-v1"
+EVIDENCE = ROOT / "reports/runtime/mot-ground-v1"
+TEMP = ROOT.parent / ".tmp/academic_upgrade_v2/mot"
+PROTOCOL = EVIDENCE / "protocol.json"
+REVISION = "f93908467986c77765667925a526ad07be8ad630"
+SOURCE = "Lekim89/MOT17"
+SEQUENCES = {
+    "MOT17-05-FRCNN": {"role": "dev", "fps": 14, "length": 837, "size": [640, 480]},
+    "MOT17-09-FRCNN": {"role": "test", "fps": 30, "length": 525, "size": [1920, 1080]},
+}
+FRAMES = 300
+CANDIDATES = study.CANDIDATES
+BASELINE = study.BASELINE
+API = f"https://huggingface.co/api/datasets/{SOURCE}/tree/{REVISION}/"
+FILE_URL = f"https://huggingface.co/datasets/{SOURCE}/resolve/{REVISION}/"
+
+
+def expected_paths():
+    return {
+        path
+        for name in SEQUENCES
+        for path in (
+            f"train/{name}/seqinfo.ini",
+            f"train/{name}/gt/gt.txt",
+            *(f"train/{name}/img1/{frame:06}.jpg" for frame in range(1, FRAMES + 1)),
+        )
+    }
+
+
+def json_url(url: str):
+    # Bound untrusted API metadata before decoding JSON.
+    with urllib.request.urlopen(url, timeout=45) as response:
+        data = response.read(2 * 2**20 + 1)
+    if len(data) > 2 * 2**20:
+        raise ValueError("Remote metadata exceeds 2 MiB")
+    return json.loads(data)
+
+
+def git_blob_hash(data: bytes):
+    return hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+
+
+def validate_entry(entry: dict):
+    relative = entry.get("path")
+    if (
+        not isinstance(relative, str)
+        or relative not in expected_paths()
+        or entry.get("type") != "file"
+    ):
+        raise ValueError("Unexpected remote file or symlink")
+    size = entry.get("size")
+    limit = 8 * 2**20 if relative.endswith(".jpg") else 10 * 2**20
+    if type(size) is not int or not 0 < size <= limit:
+        raise ValueError(f"Remote file size exceeds bound: {relative}")
+    if not isinstance(entry.get("oid"), str) or not re.fullmatch(r"[0-9a-f]{40}", entry["oid"]):
+        raise ValueError(f"Invalid Git object ID: {relative}")
+    lfs = entry.get("lfs")
+    if relative.endswith(".jpg"):
+        if (
+            not isinstance(lfs, dict)
+            or lfs.get("size") != size
+            or not isinstance(lfs.get("oid"), str)
+            or not re.fullmatch(r"[0-9a-f]{64}", lfs["oid"])
+        ):
+            raise ValueError(f"Missing LFS SHA-256: {relative}")
+    elif lfs is not None:
+        raise ValueError(f"Unexpected LFS text file: {relative}")
+    return entry
+
+
+def dataset_file(relative: str):
+    if relative not in expected_paths() or not DATASET.resolve().is_relative_to(ROOT.resolve()):
+        raise ValueError("Dataset path leaves workspace")
+    target = DATASET / relative
+    if target.resolve() != DATASET.resolve() / relative:
+        raise ValueError("Dataset file or parent is a symlink")
+    return target
+
+
+def fetch_file(entry: dict):
+    validate_entry(entry)
+    relative = entry["path"]
+    target = dataset_file(relative)
+    expected_size = entry["size"]
+    expected_sha = entry.get("lfs", {}).get("oid")
+    if target.exists():
+        if target.stat().st_size != expected_size:
+            raise ValueError(f"Existing file size differs: {relative}")
+        data = target.read_bytes()
+    else:
+        # ponytail: bounded files fit in memory; stream only if source files exceed 8 MiB.
+        with urllib.request.urlopen(FILE_URL + relative, timeout=60) as response:
+            data = response.read(expected_size + 1)
+        if len(data) != expected_size:
+            raise ValueError(f"Remote size mismatch: {relative}")
+        if expected_sha and hashlib.sha256(data).hexdigest() != expected_sha:
+            raise ValueError(f"Remote LFS digest mismatch: {relative}")
+        if not expected_sha and git_blob_hash(data) != entry["oid"]:
+            raise ValueError(f"Remote Git digest mismatch: {relative}")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        if not TEMP.resolve().is_relative_to(ROOT.parent.resolve()):
+            raise ValueError("Temporary download path leaves workspace")
+        TEMP.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(dir=TEMP, delete=False) as stream:
+            pending = Path(stream.name)
+            stream.write(data)
+        try:
+            os.replace(pending, target)
+        finally:
+            pending.unlink(missing_ok=True)
+    if len(data) != expected_size or (
+        expected_sha and hashlib.sha256(data).hexdigest() != expected_sha
+    ):
+        raise ValueError(f"Existing file differs from remote metadata: {relative}")
+    if not expected_sha and git_blob_hash(data) != entry["oid"]:
+        raise ValueError(f"Existing text differs from remote metadata: {relative}")
+    return relative, hashlib.sha256(data).hexdigest()
+
+
+def collect():
+    if (DATASET / "manifest.json").exists():
+        return preflight_data()
+    entries = []
+    for name, expected in SEQUENCES.items():
+        directory = f"train/{name}"
+        metadata = json_url(API + directory + "?recursive=false")
+        expected_root = {
+            directory + "/det": "directory",
+            directory + "/gt": "directory",
+            directory + "/img1": "directory",
+            directory + "/seqinfo.ini": "file",
+        }
+        if (
+            not isinstance(metadata, list)
+            or len(metadata) != 4
+            or {row.get("path"): row.get("type") for row in metadata} != expected_root
+        ):
+            raise ValueError(f"Unexpected sequence layout: {name}")
+        gt = json_url(API + directory + "/gt?recursive=false")
+        images = json_url(API + directory + "/img1?limit=1000")
+        if (
+            not isinstance(gt, list)
+            or len(gt) != 1
+            or gt[0].get("path") != directory + "/gt/gt.txt"
+        ):
+            raise ValueError(f"Missing GT: {name}")
+        if (
+            not isinstance(images, list)
+            or len(images) != expected["length"]
+            or any(
+                row.get("path") != f"{directory}/img1/{i:06}.jpg" or row.get("type") != "file"
+                for i, row in enumerate(images, 1)
+            )
+        ):
+            raise ValueError(f"Image sequence is incomplete: {name}")
+        entries += [next(row for row in metadata if row["path"].endswith("seqinfo.ini")), gt[0]]
+        entries += images[:FRAMES]
+    if (
+        len(entries) != len(expected_paths())
+        or {row["path"] for row in entries} != expected_paths()
+    ):
+        raise ValueError("Remote file list differs from frozen dataset")
+    for entry in entries:
+        validate_entry(entry)
+    if sum(row["size"] for row in entries) > 200 * 2**20:
+        raise ValueError("Frozen dataset exceeds 200 MiB download bound")
+    DATASET.mkdir(parents=True, exist_ok=True)
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        files = dict(pool.map(fetch_file, entries))
+    for name, expected in SEQUENCES.items():
+        ini = configparser.ConfigParser(interpolation=None)
+        ini.read(DATASET / "train" / name / "seqinfo.ini", encoding="utf-8")
+        row = ini["Sequence"]
+        if (
+            row["name"] != name
+            or row["imDir"] != "img1"
+            or row["imExt"] != ".jpg"
+            or int(row["seqLength"]) != expected["length"]
+            or int(row["frameRate"]) != expected["fps"]
+            or [int(row["imWidth"]), int(row["imHeight"])] != expected["size"]
+        ):
+            raise ValueError(f"Sequence metadata changed: {name}")
+    manifest = {
+        "source": SOURCE,
+        "revision": REVISION,
+        "dataset_card": f"https://huggingface.co/datasets/{SOURCE}",
+        "rights": "Mirror says license:other; original MOTChallenge terms unverified. Local research only; no image redistribution.",
+        "frames": FRAMES,
+        "sequences": SEQUENCES,
+        "files": dict(sorted(files.items())),
+    }
+    base.save(DATASET / "manifest.json", manifest)
+    return manifest
+
+
+def preflight_data():
+    manifest_file = DATASET / "manifest.json"
+    if manifest_file.resolve() != DATASET.resolve() / "manifest.json":
+        raise ValueError("Dataset manifest is a symlink")
+    manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+    if (
+        manifest["source"] != SOURCE
+        or manifest["revision"] != REVISION
+        or manifest["frames"] != FRAMES
+        or manifest["sequences"] != SEQUENCES
+        or set(manifest["files"]) != expected_paths()
+    ):
+        raise ValueError("Unexpected dataset manifest")
+    for relative, digest in manifest["files"].items():
+        path = dataset_file(relative)
+        if not path.is_file() or base.sha256(path) != digest:
+            raise ValueError(f"Dataset hash mismatch: {relative}")
+    return manifest
+
+
+def gt_rows(name: str):
+    result = []
+    seen = set()
+    source = DATASET / "train" / name / "gt/gt.txt"
+    for line in source.read_text(encoding="utf-8").splitlines():
+        row = line.split(",")
+        if len(row) != 9:
+            raise ValueError(f"Invalid MOT17 GT row: {name}")
+        frame, identity = int(row[0]), int(row[1])
+        x, y, width, height = map(float, row[2:6])
+        marked, category, visibility = float(row[6]), int(row[7]), float(row[8])
+        if (
+            not 1 <= frame <= cast(int, SEQUENCES[name]["length"])
+            or identity < 0
+            or not all(map(math.isfinite, (x, y, width, height, marked, visibility)))
+            or width <= 0
+            or height <= 0
+            or marked not in (0, 1)
+            or not 0 <= visibility <= 1
+            or category < 1
+            or (frame, identity) in seen
+        ):
+            raise ValueError(f"Invalid/duplicate MOT17 GT: {name}:{frame}:{identity}")
+        seen.add((frame, identity))
+        if frame <= FRAMES:
+            result.append((line, frame, identity, x, y, width, height, marked, category))
+    if not result or not any(row[7] == 1 and row[8] == 1 for row in result):
+        raise ValueError(f"No valid pedestrians in frozen interval: {name}")
+    return result
+
+
+def native_snapshot():
+    return {
+        **study.native_snapshot(),
+        "mot_evaluator_sha256": base.sha256(inspect.getfile(MotChallenge2DBox)),
+        "runner_sha256": base.sha256(__file__),
+        "model_sha256": base.sha256(ROOT / "models/yolo26n.pt"),
+    }
+
+
+def freeze():
+    import cv2
+
+    preflight_data()
+    if PROTOCOL.exists():
+        raise FileExistsError("MOT protocol already frozen")
+    counts = {}
+    for name, expected in SEQUENCES.items():
+        rows = gt_rows(name)
+        counts[name] = sum(row[7] == 1 and row[8] == 1 for row in rows)
+        for frame in range(1, FRAMES + 1):
+            image = cv2.imread(str(DATASET / f"train/{name}/img1/{frame:06}.jpg"))
+            if image is None or list(image.shape[1::-1]) != expected["size"]:
+                raise ValueError(f"Cannot decode frozen image/canvas: {name}:{frame}")
+    protocol = {
+        "manifest_sha256": base.sha256(DATASET / "manifest.json"),
+        "frames": FRAMES,
+        "sequences": SEQUENCES,
+        "valid_person_gt": counts,
+        "candidates": CANDIDATES,
+        "baseline": BASELINE,
+        "settings": study.SETTINGS,
+        "selection": "highest dev mean HOTA, then IDF1, then lexical candidate; test once",
+        "ground_truth": "Native TrackEval MOT17 preprocessing (distractor match removal and marked pedestrian filter)",
+        "native": native_snapshot(),
+    }
+    base.save(PROTOCOL, protocol)
+    return protocol
+
+
+def preflight():
+    protocol = json.loads(PROTOCOL.read_text(encoding="utf-8"))
+    if (
+        protocol["frames"] != FRAMES
+        or protocol["sequences"] != SEQUENCES
+        or tuple(protocol["candidates"]) != CANDIDATES
+        or protocol["baseline"] != BASELINE
+        or protocol["settings"] != study.SETTINGS
+        or protocol["native"] != native_snapshot()
+        or protocol["manifest_sha256"] != base.sha256(DATASET / "manifest.json")
+    ):
+        raise ValueError("Frozen protocol, model, code, or native dependency changed")
+    preflight_data()
+    for name in SEQUENCES:
+        if (
+            sum(row[7] == 1 and row[8] == 1 for row in gt_rows(name))
+            != protocol["valid_person_gt"][name]
+        ):
+            raise ValueError(f"GT count changed: {name}")
+    return protocol
+
+
+def phase_names(phase: str, selection: dict | None = None):
+    if phase == "dev":
+        return CANDIDATES
+    if phase != "test" or selection is None:
+        raise ValueError("Test requires a locked dev selection")
+    return tuple(dict.fromkeys((BASELINE, selection["selected"])))
+
+
+def selection_receipt():
+    path = EVIDENCE / "selection.json"
+    selected = json.loads(path.read_text(encoding="utf-8"))
+    if (
+        selected["protocol_sha256"] != base.sha256(PROTOCOL)
+        or selected["dev_metrics_sha256"] != base.sha256(EVIDENCE / "dev/metrics.json")
+        or selected["dev_complete_sha256"] != base.sha256(EVIDENCE / "dev/complete.json")
+        or selected["selected"] not in CANDIDATES
+    ):
+        raise ValueError("Dev selection is no longer linked to frozen evidence")
+    return selected
+
+
+def run(phase: str, device_preference: str = "auto"):
+    from contextlib import ExitStack
+
+    import cv2
+    import torch
+    from sahi import AutoDetectionModel
+    from sahi.predict import get_prediction, get_sliced_prediction
+    from ultralytics.engine.results import Boxes
+    from ultralytics.trackers.bot_sort import BOTSORT
+    from ultralytics.trackers.byte_tracker import BYTETracker
+    from ultralytics.utils import YAML, IterableSimpleNamespace
+    from ultralytics.utils.torch_utils import init_seeds
+
+    preflight()
+    selected = selection_receipt() if phase == "test" else None
+    candidates = phase_names(phase, selected)
+    run_dir = EVIDENCE / phase
+    if run_dir.exists():
+        raise FileExistsError(f"Fresh {phase} output required")
+    run_dir.mkdir(parents=True)
+    base.save(
+        run_dir / "receipt.json",
+        {
+            "phase": phase,
+            "candidates": candidates,
+            "protocol_sha256": base.sha256(PROTOCOL),
+            "selection_sha256": base.sha256(EVIDENCE / "selection.json") if selected else None,
+            "device_preference": device_preference,
+            "claimed_unix_seconds": time.time(),
+        },
+    )
+    started = time.perf_counter()
+    try:
+        init_seeds(seed=0, deterministic=True)
+        device, device_reason = runtime.select_device(device_preference)
+        cuda = device.startswith("cuda")
+        if cuda:
+            torch.cuda.reset_peak_memory_stats(device)
+        model = AutoDetectionModel.from_pretrained(
+            model_type="ultralytics",
+            model_path=str(ROOT / "models/yolo26n.pt"),
+            confidence_threshold=study.SETTINGS["confidence"],
+            image_size=cast(int, study.SETTINGS["imgsz"]),
+            device=device,
+        )
+        if model.model.names.get(0) != "person":
+            raise ValueError("Frozen model person class changed")
+        model.model.overrides.update(
+            {"iou": study.SETTINGS["iou"], "max_det": study.SETTINGS["max_det"], "classes": [0]}
+        )
+        tracker_dir = Path(inspect.getfile(BOTSORT)).parents[1] / "cfg/trackers"
+        counts = Counter()
+        times = {mode: [] for mode in ("standard", "sliced")}
+        with ExitStack() as stack:
+            detection_file = stack.enter_context(
+                (run_dir / "detections.jsonl").open("x", encoding="utf-8")
+            )
+            track_file = stack.enter_context((run_dir / "tracks.jsonl").open("x", encoding="utf-8"))
+            for name, metadata in SEQUENCES.items():
+                if metadata["role"] != phase:
+                    continue
+                gt_dir = run_dir / "gt" / name / "gt"
+                gt_dir.mkdir(parents=True)
+                gt_source = gt_rows(name)
+                (gt_dir / "gt.txt").write_text(
+                    "\n".join(row[0] for row in gt_source) + "\n", encoding="utf-8"
+                )
+                trackers = {}
+                streams = {}
+                for candidate in candidates:
+                    tracker_name = candidate.split("+")[1]
+                    config = YAML.load(
+                        tracker_dir
+                        / ("bytetrack.yaml" if tracker_name == "byte" else "botsort.yaml")
+                    )
+                    if tracker_name == "bot" and config["with_reid"] is not False:
+                        raise ValueError("BoT-SORT ReID configuration changed")
+                    config["device"] = device
+                    tracker_class = BYTETracker if tracker_name == "byte" else BOTSORT
+                    trackers[candidate] = tracker_class(IterableSimpleNamespace(**config))
+                    output = run_dir / "trackers" / candidate / "data" / (name + ".txt")
+                    output.parent.mkdir(parents=True)
+                    streams[candidate] = stack.enter_context(output.open("x", encoding="utf-8"))
+                for frame in range(1, FRAMES + 1):
+                    image = cv2.imread(str(DATASET / f"train/{name}/img1/{frame:06}.jpg"))
+                    if image is None or list(image.shape[1::-1]) != metadata["size"]:
+                        raise ValueError(f"Frozen frame decode/canvas failed: {name}:{frame}")
+                    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+                    raw_by_mode = {}
+                    for mode in ("standard", "sliced"):
+                        if cuda:
+                            torch.cuda.synchronize(device)
+                        begin = time.perf_counter()
+                        result = (
+                            get_prediction(rgb, model)
+                            if mode == "standard"
+                            else get_sliced_prediction(
+                                rgb,
+                                model,
+                                slice_height=cast(int, study.SETTINGS["slice_size"]),
+                                slice_width=cast(int, study.SETTINGS["slice_size"]),
+                                overlap_height_ratio=study.SETTINGS["slice_overlap"],
+                                overlap_width_ratio=study.SETTINGS["slice_overlap"],
+                                perform_standard_pred=cast(
+                                    bool, study.SETTINGS["slice_full_image"]
+                                ),
+                                postprocess_type="NMS",
+                                postprocess_match_metric="IOU",
+                                postprocess_match_threshold=study.SETTINGS["iou"],
+                                verbose=0,
+                            )
+                        )
+                        raw = study.normalize(result.object_prediction_list, metadata["size"])
+                        if cuda:
+                            torch.cuda.synchronize(device)
+                        times[mode].append((time.perf_counter() - begin) * 1000)
+                        raw_by_mode[mode] = raw
+                        detection_file.write(
+                            json.dumps(
+                                {"sequence": name, "frame": frame, "mode": mode, "detections": raw},
+                                sort_keys=True,
+                                allow_nan=False,
+                            )
+                            + "\n"
+                        )
+                        counts[f"raw_{mode}"] += len(raw)
+                    for candidate in candidates:
+                        raw = raw_by_mode[candidate.split("+")[0]]
+                        values = np.asarray(
+                            [row["bbox"] + [row["confidence"], 0] for row in raw],
+                            dtype=np.float32,
+                        ).reshape(-1, 6)
+                        tracked = study.tracked_rows(
+                            trackers[candidate].update(Boxes(values, image.shape[:2]), image),
+                            raw,
+                            metadata["size"],
+                        )
+                        track_file.write(
+                            json.dumps(
+                                {
+                                    "sequence": name,
+                                    "frame": frame,
+                                    "candidate": candidate,
+                                    "tracks": tracked,
+                                },
+                                sort_keys=True,
+                                allow_nan=False,
+                            )
+                            + "\n"
+                        )
+                        counts[f"tracked_{candidate}"] += len(tracked)
+                        for row in tracked:
+                            x1, y1, x2, y2 = row["bbox"]
+                            streams[candidate].write(
+                                f"{frame},{row['track_id']},{x1:.6f},{y1:.6f},{x2 - x1:.6f},{y2 - y1:.6f},{row['confidence']:.6f}\n"
+                            )
+                    counts["frames"] += 1
+                print(f"{phase} {name}: {FRAMES} contiguous frames", flush=True)
+        if counts["frames"] != FRAMES:
+            raise ValueError("Incomplete frozen interval")
+        files = {
+            path.relative_to(run_dir).as_posix(): base.sha256(path)
+            for path in run_dir.rglob("*")
+            if path.is_file() and path.name != "receipt.json"
+        }
+        base.save(
+            run_dir / "complete.json",
+            {
+                "files": dict(sorted(files.items())),
+                "frames": counts["frames"],
+                "counts": dict(counts),
+                "device": device,
+                "device_reason": device_reason,
+                "elapsed_seconds": time.perf_counter() - started,
+                "detector_ms": {
+                    mode: {
+                        "p50": float(np.percentile(values, 50)),
+                        "p95": float(np.percentile(values, 95)),
+                    }
+                    for mode, values in times.items()
+                },
+                "peak_cuda_allocated_bytes": torch.cuda.max_memory_allocated(device)
+                if cuda
+                else None,
+            },
+        )
+        base.save(run_dir / "metrics.json", score(phase))
+    except Exception as error:
+        base.save(run_dir / "failure.json", {"type": type(error).__name__, "error": str(error)})
+        raise
+
+
+def valid_gt(name: str):
+    targets = {frame: [] for frame in range(1, FRAMES + 1)}
+    for _, frame, identity, x, y, width, height, marked, category in gt_rows(name):
+        if marked == 1 and category == 1:
+            targets[frame].append({"track_id": identity, "bbox": [x, y, x + width, y + height]})
+    return targets
+
+
+def score(phase: str):
+    preflight()
+    run_dir = EVIDENCE / phase
+    receipt = json.loads((run_dir / "receipt.json").read_text(encoding="utf-8"))
+    complete = json.loads((run_dir / "complete.json").read_text(encoding="utf-8"))
+    if receipt["phase"] != phase or receipt["protocol_sha256"] != base.sha256(PROTOCOL):
+        raise ValueError("Inference receipt does not match protocol")
+    candidates = phase_names(phase, selection_receipt() if phase == "test" else None)
+    if tuple(receipt["candidates"]) != candidates or complete["frames"] != FRAMES:
+        raise ValueError("Candidate/frame count differs from frozen run")
+    for relative, digest in complete["files"].items():
+        path = (run_dir / relative).resolve()
+        if not path.is_relative_to(run_dir.resolve()) or base.sha256(path) != digest:
+            raise ValueError(f"Frozen inference file hash mismatch: {relative}")
+    name = next(key for key, row in SEQUENCES.items() if row["role"] == phase)
+    evaluator = MotChallenge2DBox(
+        {
+            "GT_FOLDER": str(run_dir / "gt"),
+            "TRACKERS_FOLDER": str(run_dir / "trackers"),
+            "TRACKERS_TO_EVAL": list(candidates),
+            "SEQ_INFO": {name: FRAMES},
+            "SKIP_SPLIT_FOL": True,
+            "PRINT_CONFIG": False,
+            "DO_PREPROC": True,
+        }
+    )
+    results = {}
+    for candidate in candidates:
+        raw = evaluator.get_raw_seq_data(candidate, name)
+        data = evaluator.get_preprocessed_seq_data(raw, "pedestrian")
+        hota, identity, clear = (
+            HOTA({"PRINT_CONFIG": False}),
+            Identity(base.CONFIG),
+            CLEAR(base.CONFIG),
+        )
+        hota_result = hota.eval_sequence(data)
+        id_result = identity.eval_sequence(data)
+        clear_result = clear.eval_sequence(data)
+        results[candidate] = {
+            "HOTA": study.hota_json(hota, hota_result),
+            "Identity": {
+                key: int(value) if key in identity.integer_fields else float(value)
+                for key, value in id_result.items()
+            },
+            "CLEAR": {
+                key: int(value) if key in clear.integer_fields else float(value)
+                for key, value in clear_result.items()
+            },
+            "gt_detections": data["num_gt_dets"],
+            "tracker_detections": data["num_tracker_dets"],
+        }
+    targets = valid_gt(name)
+    recall = {mode: Counter() for mode in ("standard", "sliced")}
+    seen = set()
+    with (run_dir / "detections.jsonl").open(encoding="utf-8") as stream:
+        for line in stream:
+            row = json.loads(line)
+            key = (row["sequence"], row["frame"], row["mode"])
+            if (
+                row["sequence"] != name
+                or not 1 <= row["frame"] <= FRAMES
+                or row["mode"] not in recall
+                or key in seen
+            ):
+                raise ValueError("Raw detection receipt has duplicate or invalid frame")
+            seen.add(key)
+            base.validate_rows(row["detections"], SEQUENCES[name]["size"], True)
+            recall[row["mode"]].update(study.match_counts(targets[row["frame"]], row["detections"]))
+    if len(seen) != 2 * FRAMES:
+        raise ValueError("Raw detection receipt has missing frames")
+    return {
+        "phase": phase,
+        "sequence": name,
+        "protocol_sha256": base.sha256(PROTOCOL),
+        "complete_sha256": base.sha256(run_dir / "complete.json"),
+        "candidate_metrics": results,
+        "raw_geometry": {
+            mode: {
+                **dict(counts),
+                "recall": counts["tp"] / max(1, counts["tp"] + counts["fn"]),
+                "small_recall": counts["small_tp"] / max(1, counts["small_gt"]),
+                "note": "Raw detector boxes vs marked pedestrian GT at IoU 0.5; not MOT17 native distractor preprocessing",
+            }
+            for mode, counts in recall.items()
+        },
+    }
+
+
+def select():
+    preflight()
+    dev_dir = EVIDENCE / "dev"
+    metrics = json.loads((dev_dir / "metrics.json").read_text(encoding="utf-8"))
+    if metrics["complete_sha256"] != base.sha256(dev_dir / "complete.json"):
+        raise ValueError("Dev metrics no longer match inference")
+    names = metrics["candidate_metrics"]
+    if set(names) != set(CANDIDATES):
+        raise ValueError("Missing dev candidate")
+    winner = min(
+        names,
+        key=lambda name: (
+            -names[name]["HOTA"]["mean_HOTA"],
+            -names[name]["Identity"]["IDF1"],
+            name,
+        ),
+    )
+    result = {
+        "selected": winner,
+        "protocol_sha256": base.sha256(PROTOCOL),
+        "dev_complete_sha256": base.sha256(dev_dir / "complete.json"),
+        "dev_metrics_sha256": base.sha256(dev_dir / "metrics.json"),
+        "rule": "max dev mean HOTA then IDF1 then lexical name",
+    }
+    base.save(EVIDENCE / "selection.json", result)
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "command", choices=("collect", "freeze", "dev", "select", "test", "score-dev", "score-test")
+    )
+    parser.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto")
+    args = parser.parse_args()
+    if args.command == "collect":
+        print(json.dumps({"files": len(collect()["files"])}))
+    elif args.command == "freeze":
+        print(json.dumps({"valid_person_gt": freeze()["valid_person_gt"]}))
+    elif args.command in ("dev", "test"):
+        run(args.command, args.device)
+    elif args.command == "select":
+        print(json.dumps(select(), sort_keys=True))
+    else:
+        print(json.dumps(score(args.command.split("-")[1]), sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()

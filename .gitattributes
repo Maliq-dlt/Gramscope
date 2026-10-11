@@ -65,3 +65,13 @@ industrial_ai/cvat_reference.py -text whitespace=cr-at-eol
 industrial_ai/prepare_continuous_reference.py -text whitespace=cr-at-eol
 industrial_ai/tests/continuous_tracking_check.py -text whitespace=cr-at-eol
 industrial_ai/tests/cvat_reference_check.py -text whitespace=cr-at-eol
+
+# New academic evidence retains exact source/data bytes, including raw tool whitespace.
+extensions/results/academic_upgrade_v2/** -text -whitespace
+extensions/results/mot_ground_v1/** -text -whitespace
+extensions/experiments/academic_upgrade.py -text whitespace=cr-at-eol
+extensions/experiments/academic_upgrade_audit.py -text whitespace=cr-at-eol
+extensions/experiments/prepare_academic_corpora.py -text whitespace=cr-at-eol
+extensions/experiments/kenlm_validation.py -text whitespace=cr-at-eol
+industrial_ai/mot_tracking_study.py -text whitespace=cr-at-eol
+industrial_ai/tests/test_mot_tracking_study.py -text whitespace=cr-at-eol

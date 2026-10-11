@@ -1,0 +1,70 @@
+{
+  "format": "source-provenance-v1",
+  "source_commit": "0df17d2b6f740ee72168721cc169d4fdc062d596",
+  "note": "Protocols retain original executed Windows bytes. Git uses LF for some source files. No frozen source or protocol was rewritten. Verify Git blob content hashes for publication; normalize LF to CRLF only when it reproduces the recorded hash.",
+  "files": {
+    "core/src/ngram.py": {
+      "protocol_sha256": "eb6b887412a0e30353e9193e5d84816b6c5d79b80ad177d9a4885e2bc048d1bf",
+      "git_blob_content_sha256": "7cafe6bdad91aee2f63c1d9a7849eee2604e4990cf2a526586d8ea06504d5208",
+      "normalized_lf_sha256": "7cafe6bdad91aee2f63c1d9a7849eee2604e4990cf2a526586d8ea06504d5208",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "core/src/preprocess.py": {
+      "protocol_sha256": "c61964dd1fe7e5b65bad89cebbd047e1905e2b8c0fdcb7c562b2a4a395c4ac31",
+      "git_blob_content_sha256": "a20bad8b233e529d3b8edb2561563912a22d3ec51f9876d70c7af49788fb31e9",
+      "normalized_lf_sha256": "a20bad8b233e529d3b8edb2561563912a22d3ec51f9876d70c7af49788fb31e9",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "extensions/experiments/academic_upgrade.py": {
+      "protocol_sha256": "3cb2639754c7fcc3cf3a88c592f2934d9fa8617e1e114dcf34f1a5296a6dafe1",
+      "git_blob_content_sha256": "ce1caae0e77ec788a9dc201b31055f138de69b1001523752af9ec4c9aa050708",
+      "normalized_lf_sha256": "ce1caae0e77ec788a9dc201b31055f138de69b1001523752af9ec4c9aa050708",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "extensions/experiments/registry.py": {
+      "protocol_sha256": "1bb456dab232ef9588e311f6856ee203c5b415663da9e4be2203f51f9325d166",
+      "git_blob_content_sha256": "df489a87fe9b6cf6ab1901e0ab07ab74a39638b00e2b309838a32be335b055f4",
+      "normalized_lf_sha256": "df489a87fe9b6cf6ab1901e0ab07ab74a39638b00e2b309838a32be335b055f4",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "extensions/src/analytics.py": {
+      "protocol_sha256": "c3b928fae7c241871a3fd7948e32b12f53f6231a5042e33c6163ac2d9b68edfe",
+      "git_blob_content_sha256": "c068fa908a2bcd268f3f9f80b02bc17441b792a898e9323b15849aca7210ae08",
+      "normalized_lf_sha256": "c068fa908a2bcd268f3f9f80b02bc17441b792a898e9323b15849aca7210ae08",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "extensions/src/datasets.py": {
+      "protocol_sha256": "92461771c0464a0ef90ef0e232a7b8eaf251628b1d7a9a660b6f7ced6a856e10",
+      "git_blob_content_sha256": "32128e8673cec52b3a11a739a4def0d47c5966da45100baf088c99012f72a1de",
+      "normalized_lf_sha256": "32128e8673cec52b3a11a739a4def0d47c5966da45100baf088c99012f72a1de",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "extensions/src/models.py": {
+      "protocol_sha256": "2a42b52a57fc52eca41ef62ecd42350adc0b84feb994a13565fa83f3f943fab2",
+      "git_blob_content_sha256": "442e59e4603d4f24566bc76494b7f77cff637fc2844cb598ffa6aef5d1aac406",
+      "normalized_lf_sha256": "442e59e4603d4f24566bc76494b7f77cff637fc2844cb598ffa6aef5d1aac406",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "extensions/src/pipeline.py": {
+      "protocol_sha256": "cf52d5ae58ca209abdb425bf7681b9d55e7f2c838f69ca63c74cd3fc1f921f0c",
+      "git_blob_content_sha256": "e8cea216f0e216e6c889bde92bb9882f398b089f6c5f43236405c736c2d0f1a1",
+      "normalized_lf_sha256": "e8cea216f0e216e6c889bde92bb9882f398b089f6c5f43236405c736c2d0f1a1",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    },
+    "extensions/experiments/academic_upgrade_audit.py": {
+      "checkout_sha256": "3203c58993d84e69fdb2251757f5c78df027f61dd6fdd33d575fa1be6edc3eb4",
+      "git_blob_content_sha256": "0d895464bf575053dd262dab1f164d96be201a7bec5641c4185db67419ee891b",
+      "normalized_lf_sha256": "0d895464bf575053dd262dab1f164d96be201a7bec5641c4185db67419ee891b",
+      "exact_git_bytes": false,
+      "same_content_after_eol_normalization": true
+    }
+  }
+}

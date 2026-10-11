@@ -1,0 +1,31 @@
+{
+  "counts": {
+    "frames": 300,
+    "raw_sliced": 7038,
+    "raw_standard": 3235,
+    "tracked_sliced+bot": 5384,
+    "tracked_standard+byte": 2687
+  },
+  "detector_ms": {
+    "sliced": {
+      "p50": 111.83920000257785,
+      "p95": 189.7995799958154
+    },
+    "standard": {
+      "p50": 17.240499997569714,
+      "p95": 26.658055000007153
+    }
+  },
+  "device": "cuda:0",
+  "device_reason": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "elapsed_seconds": 54.665015999999014,
+  "files": {
+    "detections.jsonl": "ec5b8a883095c8590b78d41b730ed95ef49e6508542b536fffe09e01e73bfe40",
+    "gt/MOT17-09-FRCNN/gt/gt.txt": "1a1384963d89a07e29919b9c4f567469ca37f9bae900e34dac50930164b2447d",
+    "trackers/sliced+bot/data/MOT17-09-FRCNN.txt": "46eea683d4a28096db93572a52cfdfc7c3b350cca00a946830c0fe4b67a4f5e4",
+    "trackers/standard+byte/data/MOT17-09-FRCNN.txt": "3af3fbbef45bc5a5d16c8e078d3bed970bdd63dbfb87758441377da764323493",
+    "tracks.jsonl": "88719df05cef1c4fd95751fee90b8bca30018855bb0f8a744bcd6707c26b424f"
+  },
+  "frames": 300,
+  "peak_cuda_allocated_bytes": 78508544
+}

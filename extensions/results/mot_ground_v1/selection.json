@@ -1,0 +1,7 @@
+{
+  "dev_complete_sha256": "2aebb397223317db906428298db2cdd811cfc565204bb8ef5a4eef79acfc6a45",
+  "dev_metrics_sha256": "5026d63222901aa6a97ae337912a2027d3d0d08d65a355504a48686207faaa14",
+  "protocol_sha256": "7dc77bbc7b8fdf9d920bcb7c634d3328c09449e52f5c86ca2f1fa0def79c2b74",
+  "rule": "max dev mean HOTA then IDF1 then lexical name",
+  "selected": "sliced+bot"
+}

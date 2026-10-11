@@ -1,0 +1,158 @@
+{
+  "commands": [
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe tests/test_mot_tracking_study.py",
+      "exit_code": 0
+    },
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe tests/continuous_tracking_check.py",
+      "exit_code": 0
+    },
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe -m ruff check mot_tracking_study.py tests/test_mot_tracking_study.py",
+      "exit_code": 0
+    },
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe -m ruff format --check mot_tracking_study.py tests/test_mot_tracking_study.py",
+      "exit_code": 0
+    },
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe -m ty check mot_tracking_study.py tests/test_mot_tracking_study.py",
+      "exit_code": 0
+    },
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe mot_tracking_study.py collect",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\reports\\runtime\\mot-ground-v1\\runner_frozen.py score-dev",
+      "exit_code": 0
+    },
+    {
+      "command": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\.venv\\Scripts\\python.exe D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\reports\\runtime\\mot-ground-v1\\runner_frozen.py score-test",
+      "exit_code": 0
+    }
+  ],
+  "current_runner_differs_after_collector_hardening": true,
+  "current_runner_sha256": "e7837f324cc9c7f80fa34148829be315ae184fad1eb05ae9398cd4623e1114b2",
+  "frozen_runner_matches_protocol": true,
+  "frozen_runner_sha256": "68587336b7774d1feee38cd38db4834eeae51b4e8a20e9531f330edd585838ef",
+  "manifest_matches_protocol": true,
+  "model_matches_protocol": true,
+  "roles": {
+    "dev": {
+      "candidates": {
+        "sliced+bot": {
+          "FN": 1126,
+          "FP": 392,
+          "HOTA": 0.41823857352972926,
+          "IDF1": 0.5733211512105985,
+          "IDSW": 22,
+          "MOTA": 0.3974960876369327
+        },
+        "sliced+byte": {
+          "FN": 1156,
+          "FP": 378,
+          "HOTA": 0.4116144845576151,
+          "IDF1": 0.5800646054453161,
+          "IDSW": 25,
+          "MOTA": 0.3900625978090767
+        },
+        "standard+bot": {
+          "FN": 1126,
+          "FP": 392,
+          "HOTA": 0.41823857352972926,
+          "IDF1": 0.5733211512105985,
+          "IDSW": 22,
+          "MOTA": 0.3974960876369327
+        },
+        "standard+byte": {
+          "FN": 1156,
+          "FP": 378,
+          "HOTA": 0.4116144845576151,
+          "IDF1": 0.5800646054453161,
+          "IDSW": 25,
+          "MOTA": 0.3900625978090767
+        }
+      },
+      "raw_geometry": {
+        "sliced": {
+          "recall": 0.642018779342723,
+          "small_gt": 204,
+          "small_recall": 0.4019607843137255
+        },
+        "standard": {
+          "recall": 0.642018779342723,
+          "small_gt": 204,
+          "small_recall": 0.4019607843137255
+        }
+      },
+      "sequence": "MOT17-05-FRCNN"
+    },
+    "test": {
+      "candidates": {
+        "sliced+bot": {
+          "FN": 827,
+          "FP": 2682,
+          "HOTA": 0.29755629191325267,
+          "IDF1": 0.3506307712316296,
+          "IDSW": 112,
+          "MOTA": -0.24134384641755227
+        },
+        "standard+byte": {
+          "FN": 914,
+          "FP": 357,
+          "HOTA": 0.4810281659906553,
+          "IDF1": 0.5783589160507865,
+          "IDSW": 24,
+          "MOTA": 0.5560507370586218
+        }
+      },
+      "raw_geometry": {
+        "sliced": {
+          "recall": 0.7291738087075763,
+          "small_gt": 0,
+          "small_recall": 0.0
+        },
+        "standard": {
+          "recall": 0.7151182721974632,
+          "small_gt": 0,
+          "small_recall": 0.0
+        }
+      },
+      "sequence": "MOT17-09-FRCNN"
+    }
+  },
+  "score_recomputed_equal_saved": {
+    "dev": true,
+    "test": true
+  },
+  "selection_linked_to_dev": true,
+  "small_box_area_threshold_source_px2": 1024,
+  "small_box_note": "Raw geometry small area uses each source image pixel scale; dev/test small recall is not normalized across resolutions.",
+  "source_revision": "f93908467986c77765667925a526ad07be8ad630",
+  "source_sequences": {
+    "MOT17-05-FRCNN": {
+      "fps": 14,
+      "length": 837,
+      "role": "dev",
+      "size": [
+        640,
+        480
+      ]
+    },
+    "MOT17-09-FRCNN": {
+      "fps": 30,
+      "length": 525,
+      "role": "test",
+      "size": [
+        1920,
+        1080
+      ]
+    }
+  }
+}

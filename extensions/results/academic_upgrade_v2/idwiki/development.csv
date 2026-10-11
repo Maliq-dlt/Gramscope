@@ -1,0 +1,16 @@
+seed,model,n,method,dev_ce_nats,vocabulary_size
+42,1-kneser_ney,1,kneser_ney,7.241445718779618,34058
+42,2-kneser_ney,2,kneser_ney,6.317750871140533,34058
+42,3-kneser_ney,3,kneser_ney,6.254692952047771,34058
+42,2-modified_kneser_ney,2,modified_kneser_ney,6.303402811343076,34058
+42,3-modified_kneser_ney,3,modified_kneser_ney,6.236507570555146,34058
+43,1-kneser_ney,1,kneser_ney,7.251208589929521,34119
+43,2-kneser_ney,2,kneser_ney,6.30947986767329,34119
+43,3-kneser_ney,3,kneser_ney,6.24567726770415,34119
+43,2-modified_kneser_ney,2,modified_kneser_ney,6.2933067394884725,34119
+43,3-modified_kneser_ney,3,modified_kneser_ney,6.227112897511394,34119
+44,1-kneser_ney,1,kneser_ney,7.22011521586804,34515
+44,2-kneser_ney,2,kneser_ney,6.303877056817737,34515
+44,3-kneser_ney,3,kneser_ney,6.236454822972473,34515
+44,2-modified_kneser_ney,2,modified_kneser_ney,6.289277615610826,34515
+44,3-modified_kneser_ney,3,modified_kneser_ney,6.218403544792201,34515

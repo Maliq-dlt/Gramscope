@@ -16,3 +16,5 @@ recursive-include frontend *.json
 
 include cvat_reference.py continuous_tracking_study.py prepare_continuous_reference.py
 include tracking_benchmark.py prepare_tracking_reference.py
+
+include mot_tracking_study.py

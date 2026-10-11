@@ -1,3 +1,19 @@
+## Pembenahan bukti akademik — 11 Oktober 2026
+
+Permintaan pengguna: benahi kritik data/validasi akademik terlebih dahulu, lalu diagnosis CCTV. Makalah tetap ditulis pengguna. Siklus ini tidak mengubah core, hasil lama, bobot atau UI.
+
+| Fase | Pekerjaan | Gate dan keluaran |
+| --- | --- | --- |
+| A1 Validasi eksternal | Build KenLM resmi lokal; bandingkan MKN tokenwise dan dokumentasikan boundary/UNK/fallback | Command nyata, hash sumber, counts/probabilitas dan selisih; tidak memalsukan ekuivalensi estimator |
+| A2 Data | Brown penuh, Reuters penuh, Wikipedia Indonesia full-article dengan sampling dari seluruh snapshot | Manifest sumber/lisensi/response hash/exclusion; jumlah token, grup dan ketimpangan; sampling window disebut cluster |
+| A3 Studi | Protokol dibekukan; KN1–3/MKN2–3, dev-only tiga seed dan aturan one-SE; matched-probe sibling-exposure study dan random-sentence diagnostic | Test primary sekali, vocabulary train-only; CE/PP, paired grouped CI, dev stability dan train-budget audit |
+| A4 Audit dan paket data | Review independen, tes/lint/type/build, preservasi, CSV/JSON dan panduan reproduksi ringkas | Satu indeks hasil terbaru; angka historis tetap bertanggal, hasil negatif tetap ada; tidak menjanjikan peringkat jurnal |
+| C1 Tindak lanjut CCTV | Tentukan sumber ground-view tracking dan label worn/not_worn/unknown lokasi target; evaluasi sebelum promosi model | MOT bukan label K3; belum ada label independen berarti FP/hour/delay tidak dapat diklaim. Sisa gate dicatat, tidak dicentang dari fitur kode |
+
+[Hasil akademik](../extensions/reports/ACADEMIC_UPGRADE_20261011.md) dan [MOT ground-view](../extensions/reports/MOT_GROUND_20261011.md) tersedia; A1–A4 selesai, label independen lokasi target tetap terbuka.
+
+A1 mendahului fitting A3; koleksi A2 dapat berjalan paralel. Brown/Reuters pernah digunakan sehingga hasilnya perluasan eksploratif, bukan holdout populasi baru. Wikipedia source mirror dan conversion API dapat berbeda revision; raw response yang dihash adalah bukti aktual. One-SE adalah regularisasi seleksi dev, bukan jaminan generalisasi. Studi probe mengukur pengaruh paparan dokumen saudara pada target yang sama, bukan otomatis estimasi kausal bias semua random sentence split.
+
 # Rencana aktif â€” N-gram untuk analisis kejadian CCTV
 
 Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari video unggahan**. Status: **implementasi fokus tersedia; verifikasi dan publikasi tercatat pada checklist**.

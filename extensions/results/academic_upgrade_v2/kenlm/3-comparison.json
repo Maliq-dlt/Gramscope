@@ -1,0 +1,721 @@
+{
+  "claim": "External MKN token-score comparison; policies prevent exact equivalence",
+  "order": 3,
+  "ngram_types": {
+    "1": {
+      "local_raw": 14,
+      "kenlm_arpa": 16
+    },
+    "2": {
+      "local_raw": 170,
+      "kenlm_arpa": 170
+    },
+    "3": {
+      "local_raw": 605,
+      "kenlm_arpa": 592
+    }
+  },
+  "source": {
+    "url": "https://github.com/kpu/kenlm",
+    "sha": "4cb443e60b7bf2c0ddf3c745378f76cb59e254e5",
+    "local_source_diff": "diff --git a/CMakeLists.txt b/CMakeLists.txt\nindex a4e487b..5b6b58a 100644\n--- a/CMakeLists.txt\n+++ b/CMakeLists.txt\n@@ -100,7 +100,6 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)\n # We need boost\n find_package(Boost 1.41.0 REQUIRED COMPONENTS\n   program_options\n-  system\n   thread\n   unit_test_framework\n )\n",
+    "local_source_status": " M CMakeLists.txt\n",
+    "lmplz_sha256": "84d9fade6c6a9903a2c605280128ca98cfdd1cc96819a18de84c20d62ea210ba",
+    "query_sha256": "62b121a7184bee5478143866be66ae5c78dda84cc6db273692055e8eb6e04a57",
+    "adapter_sha256": "de72da38d8d2e1a80b5367aae1f34a12b875906fb2c693092a17b8418ece8a2e"
+  },
+  "corpus": {
+    "sha256": "e2e548a3067a104af9b188c24451e802329f3263246ae951dd188c24ac9a0588",
+    "bytes": 1650,
+    "sentences": 160,
+    "word_tokens": 825,
+    "vocabulary": [
+      "</s>",
+      "<UNK>",
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m"
+    ],
+    "min_count": 1
+  },
+  "probes": {
+    "sha256": "a623ef3251a46613fac696f0e9b7c6a4216eb65ff7f692eaa1eb25986927a39c",
+    "sentences": 7,
+    "predicted_tokens": 39
+  },
+  "commands": {
+    "lmplz": [
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\kenlm_build\\bin\\lmplz.exe",
+      "-o",
+      "3",
+      "--text",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_3\\corpus.txt",
+      "--arpa",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_3\\model.arpa",
+      "-T",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_3\\sort",
+      "-S",
+      "256M",
+      "--interpolate_unigrams",
+      "0",
+      "--discount_fallback",
+      "0.75",
+      "--verbose_header"
+    ],
+    "query": [
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\kenlm_build\\bin\\query.exe",
+      "-v",
+      "word",
+      "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\.tmp\\academic_upgrade_v2\\evidence_order_3\\model.arpa"
+    ]
+  },
+  "normalization": [
+    {
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "local_sum": 1.0,
+      "kenlm_arpa_sum": 1.000000022787498
+    },
+    {
+      "context": [
+        "a",
+        "a"
+      ],
+      "local_sum": 1.0,
+      "kenlm_arpa_sum": 1.0000000121637234
+    },
+    {
+      "context": [
+        "m",
+        "l"
+      ],
+      "local_sum": 1.0,
+      "kenlm_arpa_sum": 1.0000000595167113
+    }
+  ],
+  "unigram_unk_mass": {
+    "local": 0.0,
+    "kenlm_arpa": 0.061764709055010886,
+    "local_default_epsilon_1e_8": 5.882352935986159e-11
+  },
+  "formula_check": {
+    "direct_matched_tokens": 26,
+    "max_abs_residual_log10": 2.2678464307590573e-06,
+    "mean_abs_residual_log10": 7.13027324322768e-07,
+    "compatible_at_1e_4_log10": true,
+    "method": "Local top-order counts and context mass with KenLM printed discounts and ARPA lower-order probabilities"
+  },
+  "kenlm_fallback_orders_zero_based": [
+    0
+  ],
+  "discounts": {
+    "2": {
+      "local": [
+        0.4505494505494505,
+        0.5402197802197801,
+        1.197802197802198
+      ],
+      "kenlm_stderr": [
+        0.367089,
+        0.810633,
+        1.53165
+      ],
+      "local_fallback": null
+    },
+    "3": {
+      "local": [
+        0.6407185628742516,
+        1.5835329341317363,
+        1.422846614463381
+      ],
+      "kenlm_stderr": [
+        0.64018,
+        1.58388,
+        1.42417
+      ],
+      "local_fallback": null
+    }
+  },
+  "policy_differences": [
+    "KenLM reserves <unk> and allocates probability to it; local <UNK> has zero mass with epsilon=0.",
+    "KenLM unigram ARPA includes reserved <s> and <unk>; local event unigrams omit both.",
+    "KenLM --interpolate_unigrams 0 assigns lower-order residual mass to <unk>; the local unigram uses continuation frequency without residual interpolation.",
+    "KenLM allows zero/endpoint estimated discounts; local requires 0 < D_i < i and otherwise falls back to (0.75, 0.75, 0.75).",
+    "KenLM stores rounded log10 ARPA scores; local scores are Python float probabilities.",
+    "Historical ExtensionLM defaults epsilon=1e-8; this comparison uses epsilon=0 and reports the known-token delta separately.",
+    "KenLM suppresses repeated-BOS higher-order grams; local events uses n-1 BOS prefixes, affecting trigram count-of-counts and lower-order discounts.",
+    "Both inputs are whitespace-tokenized, one sentence per line, with implicit BOS/EOS; all training and probe words are known, so no UNK mapping is compared.",
+    "Probes mix training and perturbed in-vocabulary sentences; this checks arithmetic, not held-out generalization."
+  ],
+  "summary": {
+    "tokens": 39,
+    "finite_local_tokens": 39,
+    "max_abs_delta_log10": 0.07348990278824497,
+    "mean_abs_delta_log10": 0.012970313284574847,
+    "kenlm_backed_off_tokens": 13,
+    "local_unseen_highest_order": 6,
+    "max_abs_delta_log10_default_vs_zero_epsilon": 6.904521399064834e-11,
+    "local_probe_cross_entropy_nats": 2.364922245148317,
+    "kenlm_probe_cross_entropy_nats": 2.370590305928177
+  },
+  "rows": [
+    {
+      "sentence": 0,
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "word": "e",
+      "local_count_highest_order": 13,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0923124287947228,
+      "kenlm_log10": -1.096258,
+      "delta_log10_local_minus_kenlm": 0.003945571205277165
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "<s>",
+        "e"
+      ],
+      "word": "h",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 13,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.199371883432086,
+      "kenlm_log10": -1.2130668,
+      "delta_log10_local_minus_kenlm": 0.013694916567914106
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "e",
+        "h"
+      ],
+      "word": "a",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 4,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.7793589467883264,
+      "kenlm_log10": -0.7844455,
+      "delta_log10_local_minus_kenlm": 0.005086553211673617
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "h",
+        "a"
+      ],
+      "word": "a",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 7,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.8024023273961266,
+      "kenlm_log10": -0.80639374,
+      "delta_log10_local_minus_kenlm": 0.003991412603873368
+    },
+    {
+      "sentence": 0,
+      "context": [
+        "a",
+        "a"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 6,
+      "local_context_total_highest_order": 15,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.4207702305271959,
+      "kenlm_log10": -0.42215285,
+      "delta_log10_local_minus_kenlm": 0.001382619472804103
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "word": "d",
+      "local_count_highest_order": 22,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -0.8629580946333745,
+      "kenlm_log10": -0.86528057,
+      "delta_log10_local_minus_kenlm": 0.0023224753666255538
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "<s>",
+        "d"
+      ],
+      "word": "c",
+      "local_count_highest_order": 3,
+      "local_context_total_highest_order": 22,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.9404225063650034,
+      "kenlm_log10": -0.9436329,
+      "delta_log10_local_minus_kenlm": 0.0032103936349966444
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "d",
+        "c"
+      ],
+      "word": "b",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 9,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.8651266823498547,
+      "kenlm_log10": -0.86869866,
+      "delta_log10_local_minus_kenlm": 0.003571977650145275
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "c",
+        "b"
+      ],
+      "word": "d",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 12,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.0585583989787624,
+      "kenlm_log10": -1.062241,
+      "delta_log10_local_minus_kenlm": 0.0036826010212376303
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "b",
+        "d"
+      ],
+      "word": "j",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 10,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.0932398394484706,
+      "kenlm_log10": -1.1003311,
+      "delta_log10_local_minus_kenlm": 0.007091260551529421
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "d",
+        "j"
+      ],
+      "word": "c",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 7,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.9930309966714805,
+      "kenlm_log10": -1.0067168,
+      "delta_log10_local_minus_kenlm": 0.01368580332851943
+    },
+    {
+      "sentence": 1,
+      "context": [
+        "j",
+        "c"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 4,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.7376212731432876,
+      "kenlm_log10": -0.7410351,
+      "delta_log10_local_minus_kenlm": 0.003413826856712321
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "word": "k",
+      "local_count_highest_order": 9,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.257553477920066,
+      "kenlm_log10": -1.2696882,
+      "delta_log10_local_minus_kenlm": 0.012134722079933935
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "<s>",
+        "k"
+      ],
+      "word": "d",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 9,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.9483784396671991,
+      "kenlm_log10": -0.9700955,
+      "delta_log10_local_minus_kenlm": 0.021717060332800853
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "k",
+        "d"
+      ],
+      "word": "h",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 3,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.7347355619888845,
+      "kenlm_log10": -0.7382703,
+      "delta_log10_local_minus_kenlm": 0.00353473801111559
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "d",
+        "h"
+      ],
+      "word": "d",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 6,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.9313375143813429,
+      "kenlm_log10": -0.93961996,
+      "delta_log10_local_minus_kenlm": 0.008282445618657097
+    },
+    {
+      "sentence": 2,
+      "context": [
+        "h",
+        "d"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 8,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.8466180771652568,
+      "kenlm_log10": -0.85000664,
+      "delta_log10_local_minus_kenlm": 0.003388562834743203
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "word": "e",
+      "local_count_highest_order": 13,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0923124287947228,
+      "kenlm_log10": -1.096258,
+      "delta_log10_local_minus_kenlm": 0.003945571205277165
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "<s>",
+        "e"
+      ],
+      "word": "d",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 13,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.1231976438520257,
+      "kenlm_log10": -1.1333499,
+      "delta_log10_local_minus_kenlm": 0.010152256147974326
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "e",
+        "d"
+      ],
+      "word": "i",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 7,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.0547735986243916,
+      "kenlm_log10": -1.0587869,
+      "delta_log10_local_minus_kenlm": 0.004013301375608513
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "d",
+        "i"
+      ],
+      "word": "g",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 6,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.8404088657972971,
+      "kenlm_log10": -0.85081476,
+      "delta_log10_local_minus_kenlm": 0.010405894202702881
+    },
+    {
+      "sentence": 3,
+      "context": [
+        "i",
+        "g"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 5,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.724913237610119,
+      "kenlm_log10": -0.73011065,
+      "delta_log10_local_minus_kenlm": 0.005197412389880918
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "word": "g",
+      "local_count_highest_order": 14,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0614403990496744,
+      "kenlm_log10": -1.0671157,
+      "delta_log10_local_minus_kenlm": 0.005675300950325646
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "<s>",
+        "g"
+      ],
+      "word": "f",
+      "local_count_highest_order": 3,
+      "local_context_total_highest_order": 14,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.8019451312162773,
+      "kenlm_log10": -0.80654573,
+      "delta_log10_local_minus_kenlm": 0.004600598783722654
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "g",
+        "f"
+      ],
+      "word": "h",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 8,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.0658216753422993,
+      "kenlm_log10": -1.0781677,
+      "delta_log10_local_minus_kenlm": 0.012346024657700738
+    },
+    {
+      "sentence": 4,
+      "context": [
+        "f",
+        "h"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 3,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.5487952275479521,
+      "kenlm_log10": -0.5527674,
+      "delta_log10_local_minus_kenlm": 0.003972172452047951
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "word": "g",
+      "local_count_highest_order": 14,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0614403990496744,
+      "kenlm_log10": -1.0671157,
+      "delta_log10_local_minus_kenlm": 0.005675300950325646
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "<s>",
+        "g"
+      ],
+      "word": "a",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 14,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.1256637789312058,
+      "kenlm_log10": -1.1350027,
+      "delta_log10_local_minus_kenlm": 0.009338921068794193
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "g",
+        "a"
+      ],
+      "word": "d",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 6,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.917546280979036,
+      "kenlm_log10": -0.9228029,
+      "delta_log10_local_minus_kenlm": 0.005256619020963971
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "a",
+        "d"
+      ],
+      "word": "g",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 6,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.9062106716183917,
+      "kenlm_log10": -0.9104905,
+      "delta_log10_local_minus_kenlm": 0.0042798283816082305
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "d",
+        "g"
+      ],
+      "word": "b",
+      "local_count_highest_order": 2,
+      "local_context_total_highest_order": 6,
+      "kenlm_matched_order": 3,
+      "local_log10": -0.9277466304599572,
+      "kenlm_log10": -0.9363915,
+      "delta_log10_local_minus_kenlm": 0.008644869540042843
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "g",
+        "b"
+      ],
+      "word": "k",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 5,
+      "kenlm_matched_order": 3,
+      "local_log10": -1.0205364108380592,
+      "kenlm_log10": -1.0236593,
+      "delta_log10_local_minus_kenlm": 0.0031228891619408117
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "b",
+        "k"
+      ],
+      "word": "a",
+      "local_count_highest_order": 0,
+      "local_context_total_highest_order": 2,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.495334602788245,
+      "kenlm_log10": -1.4218447,
+      "delta_log10_local_minus_kenlm": -0.07348990278824497
+    },
+    {
+      "sentence": 5,
+      "context": [
+        "k",
+        "a"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 0,
+      "local_context_total_highest_order": 2,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0203945712548406,
+      "kenlm_log10": -1.027216,
+      "delta_log10_local_minus_kenlm": 0.006821428745159341
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "<s>",
+        "<s>"
+      ],
+      "word": "m",
+      "local_count_highest_order": 1,
+      "local_context_total_highest_order": 160,
+      "kenlm_matched_order": 2,
+      "local_log10": -2.0611971149465114,
+      "kenlm_log10": -2.1206684,
+      "delta_log10_local_minus_kenlm": 0.05947128505348864
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "<s>",
+        "m"
+      ],
+      "word": "l",
+      "local_count_highest_order": 0,
+      "local_context_total_highest_order": 1,
+      "kenlm_matched_order": 1,
+      "local_log10": -1.75409358749626,
+      "kenlm_log10": -1.771138,
+      "delta_log10_local_minus_kenlm": 0.017044412503740114
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "m",
+        "l"
+      ],
+      "word": "k",
+      "local_count_highest_order": 0,
+      "local_context_total_highest_order": 0,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.3725364568369058,
+      "kenlm_log10": -1.3145965,
+      "delta_log10_local_minus_kenlm": -0.05793995683690589
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "l",
+        "k"
+      ],
+      "word": "a",
+      "local_count_highest_order": 0,
+      "local_context_total_highest_order": 1,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.495334602788245,
+      "kenlm_log10": -1.4218447,
+      "delta_log10_local_minus_kenlm": -0.07348990278824497
+    },
+    {
+      "sentence": 6,
+      "context": [
+        "k",
+        "a"
+      ],
+      "word": "</s>",
+      "local_count_highest_order": 0,
+      "local_context_total_highest_order": 2,
+      "kenlm_matched_order": 2,
+      "local_log10": -1.0203945712548406,
+      "kenlm_log10": -1.027216,
+      "delta_log10_local_minus_kenlm": 0.006821428745159341
+    }
+  ]
+}
