@@ -1,0 +1,146 @@
+{
+  "aggregation_csv_sha256": "672b6362a3f262be100caddd90f53a18b02a54fe594909b31053440a2c360972",
+  "aggregation_rows": 138,
+  "audits": [
+    {
+      "a2_clean_calibration_and_cached_baselines_match": true,
+      "duration": [
+        {
+          "condition": "duration_base",
+          "mean_ce_nats": "3.2609623387489957",
+          "model": "3-modified_kneser_ney",
+          "normal_source_alerts": "0"
+        },
+        {
+          "condition": "duration_slow",
+          "mean_ce_nats": "3.167902252587821",
+          "model": "3-modified_kneser_ney",
+          "normal_source_alerts": "0"
+        }
+      ],
+      "label_identity_and_eos_denominators_match": true,
+      "receipt_current_source_and_public_bytes_match": true,
+      "rows": {
+        "A3_duration.csv": 360,
+        "A3_duration_sources.csv": 60,
+        "A3_duration_summary.csv": 2,
+        "A3_models.csv": 44,
+        "A3_review.csv": 168,
+        "A3_sessions.csv": 7920,
+        "A3_sources.csv": 1080
+      },
+      "seed": 42,
+      "training_gap_bins_counts_and_dev_selection_match": true
+    },
+    {
+      "a2_clean_calibration_and_cached_baselines_match": true,
+      "duration": [
+        {
+          "condition": "duration_base",
+          "mean_ce_nats": "3.3181395671010177",
+          "model": "3-modified_kneser_ney",
+          "normal_source_alerts": "1"
+        },
+        {
+          "condition": "duration_slow",
+          "mean_ce_nats": "3.3191394734051256",
+          "model": "3-modified_kneser_ney",
+          "normal_source_alerts": "4"
+        }
+      ],
+      "label_identity_and_eos_denominators_match": true,
+      "receipt_current_source_and_public_bytes_match": true,
+      "rows": {
+        "A3_duration.csv": 360,
+        "A3_duration_sources.csv": 60,
+        "A3_duration_summary.csv": 2,
+        "A3_models.csv": 44,
+        "A3_review.csv": 168,
+        "A3_sessions.csv": 7920,
+        "A3_sources.csv": 1080
+      },
+      "seed": 43,
+      "training_gap_bins_counts_and_dev_selection_match": true
+    },
+    {
+      "a2_clean_calibration_and_cached_baselines_match": true,
+      "duration": [
+        {
+          "condition": "duration_base",
+          "mean_ce_nats": "3.2977008415212254",
+          "model": "2-modified_kneser_ney",
+          "normal_source_alerts": "0"
+        },
+        {
+          "condition": "duration_slow",
+          "mean_ce_nats": "3.3174657331649087",
+          "model": "2-modified_kneser_ney",
+          "normal_source_alerts": "0"
+        }
+      ],
+      "label_identity_and_eos_denominators_match": true,
+      "receipt_current_source_and_public_bytes_match": true,
+      "rows": {
+        "A3_duration.csv": 360,
+        "A3_duration_sources.csv": 60,
+        "A3_duration_summary.csv": 2,
+        "A3_models.csv": 44,
+        "A3_review.csv": 168,
+        "A3_sessions.csv": 7920,
+        "A3_sources.csv": 1080
+      },
+      "seed": 44,
+      "training_gap_bins_counts_and_dev_selection_match": true
+    }
+  ],
+  "deviation": "Post-run reporting clarification only; frozen source and seed outputs preserved",
+  "legacy_mean_ce_nats": "A3_duration_summary mean_ce_nats is equal-session mean CE, not global token-weighted CE",
+  "method": "derive from stored session score/target fields; no refit, model score, or test reopening",
+  "schema": "event-stress-derived-aggregation-v1",
+  "source_files": {
+    "extensions/results/event_stress_v1/seed42/A3_duration.csv": "655dadb5fd8ed094bf031a72684942229d1c032d97b2e232c82f4626dbef115a",
+    "extensions/results/event_stress_v1/seed42/A3_duration_sources.csv": "9f101c5d7404365fd35edeb9c7b71f36f67f798a7aafd7733a1f7c91936b0d60",
+    "extensions/results/event_stress_v1/seed42/A3_duration_summary.csv": "de7a8989bcddeac56e86eea930e03c905b24f2fc30d9d2803eebe4fa86122b2a",
+    "extensions/results/event_stress_v1/seed42/A3_models.csv": "19f189d7a1a912bd2dc7cd5db7d68647faf5dd4788cf146d27dadc8e23d9aca1",
+    "extensions/results/event_stress_v1/seed42/A3_review.csv": "91a8f6159f475f7a82278f1a880fe125224b6b543e40a52cf776c40914277ca6",
+    "extensions/results/event_stress_v1/seed42/A3_sessions.csv": "1a3e41ac44baa833081fb67eb0e2f8f90b6e3849beeb4e00c4990cf2268423dd",
+    "extensions/results/event_stress_v1/seed42/A3_sources.csv": "b5df147b6073069f9aa93f3b1c5f03d32ed2003f4da71a35701d1667e8410236",
+    "extensions/results/event_stress_v1/seed42/duration_calibration.json": "cad0a282e37e7709a9038e6b07c7c1c8ab91d1cd644b5f554ade86f8270a574d",
+    "extensions/results/event_stress_v1/seed42/duration_cases.json": "e8e8b473ca7b32e0186de3d53478ed38bb5e0f875a903f98b7983e21abe96783",
+    "extensions/results/event_stress_v1/seed42/duration_selection.json": "75a30968c868dda5eba763764d7154c3c166a75f4341b01a2d81b6f0dd212a9e",
+    "extensions/results/event_stress_v1/seed42/duration_slow_cases.json": "9a790330fdaa35559989a853b681f94da425610ed91dcc2f8053509b066480bf",
+    "extensions/results/event_stress_v1/seed42/input_variants.json": "dcbb3b43bbd582cb4e49df4ae78417a940a1b3fd89dcb4ca776ecf4816ab3535",
+    "extensions/results/event_stress_v1/seed42/protocol.json": "f985655b700c7f52012e3e31048c10e51d813c3d44fa66d4dd2836ed1d70dac8",
+    "extensions/results/event_stress_v1/seed42/timestamp_invariance.json": "a2bcfd4b2a8f4d5e818364e7bb14dfa7f95f4c175cd66bdc44132d7445e9c4c6",
+    "extensions/results/event_stress_v1/seed43/A3_duration.csv": "a3ee02847c27a66b2e8031da75b45a42bf8b1007c1c384f3200aff09656109b3",
+    "extensions/results/event_stress_v1/seed43/A3_duration_sources.csv": "91b823f695b586c509c9ced6803a631e3606efba20123606c5f7f4e8ca2bcd39",
+    "extensions/results/event_stress_v1/seed43/A3_duration_summary.csv": "a0d25e3cc2f265a5d98e21b303b3d2c1e402c0871360dd7571f345967a673529",
+    "extensions/results/event_stress_v1/seed43/A3_models.csv": "6bdc1260dce7acbdd73aa94ce52919bd40869b08ced71e77f21c3c9e063ac3d4",
+    "extensions/results/event_stress_v1/seed43/A3_review.csv": "c6773794f0b42c572c408e68b2635e72b45eb65dcac75b811b9bc7ab31569a6d",
+    "extensions/results/event_stress_v1/seed43/A3_sessions.csv": "8e3f332338d7839498c1c787b88f306ae1cb5a5a02f67d7d3ee702c0ce394cc6",
+    "extensions/results/event_stress_v1/seed43/A3_sources.csv": "7d85be1a5d23de7152ce177b5515214fdb6cfc5203a15588f5c4e1ec89dc7556",
+    "extensions/results/event_stress_v1/seed43/duration_calibration.json": "3bdefa3fb4161855fb5bc5f20de7c82ce7273cf782adfc6ec5e67a5bc05cbca8",
+    "extensions/results/event_stress_v1/seed43/duration_cases.json": "e28a9cfe4f28b3ff4f4f06fc8a83c3b83ed19683c23a6c6b46157605ea3208b1",
+    "extensions/results/event_stress_v1/seed43/duration_selection.json": "deb2cbf260d961464a51186e3ef084ad5b279b5490ae5290c50513443eb7a648",
+    "extensions/results/event_stress_v1/seed43/duration_slow_cases.json": "7cece035c6ac4202c8203c37c3f77a1f06d899730ef93bfa03e5b320d15e2d47",
+    "extensions/results/event_stress_v1/seed43/input_variants.json": "cb6ab3c5d0261f315fbb8954787adae100d64b7e0770266a27ed17e972f63cc1",
+    "extensions/results/event_stress_v1/seed43/protocol.json": "28a708af88c53dda1dd1534ed2a45492924718d3fc2a0c86a68a98a00e4ff1e6",
+    "extensions/results/event_stress_v1/seed43/timestamp_invariance.json": "a2bcfd4b2a8f4d5e818364e7bb14dfa7f95f4c175cd66bdc44132d7445e9c4c6",
+    "extensions/results/event_stress_v1/seed44/A3_duration.csv": "b5dca7e9917daeb37e3cdf7b52a44a194ccafeaf9f6e64ea785e6a2cad658e4e",
+    "extensions/results/event_stress_v1/seed44/A3_duration_sources.csv": "c9156e57bae01e030f18e98ff52db43c406ba3523d962b7cee073ae6e04cd11c",
+    "extensions/results/event_stress_v1/seed44/A3_duration_summary.csv": "b3bc1d0f7b4b463b85e3ecd88cc48d8bdae1752ce0b469b01effc162c1f3e033",
+    "extensions/results/event_stress_v1/seed44/A3_models.csv": "f3fd709a44b27176099df7b7b00b941064c5b841a44db1d1464040e4ffd60d2a",
+    "extensions/results/event_stress_v1/seed44/A3_review.csv": "49766db36435c8c8246bd4e96450346b7bf90d0f424c271d3f9e32f908a00ccb",
+    "extensions/results/event_stress_v1/seed44/A3_sessions.csv": "7d1ccc7d62d20b9c068a1a0b2c7d9b273356b8468ac62ab30f05cced80040da9",
+    "extensions/results/event_stress_v1/seed44/A3_sources.csv": "757b6d493f2fd9f5aa533492a6f376c45ebf49410a0cd55ad701c498e32a7f25",
+    "extensions/results/event_stress_v1/seed44/duration_calibration.json": "c264b06732fc756fed5d32b96127d89db4d36a8baac654240a70a9de1fe78c1f",
+    "extensions/results/event_stress_v1/seed44/duration_cases.json": "226ccf1a6e03744dcb85177ec0dcc55d9f976446d066b58f36eb1b848dd1c6e5",
+    "extensions/results/event_stress_v1/seed44/duration_selection.json": "f03fe1423f9deb34ddf0c52c7c2307078fca2c74c82f220f3adf0c1a9885e4a6",
+    "extensions/results/event_stress_v1/seed44/duration_slow_cases.json": "a6f467035ac3833e53c0b68028762c26bb017990b21ada910a16f990e755e735",
+    "extensions/results/event_stress_v1/seed44/input_variants.json": "8d2e9a22ecf239b3b71816c7e8f3023c93cc531470daac830bae16cba613ba5d",
+    "extensions/results/event_stress_v1/seed44/protocol.json": "bd2a67f1250dc3945fb5144d114e3e4cd624d4b44887da8041addac6ce83c8b9",
+    "extensions/results/event_stress_v1/seed44/timestamp_invariance.json": "a2bcfd4b2a8f4d5e818364e7bb14dfa7f95f4c175cd66bdc44132d7445e9c4c6"
+  },
+  "token_weighted_formula": "sum(session_CE * predicted_targets_including_eos) / sum(predicted_targets_including_eos)",
+  "units": "CE uses nats; rule-count baselines have no CE/log-likelihood entries"
+}

@@ -1,0 +1,38 @@
+{
+  "data_kind": "synthetic-symbolic",
+  "files": {
+    "A2_models.csv": "0467e1dd3cb9bbc9bdb25d0493da36a61bb6f24dcc265b9812264f5d669e24eb",
+    "A2_review.csv": "c6eb6a4ef37b6bc991827e4f88e612ea06a22a0830c65baf5017a4a1fe98c71e",
+    "A2_sessions.csv": "a36d27b17a1bebfb0e933d7b3ed356e68d3eeceb4fd8e81b0ad95fc22ee0d537",
+    "A2_sources.csv": "845dae4380860f0768f7b0b1f53c1bad43ae36c4db404a5336039b115b93853d",
+    "calibration.json": "bcea6c8c234220c10351053a3f4d258cb60a00d3fb4b9a9ed853d72a46576b0d",
+    "input_cases.json": "46f01dc83df8894c56e841efaca7a996dba81a2ba29a7f16697965d50fb219e5",
+    "protocol.json": "db1ba2a628c4ad0a52aaddd745ed420d4fb55e52f874528575365c03a538f597",
+    "selection.json": "8e7ca72595f59820902e0f7873db08a7db8023e5204e18801a308d50911b23b1",
+    "support.json": "20749587e231f62d15e6902e93e0fd4ed813fec88d623e90c5be263c3d331376"
+  },
+  "limitations": [
+    "No camera, detector or K3 accuracy evidence.",
+    "Source conformal applies to exchangeable constructed normal groups only.",
+    "Rare-valid negatives can dominate source maxima and suppress hard novelty.",
+    "Session review rankings carry no source-level conformal guarantee."
+  ],
+  "phase": "A2",
+  "source_config_sha256": "2892ea669ed26c16404692bb0324ef08264e2b2b417c93f1f221ff6fdff48718",
+  "source_files": {
+    "A2_models.csv": "0467e1dd3cb9bbc9bdb25d0493da36a61bb6f24dcc265b9812264f5d669e24eb",
+    "A2_review.csv": "c6eb6a4ef37b6bc991827e4f88e612ea06a22a0830c65baf5017a4a1fe98c71e",
+    "A2_sessions.csv": "a36d27b17a1bebfb0e933d7b3ed356e68d3eeceb4fd8e81b0ad95fc22ee0d537",
+    "A2_sources.csv": "845dae4380860f0768f7b0b1f53c1bad43ae36c4db404a5336039b115b93853d",
+    "A2_test.claim": "62f587172b5c0bb562229d733d16d31062b9819e12945fc477bf01bae4ab304e",
+    "calibration.json": "bcea6c8c234220c10351053a3f4d258cb60a00d3fb4b9a9ed853d72a46576b0d",
+    "counts.json": "7e4678da05dc18433f242a86838e48792d47fa5f92814e574e31443b1074fe37",
+    "input_cases.json": "46f01dc83df8894c56e841efaca7a996dba81a2ba29a7f16697965d50fb219e5",
+    "protocol.json": "db1ba2a628c4ad0a52aaddd745ed420d4fb55e52f874528575365c03a538f597",
+    "selection.json": "8e7ca72595f59820902e0f7873db08a7db8023e5204e18801a308d50911b23b1",
+    "stage_A2.claim": "62f587172b5c0bb562229d733d16d31062b9819e12945fc477bf01bae4ab304e",
+    "support.json": "20749587e231f62d15e6902e93e0fd4ed813fec88d623e90c5be263c3d331376"
+  },
+  "source_run": "event-validation-44-20261011",
+  "status": "completed"
+}

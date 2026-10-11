@@ -1,0 +1,54 @@
+{
+  "code_sha256": {
+    "core/src/ngram.py": "eb6b887412a0e30353e9193e5d84816b6c5d79b80ad177d9a4885e2bc048d1bf",
+    "core/src/preprocess.py": "c61964dd1fe7e5b65bad89cebbd047e1905e2b8c0fdcb7c562b2a4a395c4ac31",
+    "extensions/experiments/event_stress.py": "6ef1268e12dbbe0da3ff510026bc6970d9a23c15567b5befbd592bb8534d7329",
+    "extensions/experiments/event_study.py": "f502c888803a34ad8811e9bc49e34ba02f69eb5f0435984fee11acc1762a65bf",
+    "extensions/experiments/registry.py": "1bb456dab232ef9588e311f6856ee203c5b415663da9e4be2203f51f9325d166",
+    "extensions/src/models.py": "2a42b52a57fc52eca41ef62ecd42350adc0b84feb994a13565fa83f3f943fab2",
+    "extensions/src/pipeline.py": "cf52d5ae58ca209abdb425bf7681b9d55e7f2c838f69ca63c74cd3fc1f921f0c"
+  },
+  "contract": {
+    "calibration": "A2 clean source maxima frozen; shifted noise has no guarantee",
+    "duration": "new train-fit bins/dev-selected model/clean calibration; slow x2",
+    "duration_label": "slow construction tag separate from symbolic novelty",
+    "labels": "latent novelty/nohelmet tags preserved under observation noise",
+    "review": "10/20/40 original cases; random/ties same seed as clean A2",
+    "score": "token-weighted CE, EOS per observed segment; empty segment predicts EOS"
+  },
+  "duration_input_sha256": "53b19bd36feaffa390824cf4757bb659daf084f28b141aecd9ef47b7918c08a2",
+  "experiment": "event-stress-v1",
+  "gap_bin_edges_train_only": [
+    1.3561295526570638,
+    2.1993579002811448
+  ],
+  "input_sha256": "d4fa32036d344ae8a310346e61b938d73e09d79298c793fe3f9242717b293649",
+  "noise": [
+    "drop10pct",
+    "duplicate10pct",
+    "helmet-flip10pct",
+    "track-fragment"
+  ],
+  "seed": 42,
+  "source_config_sha256": "3ff5f95656b3b1c0053de237bb6df528940c03663385604f853fcef2ab47c13c",
+  "source_files": {
+    "A2_models.csv": "b4db7a9ccc6ff9dafc9256322fa319fc04898c978fbaf809bb1be893e8be4bbf",
+    "A2_review.csv": "d38b7e3484701565050a328f27cf60195c1631a80418f0c721f5553aa663649b",
+    "A2_sessions.csv": "90dddfdff31ce2e67a30f86f8463fb3d874b3dc30d14c4905c053805d4e34e6a",
+    "A2_sources.csv": "af81176d015698983f629fd2462bc9727d32512a3aa6af3b4c885ee4be643c63",
+    "A2_test.claim": "1ee9c7a0fd2f5540d24ff7b4889c5ade30561940383610efed6165645c1e60ee",
+    "calibration.json": "bcea6c8c234220c10351053a3f4d258cb60a00d3fb4b9a9ed853d72a46576b0d",
+    "counts.json": "7e4678da05dc18433f242a86838e48792d47fa5f92814e574e31443b1074fe37",
+    "input_cases.json": "4e1da3dbe80239a45f6c7f1a1bb50efa4e0e10af47e6757e579c3320a908a4ef",
+    "protocol.json": "b06c0c2552ff9d9358bc2c2772e9885c1aad965105bf676f71652563c47c1f11",
+    "selection.json": "8e7ca72595f59820902e0f7873db08a7db8023e5204e18801a308d50911b23b1",
+    "stage_A2.claim": "1ee9c7a0fd2f5540d24ff7b4889c5ade30561940383610efed6165645c1e60ee",
+    "support.json": "20749587e231f62d15e6902e93e0fd4ed813fec88d623e90c5be263c3d331376"
+  },
+  "source_run": "event-validation-42-20261011",
+  "versions": {
+    "ngram-assignment": "0.1.0",
+    "nltk": "3.10.3",
+    "numpy": "2.4.6"
+  }
+}

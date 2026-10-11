@@ -1,0 +1,66 @@
+{
+  "hard_pair_counts": [
+    [
+      [
+        "<s>",
+        "PERSON_ENTER_ZONE"
+      ],
+      91
+    ],
+    [
+      [
+        "PERSON_ENTER_ZONE",
+        "HELMET_UNKNOWN"
+      ],
+      90
+    ],
+    [
+      [
+        "HELMET_UNKNOWN",
+        "HELMET_WORN"
+      ],
+      60
+    ],
+    [
+      [
+        "HELMET_WORN",
+        "HELMET_WORN"
+      ],
+      30
+    ],
+    [
+      [
+        "HELMET_WORN",
+        "HELMET_UNKNOWN"
+      ],
+      31
+    ],
+    [
+      [
+        "HELMET_UNKNOWN",
+        "HELMET_UNKNOWN"
+      ],
+      31
+    ],
+    [
+      [
+        "HELMET_UNKNOWN",
+        "PERSON_EXIT_ZONE"
+      ],
+      31
+    ],
+    [
+      [
+        "PERSON_EXIT_ZONE",
+        "</s>"
+      ],
+      91
+    ]
+  ],
+  "hard_pair_multiset_equal": true,
+  "hard_unigram_equal": true,
+  "test_rare_valid": 30,
+  "test_sessions": 180,
+  "train_rare_valid": 1,
+  "train_sessions": 91
+}

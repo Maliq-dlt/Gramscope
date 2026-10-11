@@ -1,0 +1,46 @@
+{
+  "files": {
+    "A3_duration.csv": "b5dca7e9917daeb37e3cdf7b52a44a194ccafeaf9f6e64ea785e6a2cad658e4e",
+    "A3_duration_sources.csv": "c9156e57bae01e030f18e98ff52db43c406ba3523d962b7cee073ae6e04cd11c",
+    "A3_duration_summary.csv": "b3bc1d0f7b4b463b85e3ecd88cc48d8bdae1752ce0b469b01effc162c1f3e033",
+    "A3_models.csv": "f3fd709a44b27176099df7b7b00b941064c5b841a44db1d1464040e4ffd60d2a",
+    "A3_review.csv": "49766db36435c8c8246bd4e96450346b7bf90d0f424c271d3f9e32f908a00ccb",
+    "A3_sessions.csv": "7d1ccc7d62d20b9c068a1a0b2c7d9b273356b8468ac62ab30f05cced80040da9",
+    "A3_sources.csv": "757b6d493f2fd9f5aa533492a6f376c45ebf49410a0cd55ad701c498e32a7f25",
+    "duration_calibration.json": "c264b06732fc756fed5d32b96127d89db4d36a8baac654240a70a9de1fe78c1f",
+    "duration_cases.json": "226ccf1a6e03744dcb85177ec0dcc55d9f976446d066b58f36eb1b848dd1c6e5",
+    "duration_selection.json": "f03fe1423f9deb34ddf0c52c7c2307078fca2c74c82f220f3adf0c1a9885e4a6",
+    "duration_slow_cases.json": "a6f467035ac3833e53c0b68028762c26bb017990b21ada910a16f990e755e735",
+    "input_variants.json": "8d2e9a22ecf239b3b71816c7e8f3023c93cc531470daac830bae16cba613ba5d",
+    "protocol.json": "bd2a67f1250dc3945fb5144d114e3e4cd624d4b44887da8041addac6ce83c8b9",
+    "timestamp_invariance.json": "a2bcfd4b2a8f4d5e818364e7bb14dfa7f95f4c175cd66bdc44132d7445e9c4c6"
+  },
+  "limitations": [
+    "Synthetic noise is not detector accuracy evidence.",
+    "Shifted noise/duration loses clean exchangeability guarantee.",
+    "Primary A2 clean observations/checkpoints are immutable."
+  ],
+  "phase": "A3",
+  "source_config_sha256": "0fa7930c8d230c356aadd1b4885fb9fa838a1cd26c8132a0de422f6a0301ed82",
+  "source_files": {
+    "A3_duration.csv": "b5dca7e9917daeb37e3cdf7b52a44a194ccafeaf9f6e64ea785e6a2cad658e4e",
+    "A3_duration_sources.csv": "c9156e57bae01e030f18e98ff52db43c406ba3523d962b7cee073ae6e04cd11c",
+    "A3_duration_summary.csv": "b3bc1d0f7b4b463b85e3ecd88cc48d8bdae1752ce0b469b01effc162c1f3e033",
+    "A3_models.csv": "f3fd709a44b27176099df7b7b00b941064c5b841a44db1d1464040e4ffd60d2a",
+    "A3_review.csv": "49766db36435c8c8246bd4e96450346b7bf90d0f424c271d3f9e32f908a00ccb",
+    "A3_sessions.csv": "7d1ccc7d62d20b9c068a1a0b2c7d9b273356b8468ac62ab30f05cced80040da9",
+    "A3_sources.csv": "757b6d493f2fd9f5aa533492a6f376c45ebf49410a0cd55ad701c498e32a7f25",
+    "A3_test.claim": "985bf66241a95a68b2a46fe64492a886dcd54d87be08cfe1cdd66e34a1942ad5",
+    "duration_calibration.json": "c264b06732fc756fed5d32b96127d89db4d36a8baac654240a70a9de1fe78c1f",
+    "duration_cases.json": "226ccf1a6e03744dcb85177ec0dcc55d9f976446d066b58f36eb1b848dd1c6e5",
+    "duration_counts.json": "70bf7b6646855ccc80532bb467c9c5eb97591b78cdeab6236c1f2ebf8d469e49",
+    "duration_selection.json": "f03fe1423f9deb34ddf0c52c7c2307078fca2c74c82f220f3adf0c1a9885e4a6",
+    "duration_slow_cases.json": "a6f467035ac3833e53c0b68028762c26bb017990b21ada910a16f990e755e735",
+    "input_variants.json": "8d2e9a22ecf239b3b71816c7e8f3023c93cc531470daac830bae16cba613ba5d",
+    "protocol.json": "bd2a67f1250dc3945fb5144d114e3e4cd624d4b44887da8041addac6ce83c8b9",
+    "stage_A3.claim": "985bf66241a95a68b2a46fe64492a886dcd54d87be08cfe1cdd66e34a1942ad5",
+    "timestamp_invariance.json": "a2bcfd4b2a8f4d5e818364e7bb14dfa7f95f4c175cd66bdc44132d7445e9c4c6"
+  },
+  "source_run": "event-stress-44-20261011",
+  "status": "completed"
+}

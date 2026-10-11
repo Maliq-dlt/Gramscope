@@ -1,3 +1,40 @@
 # Preserve completed experimental data fingerprints on every platform.
 extensions/results/cctv_symbol_order_v1/*.json -text whitespace=cr-at-eol
 extensions/results/cctv_symbol_order_v1/*.csv -text whitespace=cr-at-eol
+
+extensions/results/event_validation_v1/**/*.json -text whitespace=cr-at-eol
+extensions/results/event_validation_v1/**/*.csv -text whitespace=cr-at-eol
+extensions/results/event_stress_v1/**/*.json -text whitespace=cr-at-eol
+extensions/results/event_stress_v1/**/*.csv -text whitespace=cr-at-eol
+extensions/results/idwiki_holdout_v1/*.json -text whitespace=cr-at-eol
+extensions/results/idwiki_holdout_v1/*.csv -text whitespace=cr-at-eol
+data/indonesian/wiki-expansion-20261011/*.json -text whitespace=cr-at-eol
+data/indonesian/wiki-expansion-20261011/*.jsonl -text whitespace=cr-at-eol
+
+# Preserve new frozen evaluator/protocol bytes and numeric exports.
+extensions/experiments/event_study.py -text whitespace=cr-at-eol
+extensions/experiments/event_stress.py -text whitespace=cr-at-eol
+extensions/experiments/fresh_holdout.py -text whitespace=cr-at-eol
+extensions/experiments/wiki_expansion.py -text whitespace=cr-at-eol
+industrial_ai/detector_benchmark.py -text whitespace=cr-at-eol
+industrial_ai/tracking_benchmark.py -text whitespace=cr-at-eol
+industrial_ai/prepare_tracking_reference.py -text whitespace=cr-at-eol
+industrial_ai/tests/tracking_benchmark_check.py -text whitespace=cr-at-eol
+industrial_ai/reports/*protocol_20261011.json -text whitespace=cr-at-eol
+industrial_ai/uv.lock -text
+extensions/results/cctv_detector_v1/*.json -text whitespace=cr-at-eol
+extensions/results/cctv_detector_v1/*.csv -text whitespace=cr-at-eol
+extensions/results/cctv_tracking_v1/*.json -text whitespace=cr-at-eol
+extensions/results/cctv_tracking_v1/*.csv -text whitespace=cr-at-eol
+# Source fingerprints use the original Windows byte format.
+industrial_ai/runtime.py text eol=crlf
+industrial_ai/vision.py text eol=crlf
+extensions/experiments/registry.py text eol=crlf
+extensions/src/models.py text eol=crlf
+extensions/src/pipeline.py text eol=crlf
+extensions/src/analytics.py text eol=crlf
+extensions/src/cli.py text eol=crlf
+extensions/src/datasets.py text eol=crlf
+extensions/experiments/prepare_indonesian.py text eol=crlf
+extensions/experiments/stress_aggregation.py -text whitespace=cr-at-eol
+extensions/results/cctv_tracking_v1/summary.md -text whitespace=cr-at-eol

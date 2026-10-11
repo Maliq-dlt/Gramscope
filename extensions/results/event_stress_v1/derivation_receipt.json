@@ -1,0 +1,21 @@
+{
+  "aggregation_csv": "aggregation.csv",
+  "aggregation_csv_sha256": "672b6362a3f262be100caddd90f53a18b02a54fe594909b31053440a2c360972",
+  "aggregation_metadata_sha256": "93e8952b66be9dc9993c524b25705af23f2e27cd307eeb4c14215177ff7b8abc",
+  "aggregation_rows": 138,
+  "check_command": "python -m extensions.experiments.stress_aggregation --check extensions/results/event_stress_v1/aggregation.csv",
+  "generator_path": "extensions/experiments/stress_aggregation.py",
+  "generator_sha256": "61888ae87c81422ae6208032dcd03d07ed53c3960d27677e094274611a7ec663",
+  "method": "sum(stored session CE * targets) / sum(targets); no model calls",
+  "rebuild_command": "python -m extensions.experiments.stress_aggregation --output .tmp/stress-aggregation-rebuild",
+  "replay_bytes_match": true,
+  "schema": "event-stress-aggregation-generator-v1",
+  "source_files": {
+    "seed42/A3_duration.csv": "655dadb5fd8ed094bf031a72684942229d1c032d97b2e232c82f4626dbef115a",
+    "seed42/A3_sessions.csv": "1a3e41ac44baa833081fb67eb0e2f8f90b6e3849beeb4e00c4990cf2268423dd",
+    "seed43/A3_duration.csv": "a3ee02847c27a66b2e8031da75b45a42bf8b1007c1c384f3200aff09656109b3",
+    "seed43/A3_sessions.csv": "8e3f332338d7839498c1c787b88f306ae1cb5a5a02f67d7d3ee702c0ce394cc6",
+    "seed44/A3_duration.csv": "b5dca7e9917daeb37e3cdf7b52a44a194ccafeaf9f6e64ea785e6a2cad658e4e",
+    "seed44/A3_sessions.csv": "7d1ccc7d62d20b9c068a1a0b2c7d9b273356b8468ac62ab30f05cced80040da9"
+  }
+}

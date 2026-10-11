@@ -1,0 +1,51 @@
+{
+  "baseline": "3-kneser_ney",
+  "interpretation": "encyclopedic introductions, bounded lexical selection; not population-general confirmation",
+  "metrics": [
+    {
+      "cross_entropy": 3.8649672649186106,
+      "mean_document_oov": 0.28148167445438077,
+      "model": "3-modified_kneser_ney",
+      "nll": 5364.574563707031,
+      "perplexity": 47.701710887741875,
+      "predicted_tokens": 1388,
+      "probabilistic": true,
+      "role": "dev winner",
+      "test_documents": 24,
+      "test_groups": 22,
+      "zero_probability": false
+    },
+    {
+      "cross_entropy": 3.8726190747297466,
+      "mean_document_oov": 0.28148167445438077,
+      "model": "3-kneser_ney",
+      "nll": 5375.195275724888,
+      "perplexity": 48.068115347989966,
+      "predicted_tokens": 1388,
+      "probabilistic": true,
+      "role": "same-order KN baseline",
+      "test_documents": 24,
+      "test_groups": 22,
+      "zero_probability": false
+    }
+  ],
+  "paired_bootstrap": {
+    "ci95": [
+      -0.02010198622534854,
+      0.0044772048560927065
+    ],
+    "difference": -0.007651809811136415,
+    "documents": 24,
+    "independent_groups": 22,
+    "metric": "paired token-weighted CE difference (A minus B)",
+    "resamples": 1000,
+    "seed": 42,
+    "unit": "duplicate/source group; paired resampling"
+  },
+  "selected": "3-modified_kneser_ney",
+  "selection_stability": [
+    "3-modified_kneser_ney",
+    "3-kneser_ney",
+    "3-modified_kneser_ney"
+  ]
+}

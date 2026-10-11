@@ -1,0 +1,179 @@
+{
+  "best": "2-modified_kneser_ney",
+  "models": {
+    "1-kneser_ney": {
+      "method": "kneser_ney",
+      "order": 1,
+      "trials": [
+        {
+          "dev_loss": 2.419661890145778,
+          "parameters": {
+            "discount": 0.5
+          }
+        },
+        {
+          "dev_loss": 2.419661890145778,
+          "parameters": {
+            "discount": 0.75
+          }
+        },
+        {
+          "dev_loss": 2.419661890145778,
+          "parameters": {
+            "discount": 0.9
+          }
+        }
+      ],
+      "winner": {
+        "dev_loss": 2.419661890145778,
+        "parameters": {
+          "discount": 0.5
+        }
+      }
+    },
+    "1-modified_kneser_ney": {
+      "method": "modified_kneser_ney",
+      "order": 1,
+      "trials": [
+        {
+          "dev_loss": 2.419661890145778,
+          "parameters": {}
+        }
+      ],
+      "winner": {
+        "dev_loss": 2.419661890145778,
+        "parameters": {}
+      }
+    },
+    "1-witten_bell": {
+      "method": "witten_bell",
+      "order": 1,
+      "trials": [
+        {
+          "dev_loss": 2.419661890145778,
+          "parameters": {}
+        }
+      ],
+      "winner": {
+        "dev_loss": 2.419661890145778,
+        "parameters": {}
+      }
+    },
+    "2-kneser_ney": {
+      "method": "kneser_ney",
+      "order": 2,
+      "trials": [
+        {
+          "dev_loss": 1.6133157493030934,
+          "parameters": {
+            "discount": 0.5
+          }
+        },
+        {
+          "dev_loss": 1.608389574051902,
+          "parameters": {
+            "discount": 0.75
+          }
+        },
+        {
+          "dev_loss": 1.6094338154982237,
+          "parameters": {
+            "discount": 0.9
+          }
+        }
+      ],
+      "winner": {
+        "dev_loss": 1.608389574051902,
+        "parameters": {
+          "discount": 0.75
+        }
+      }
+    },
+    "2-modified_kneser_ney": {
+      "method": "modified_kneser_ney",
+      "order": 2,
+      "trials": [
+        {
+          "dev_loss": 1.571004717826745,
+          "parameters": {}
+        }
+      ],
+      "winner": {
+        "dev_loss": 1.571004717826745,
+        "parameters": {}
+      }
+    },
+    "2-witten_bell": {
+      "method": "witten_bell",
+      "order": 2,
+      "trials": [
+        {
+          "dev_loss": 1.6066056836383167,
+          "parameters": {}
+        }
+      ],
+      "winner": {
+        "dev_loss": 1.6066056836383167,
+        "parameters": {}
+      }
+    },
+    "3-kneser_ney": {
+      "method": "kneser_ney",
+      "order": 3,
+      "trials": [
+        {
+          "dev_loss": 1.655043905389306,
+          "parameters": {
+            "discount": 0.5
+          }
+        },
+        {
+          "dev_loss": 1.5969294439817583,
+          "parameters": {
+            "discount": 0.75
+          }
+        },
+        {
+          "dev_loss": 1.5862921831188124,
+          "parameters": {
+            "discount": 0.9
+          }
+        }
+      ],
+      "winner": {
+        "dev_loss": 1.5862921831188124,
+        "parameters": {
+          "discount": 0.9
+        }
+      }
+    },
+    "3-modified_kneser_ney": {
+      "method": "modified_kneser_ney",
+      "order": 3,
+      "trials": [
+        {
+          "dev_loss": 1.581956579008646,
+          "parameters": {}
+        }
+      ],
+      "winner": {
+        "dev_loss": 1.581956579008646,
+        "parameters": {}
+      }
+    },
+    "3-witten_bell": {
+      "method": "witten_bell",
+      "order": 3,
+      "trials": [
+        {
+          "dev_loss": 1.7120296654997234,
+          "parameters": {}
+        }
+      ],
+      "winner": {
+        "dev_loss": 1.7120296654997234,
+        "parameters": {}
+      }
+    }
+  }
+}

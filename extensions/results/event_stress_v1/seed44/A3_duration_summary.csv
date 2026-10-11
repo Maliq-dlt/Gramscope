@@ -1,0 +1,3 @@
+seed,condition,model,dev_ce_nats,mean_ce_nats,oov_targets,symbol_targets,normal_source_alerts,normal_source_groups
+44,duration_base,2-modified_kneser_ney,1.571004717826745,3.2977008415212254,60,930,0,30
+44,duration_slow,2-modified_kneser_ney,1.571004717826745,3.3174657331649087,60,930,0,30

@@ -1,0 +1,218 @@
+[
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "1-kneser_ney",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "1-modified_kneser_ney",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "1-witten_bell",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "2-kneser_ney",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "2-modified_kneser_ney",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "2-witten_bell",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "3-kneser_ney",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "3-modified_kneser_ney",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  },
+  {
+    "base_times": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "ce_delta": 0.0,
+    "model": "3-witten_bell",
+    "scope": "fresh path with actual times x2; scorer consumes symbols only",
+    "slow_times": [
+      0.0,
+      2.0,
+      4.0,
+      6.0,
+      8.0,
+      10.0,
+      12.0
+    ],
+    "targets_equal": true
+  }
+]

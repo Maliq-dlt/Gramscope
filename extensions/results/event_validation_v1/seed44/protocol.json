@@ -1,0 +1,220 @@
+{
+  "code_sha256": {
+    "core/src/ngram.py": "eb6b887412a0e30353e9193e5d84816b6c5d79b80ad177d9a4885e2bc048d1bf",
+    "core/src/preprocess.py": "c61964dd1fe7e5b65bad89cebbd047e1905e2b8c0fdcb7c562b2a4a395c4ac31",
+    "extensions/experiments/event_study.py": "f502c888803a34ad8811e9bc49e34ba02f69eb5f0435984fee11acc1762a65bf",
+    "extensions/experiments/registry.py": "1bb456dab232ef9588e311f6856ee203c5b415663da9e4be2203f51f9325d166",
+    "extensions/src/models.py": "2a42b52a57fc52eca41ef62ecd42350adc0b84feb994a13565fa83f3f943fab2",
+    "extensions/src/pipeline.py": "cf52d5ae58ca209abdb425bf7681b9d55e7f2c838f69ca63c74cd3fc1f921f0c"
+  },
+  "contract": {
+    "calibration": "30 normal source maxima; separate train/dev; ties >=, alpha .05",
+    "known_nohelmet": "separate rule tag; not novelty-positive or safety evidence",
+    "label_independence": "frozen labels independent of LM scores; no expert K3 truth",
+    "label_rubric": "easy_order/hard_order novel by construction; other paths valid",
+    "normal_subset": "test normal paths only; mirrors four-path calibration groups",
+    "rare_prevalence": "train1/91, dev10/40, cal30/120, test30/180; designed shift",
+    "review_budget_unit": "number of original sessions in whole 180-case test queue",
+    "source_assumption": "IDs share grammar; conditional synthetic groups, not cameras"
+  },
+  "experiment": "event-validation-v1",
+  "input_sha256": "01314d81d502be001cb7daefa1bf164d50ad158cceab1ea63c10e5341a8d50c2",
+  "protocol": {
+    "cctv": "plan after academic final verification; public image benchmark if labels available; site/track/incident truths required separately",
+    "core": "frozen; no historical rescore",
+    "date": "2026-10-11",
+    "indonesian": {
+      "accepted_docs": 300,
+      "excluded_pilot": "data/indonesian/wiki-pilot-20261010-final/documents.jsonl",
+      "max_candidates": 5000,
+      "minimum_groups": 200,
+      "models": [
+        "1-kn",
+        "2-kn",
+        "3-kn",
+        "2-wb",
+        "3-wb",
+        "2-mkn",
+        "3-mkn",
+        "3-interpolation_em"
+      ],
+      "namespace": 0,
+      "nonredirect": true,
+      "split": "primary seed42 grouped80/10/10; seeds43,44 only development train/dev robustness, primary test never reused for tuning",
+      "start_title": "A",
+      "test": "select normalized minimum dev CE; freeze winner and same-order KN baseline, then single heldout comparison + group bootstrap; not population-general confirmatory"
+    },
+    "purpose": "academic-first validation, then CCTV",
+    "schema_version": 1,
+    "synthetic": {
+      "baselines": [
+        "frozen transition rules incl BOS/EOS",
+        "pair-frequency <2",
+        "unigram",
+        "rule-priority then LM vs random vs chronological"
+      ],
+      "calibration": "separate fresh normal group maxima; alpha0.05 source p-value (1+number >= score)/(m+1)",
+      "difficulty": [
+        "unseen pairs easy",
+        "seen pairs and identical pair multiset different trigram hard",
+        "rare valid negative",
+        "known no-helmet rule independent"
+      ],
+      "duration": "train-derived gap bins optional ablation; no camera exposure inference",
+      "groups": {
+        "calibration": 30,
+        "dev": 10,
+        "test": 30,
+        "train": 30
+      },
+      "kind": "constructed symbolic scenarios; not expert/site ground truth",
+      "labels": "synthetic construction rubric only; no operational precision claim",
+      "models": {
+        "methods": [
+          "kneser_ney",
+          "witten_bell",
+          "modified_kneser_ney"
+        ],
+        "orders": [
+          1,
+          2,
+          3
+        ]
+      },
+      "noise": [
+        "clean",
+        "drop10pct",
+        "duplicate10pct",
+        "helmet-flip10pct",
+        "track-fragment"
+      ],
+      "review_budgets": [
+        10,
+        20,
+        40
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "selection": "dev token-weighted CE; lexical ties"
+    }
+  },
+  "seed": 44,
+  "split": {
+    "calibration": [
+      "source-44-058",
+      "source-44-023",
+      "source-44-021",
+      "source-44-077",
+      "source-44-078",
+      "source-44-076",
+      "source-44-027",
+      "source-44-080",
+      "source-44-074",
+      "source-44-002",
+      "source-44-090",
+      "source-44-049",
+      "source-44-015",
+      "source-44-047",
+      "source-44-016",
+      "source-44-097",
+      "source-44-057",
+      "source-44-068",
+      "source-44-059",
+      "source-44-030",
+      "source-44-006",
+      "source-44-024",
+      "source-44-094",
+      "source-44-004",
+      "source-44-091",
+      "source-44-013",
+      "source-44-040",
+      "source-44-034",
+      "source-44-085",
+      "source-44-008"
+    ],
+    "dev": [
+      "source-44-055",
+      "source-44-044",
+      "source-44-062",
+      "source-44-039",
+      "source-44-098",
+      "source-44-071",
+      "source-44-079",
+      "source-44-067",
+      "source-44-064",
+      "source-44-029"
+    ],
+    "test": [
+      "source-44-083",
+      "source-44-088",
+      "source-44-084",
+      "source-44-036",
+      "source-44-043",
+      "source-44-009",
+      "source-44-045",
+      "source-44-041",
+      "source-44-051",
+      "source-44-075",
+      "source-44-093",
+      "source-44-081",
+      "source-44-038",
+      "source-44-065",
+      "source-44-020",
+      "source-44-012",
+      "source-44-001",
+      "source-44-072",
+      "source-44-095",
+      "source-44-092",
+      "source-44-003",
+      "source-44-037",
+      "source-44-028",
+      "source-44-048",
+      "source-44-022",
+      "source-44-014",
+      "source-44-089",
+      "source-44-069",
+      "source-44-066",
+      "source-44-052"
+    ],
+    "train": [
+      "source-44-054",
+      "source-44-031",
+      "source-44-082",
+      "source-44-046",
+      "source-44-025",
+      "source-44-063",
+      "source-44-070",
+      "source-44-010",
+      "source-44-032",
+      "source-44-026",
+      "source-44-053",
+      "source-44-099",
+      "source-44-086",
+      "source-44-035",
+      "source-44-033",
+      "source-44-050",
+      "source-44-056",
+      "source-44-060",
+      "source-44-011",
+      "source-44-073",
+      "source-44-042",
+      "source-44-017",
+      "source-44-087",
+      "source-44-019",
+      "source-44-061",
+      "source-44-018",
+      "source-44-096",
+      "source-44-007",
+      "source-44-000",
+      "source-44-005"
+    ]
+  },
+  "versions": {
+    "ngram-assignment": "0.1.0",
+    "nltk": "3.10.3",
+    "numpy": "2.4.6"
+  }
+}
