@@ -1,0 +1,25 @@
+import sys,json,subprocess,hashlib,time
+from pathlib import Path
+root=Path.cwd(); sys.path.insert(0,str(root/'industrial_ai'))
+import runtime
+import prepare_tracking_reference as ref
+out=root/'industrial_ai/data/public/sdd-continuous-20261011-p1'
+if out.exists(): raise FileExistsError(out)
+listing=json.loads((root/'industrial_ai/data/public/sdd-reference-20261011/file_listing.json').read_text())
+lookup={r['name']:r['totalBytes'] for r in listing['datasetFiles']}
+clips=['bookstore/video0','nexus/video0','little/video0','deathCircle/video0']
+out.mkdir(parents=True)
+ref.save(out/'protocol.json',{'dataset_ref':ref.REF,'original_url':ref.ORIGINAL,'license':ref.LICENSE,'mirror_license_discrepancy':'Stanford original NC-SA overrides mirror CC0','clips':clips,'dev_scenes':['bookstore','nexus'],'test_scenes':['little','deathCircle'],'selection':'fixed new scene prefixes, first300 contiguous frames per clip; chosen before inference','historical_excluded_scenes':['coupa','hyang'],'purpose':'aerial dense person tracking reference, not worn-helmet/industrial incidence','created_unix':time.time()})
+ref.save(out/'file_listing.json',listing)
+downloads={}; records=[]
+for name in clips:
+    local=out/name;local.mkdir(parents=True)
+    for path in [f'video/{name}/video.mp4',f'annotations/{name}/annotations.txt',f'annotations/{name}/reference.jpg']:
+        dest=local/Path(path).name
+        downloads[path]=ref.download(path,dest,lookup[path]);print('Downloaded',path,lookup[path],flush=True)
+    row=ref.inspect(local);row.update(clip=name,source_group=name.split('/')[0]);records.append(row)
+    subprocess.run(['ffmpeg','-v','error','-i',str(local/'video.mp4'),'-f','null','-'],check=True,timeout=240)
+    print('Decoded',name,row['video_dimensions'],row['annotation_rows'],flush=True)
+files={p.relative_to(out).as_posix():hashlib.file_digest(p.open('rb'),'sha256').hexdigest() for p in out.rglob('*') if p.is_file()}
+ref.save(out/'manifest.json',{'status':'completed','dataset_ref':ref.REF,'clips':records,'downloads':downloads,'files':files,'raw_exposure_seconds':sum(r['duration_seconds'] for r in records),'evaluated_exposure_seconds':0,'limitations':['Aerial campus not target CCTV','SDD includes interpolated/generated and occluded annotations; retain flags','No worn-helmet or incident labels','Annotation original canvas scaled to decoded video dimensions as prior documented reference protocol']})
+print('ACQUISITION COMPLETE',len(records),flush=True)

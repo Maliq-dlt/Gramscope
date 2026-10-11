@@ -1,0 +1,32 @@
+{
+  "baseline": "standard+byte",
+  "dev_complete_sha256": "90459abcc2e43605a5562ba73b21b13b69209eb2f227fec0713b3fdaef57fb57",
+  "dev_metrics": {
+    "sliced+bot": {
+      "IDF1": 0.008563643441027637,
+      "mean_HOTA": 0.03367446989574485
+    },
+    "sliced+byte": {
+      "IDF1": 0.020220349967595592,
+      "mean_HOTA": 0.043807162558770485
+    },
+    "standard+bot": {
+      "IDF1": 0.0,
+      "mean_HOTA": 0.0011292529693926134
+    },
+    "standard+byte": {
+      "IDF1": 0.0,
+      "mean_HOTA": 0.0011292529693926134
+    }
+  },
+  "dev_run": "D:\\Dokumen\\Semester 5\\Pemrosesan Bahasa Alami\\N gram\\industrial_ai\\reports\\runtime\\priority_tracking_v1\\dev",
+  "protocol_sha256": "72d1d1f05faab2ac87b480440b754c2dbc6720191dd0acb0ccb45a4810f3f5ec",
+  "ranking": [
+    "sliced+byte",
+    "sliced+bot",
+    "standard+bot",
+    "standard+byte"
+  ],
+  "rule": "max dev combined mean HOTA, then IDF1, then lexical candidate name",
+  "selected": "sliced+byte"
+}

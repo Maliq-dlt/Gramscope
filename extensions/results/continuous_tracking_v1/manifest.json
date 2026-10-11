@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "kind": "bounded academic continuous aerial tracking reference",
+  "files": {
+    "acquisition_snapshot.py.txt": "d40d03c5e7fb1e0379cdacf0027aa9c40517a4635d9e01230229709026559b92",
+    "continuous_tracking_study.py.txt": "67858619073e350405e12bf23b63675fe5543b7e9babb8ad1aac1e04ad2f304f",
+    "cvat_reference.py.txt": "ae15f1b9f94a784b20c549e7bcbfa9c4ca412e9285219f1ec86e67dbd5ad40a9",
+    "detection_metrics.csv": "0725e61cbb21d37f4f14f3072f425b7dbdcdc12afd43c3ef8ddbbd31c4f7b6fe",
+    "dev_complete.json": "90459abcc2e43605a5562ba73b21b13b69209eb2f227fec0713b3fdaef57fb57",
+    "dev_metrics.json": "3c084bf7a28ef6d98094dac57e735f6a77d6d805bc90bc581e22f97d5d859ad5",
+    "dev_receipt.json": "a218eab38a708f67f4531c4994bf89f445836af65f6cc815d3a3398ac7fe0797",
+    "prepare_continuous_reference.py.txt": "4e6d798b72d4975b723795b190c0a0d596b3a30ec51934513e194b15dc4fcfc1",
+    "prepare_tracking_reference.py.txt": "03465ad880205f5ecc9614e7a6dac7b0bd7bf20edaff7f22ed8f05180bebfacd",
+    "preservation_receipt.json": "4ae0cc87b2f01d5ead2a13abea9d406a1f449da334a7246a2768331bf271ee4d",
+    "protocol.json": "72d1d1f05faab2ac87b480440b754c2dbc6720191dd0acb0ccb45a4810f3f5ec",
+    "README.md": "f260cd99d349e256647a23ed5dc18c23c7d2e7cd227db9e8122fa05f203ff421",
+    "review_receipt.json": "a0e825e8597e0c4aecb69200954413665eb181755c3f3e375e33e9891efbeda2",
+    "selection.json": "b98a2983f2c2ff58d6f0b14cc1e30ea39a47b002ab259e43c8df6a21c81409bc",
+    "sources.json": "dc4ea702c9914a9847634409853b4782f2267bf68909d438192d62ef1d97217e",
+    "test_complete.json": "47d5e1e91ec1b1b8ef4dda79bfb359c5433b27d2d157f974d34180af72179188",
+    "test_metrics.json": "e5111db201d17caa86079bc3a0f0cadc62fde556c3b6b73024a0ff7845c6a676",
+    "test_receipt.json": "3fe1fca6e4a32c7c0c85a527ffc1b55ac8d7fc94e264c140215f741055e88b5c",
+    "tracking_benchmark.py.txt": "4a12a5ea7d49a18f02ddf653da01255cff52e9f41027dd237b60d4c03a52401d",
+    "tracking_metrics.csv": "ae4b24c4787f297070f280a6f99096ff4a46d703877d5cbd4fe59693de278bc7",
+    "verification_local.json": "9636c48fac22723e1de528d117b3075fcab800b093da421a18122fb46501e3f1"
+  },
+  "raw_media_and_model_weights": "local only",
+  "operational_accuracy": "not validated"
+}

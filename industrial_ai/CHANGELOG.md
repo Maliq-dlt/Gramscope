@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-11 — referensi review dan tracking kontinu
+
+- Import CVAT video mengikat review ke hash XML/video dan coverage eksplisit; sparse/draft/label tak dikenal tidak disahkan otomatis.
+- Evaluasi terpisah SAHI/full-frame dan ByteTrack/BoT-SORT setiap frame, dengan HOTA/IDF1 serta prediksi raw.
+- Empat scene SDD baru dan dataset/protokol/CSV tersimpan; test tidak menunjukkan peningkatan dan model studio tetap.
+- SAHI0.12.8 pinned dev, runnable checks masuk CI; panduan di docs/TRACKING_ACCURACY.md.
+
 ## 2026-10-11 — CCTV dan N-gram berbukti
 
 - Ledger v2 menautkan crossing orang/kendaraan dan observasi helm frame/interval ke bukti asli, revisi dan source group; query/ringkasan memakai filter sama.

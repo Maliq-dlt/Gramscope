@@ -1,0 +1,38 @@
+{
+  "detection_rows": 1200,
+  "detections_sha256": "fff184cb8eb3ce6d7486a5d11db373b75f61f6cac63f5ee5d823477cb8b7a32b",
+  "detector_timing": {
+    "sliced": {
+      "calls": 600,
+      "p50_ms": 85.96369999941089,
+      "p95_ms": 120.40680499922013,
+      "total_ms": 51485.66570004914
+    },
+    "standard": {
+      "calls": 600,
+      "p50_ms": 18.380249999609077,
+      "p95_ms": 28.317585003969704,
+      "total_ms": 11852.238599967677
+    }
+  },
+  "device": "cuda:0",
+  "device_reason": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "elapsed_seconds": 73.04825709999568,
+  "peak_cuda_allocated_bytes": 78508544,
+  "track_rows": 1200,
+  "tracker_timing": {
+    "sliced+byte": {
+      "calls": 600,
+      "p50_ms": 0.09435000174562447,
+      "p95_ms": 0.5967449960735384,
+      "total_ms": 87.19590005057398
+    },
+    "standard+byte": {
+      "calls": 600,
+      "p50_ms": 0.19579999934649095,
+      "p95_ms": 0.27175000250281295,
+      "total_ms": 121.8820999347372
+    }
+  },
+  "tracks_sha256": "a921c4a4af904ad166ab50479149b2e1cf9212543868e1b899be42401d48634d"
+}

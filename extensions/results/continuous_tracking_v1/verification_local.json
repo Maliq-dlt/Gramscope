@@ -1,0 +1,47 @@
+{
+  "academic": {
+    "command": "uv run --frozen pytest -q",
+    "passed": 187,
+    "lint_format_ty_build": "passed"
+  },
+  "backend": {
+    "runnable_suites_passed": 26,
+    "new_checks": [
+      "tests/cvat_reference_check.py",
+      "tests/continuous_tracking_check.py"
+    ],
+    "commands_record": ".tmp/priority_upgrade_v1/backend_checks.json",
+    "ppe_offline_self_check": "passed",
+    "extra_training_smoke_cpu_objects": "passed",
+    "initial_package_check": "read old package and failed; rebuilt then passed"
+  },
+  "frontend": {
+    "typecheck": "passed",
+    "check": "10 suites passed",
+    "build": "passed",
+    "npm_audit": "0 vulnerabilities"
+  },
+  "source_quality": {
+    "ruff_check": "passed",
+    "ruff_format": "77 files passed excluding unchanged user tests/e2e.py; user file retains preexisting formatting issue",
+    "ty": "all scoped backend and new scripts passed",
+    "diff_check": "passed"
+  },
+  "packages": {
+    "academic": "sdist/wheel built",
+    "studio": "Final publish build after docs/collector changes: source equality/runtime exclusion passed",
+    "new_experiment_scripts": "all5 included in sdist source-equal; scripts run from repository checkout",
+    "build_output": ".tmp/priority_upgrade_v1/packages-publish"
+  },
+  "security": {
+    "pip_audit": "No known vulnerabilities, 1 existing ignored NLTK advisory; editable/CUDA distributions skipped",
+    "public_torch_versions_audit": "2.14.1/0.29.1 no known vulnerabilities"
+  },
+  "data_validation": {
+    "offline_scorer_equality": "passed dev/test without inference",
+    "csv_json_sha_consistency": "independent reviewer passed",
+    "review": "Importer and runner cross-review passed; final collector bounds and clone prerequisites fixed with focused checks."
+  },
+  "runtime": "CUDA RTX4060 dev/test completed; no detector promoted; no live/CCTV production accuracy claim",
+  "preservation": "2987 protected files; only results index intentionally changed with matching original backup;15 core hashes match."
+}

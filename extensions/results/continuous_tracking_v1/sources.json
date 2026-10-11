@@ -1,0 +1,337 @@
+{
+  "dataset_ref": "aryashah2k/stanford-drone-dataset",
+  "original_url": "https://cvgl.stanford.edu/projects/uav_data/",
+  "original_license": "CC-BY-NC-SA-3.0",
+  "mirror_license_discrepancy": "CC0 does not override Stanford original NC-SA",
+  "manifest_sha256": "64fd8285f73350399b453b66e96fbc2aecf2f3f8ea4b5e0a3f5b04a8ef71a695",
+  "files": {
+    "bookstore/video0/annotations.txt": "58ec509091faa3e81f5d77c5ab43388ec3a8e7988f9a69952ac523c09799a2b4",
+    "bookstore/video0/annotations.txt.download": "0aeb9bd06fb5a82c064b18438d2abb8ec4e1ac86f945bdbaa6eecab3dc48752e",
+    "bookstore/video0/reference.jpg": "fb7fe3d7253335ecab3f7678f148c675f2504e2b5f17a624c642b5252195b2fc",
+    "bookstore/video0/reference.jpg.download": "fb7fe3d7253335ecab3f7678f148c675f2504e2b5f17a624c642b5252195b2fc",
+    "bookstore/video0/video.mp4": "88c1f9790cf21c20f6672827eaa15878a7ae7c8a066ff7fdba1dce1a5693f0ff",
+    "bookstore/video0/video.mp4.download": "ac685811a1da962215fe6afe1669a6dade1b52d076e55d82c0172386bc36f5bf",
+    "deathCircle/video0/annotations.txt": "f7b598bb4f19cc15dec0f63b2a46f9c3eed58457cb932c4841896f2a56a2898b",
+    "deathCircle/video0/annotations.txt.download": "c7e92237196746e6e36e1dcc78d430834eeca11e2763726d1cec578e1819814d",
+    "deathCircle/video0/reference.jpg": "4ec0dcc67f7068f03d64a0ea5b9302cfe26932c15db391ab7af24d5be67fa1d2",
+    "deathCircle/video0/reference.jpg.download": "4ec0dcc67f7068f03d64a0ea5b9302cfe26932c15db391ab7af24d5be67fa1d2",
+    "deathCircle/video0/video.mp4": "c60587461072712c990b9a6be03030a1feae4baa5bbeb10ad523233c1d5b27db",
+    "deathCircle/video0/video.mp4.download": "c3d0167401b02f5a1be723b68ced8bb7c6e9b58e224f8fcac0da763335cef1c5",
+    "file_listing.json": "51200be65436e7b4a3831efbf3756537594866d24130ce5c3f20da5c27ebbc56",
+    "little/video0/annotations.txt": "8da212a093d1c62103f163cfa3668fa446ffe967eed198e16f771657f1d3a9d8",
+    "little/video0/annotations.txt.download": "7d6b74ea26a30e0f54b0c6b362cc69a19e7fd75467492877291450d68b4192ab",
+    "little/video0/reference.jpg": "e7f6870761f6e62fbbb2ce284d880caa47b410a89e52e827eda09da87b866a20",
+    "little/video0/reference.jpg.download": "e7f6870761f6e62fbbb2ce284d880caa47b410a89e52e827eda09da87b866a20",
+    "little/video0/video.mp4": "e869ce7dd66f65e1b244ab87cf7e5cdb7b7a73f455aef5b719bf5cec0c099447",
+    "little/video0/video.mp4.download": "c9dc0a91cfe8158a3bf6f65c62d19cf125fa2ffbc7d2991211be53e8c9649158",
+    "nexus/video0/annotations.txt": "957f9994093c99fd38e920c83635b5ce7558f40248d7147b2b954cceaf4d625b",
+    "nexus/video0/annotations.txt.download": "4ea6abd163ce067cd552f1ab11ff831e5d6226583d26871a8f71255e52f3dec2",
+    "nexus/video0/reference.jpg": "49d2e5b288d906321df0f10cce73c61c999b66f81a4de1615e35b9444137b718",
+    "nexus/video0/reference.jpg.download": "49d2e5b288d906321df0f10cce73c61c999b66f81a4de1615e35b9444137b718",
+    "nexus/video0/video.mp4": "c4ca93a39d8e65cc584d648abcb7daa542cb69b9a46bb721485d800b011beed9",
+    "nexus/video0/video.mp4.download": "8087e588a20c31965b33acc71aa66f9eaae2a71406e79c36193392e65010f8df",
+    "protocol.json": "b5c497d74760b2135d529a0ce7ef4395f0aef9a4b96a6302015be2686c9ff345"
+  },
+  "clips": [
+    {
+      "annotation_rows": 361129,
+      "annotation_time_seconds": 444.94494494494495,
+      "boxes_outside_reference": 0,
+      "classes": [
+        "Biker",
+        "Bus",
+        "Car",
+        "Cart",
+        "Pedestrian",
+        "Skater"
+      ],
+      "clip": "bookstore/video0",
+      "coordinate_scale": [
+        0.9943820224719101,
+        0.9926470588235294
+      ],
+      "coordinate_transform_required": true,
+      "duration_seconds": 444.944945,
+      "evaluated_exposure_seconds": 0,
+      "fps": 29.97,
+      "inference_status": "not started",
+      "max_annotation_frame": 13334,
+      "reference_dimensions": [
+        1424,
+        1088
+      ],
+      "source_group": "bookstore",
+      "time_alignment_delta_seconds": 5.5055068060028134e-08,
+      "video_dimensions": [
+        1416,
+        1080
+      ]
+    },
+    {
+      "annotation_rows": 152703,
+      "annotation_time_seconds": 423.12312312312315,
+      "boxes_outside_reference": 0,
+      "classes": [
+        "Biker",
+        "Cart",
+        "Pedestrian",
+        "Skater"
+      ],
+      "clip": "nexus/video0",
+      "coordinate_scale": [
+        0.556390977443609,
+        0.5546995377503852
+      ],
+      "coordinate_transform_required": true,
+      "duration_seconds": 423.123123,
+      "evaluated_exposure_seconds": 0,
+      "fps": 29.97,
+      "inference_status": "not started",
+      "max_annotation_frame": 12680,
+      "reference_dimensions": [
+        1330,
+        1947
+      ],
+      "source_group": "nexus",
+      "time_alignment_delta_seconds": -1.2312312946960446e-07,
+      "video_dimensions": [
+        740,
+        1080
+      ]
+    },
+    {
+      "annotation_rows": 51462,
+      "annotation_time_seconds": 50.650650650650654,
+      "boxes_outside_reference": 0,
+      "classes": [
+        "Biker",
+        "Pedestrian"
+      ],
+      "clip": "little/video0",
+      "coordinate_scale": [
+        0.5363443895553988,
+        0.5349182763744428
+      ],
+      "coordinate_transform_required": true,
+      "duration_seconds": 50.650651,
+      "evaluated_exposure_seconds": 0,
+      "fps": 29.97,
+      "inference_status": "not started",
+      "max_annotation_frame": 1517,
+      "reference_dimensions": [
+        1417,
+        2019
+      ],
+      "source_group": "little",
+      "time_alignment_delta_seconds": 3.4934934944885754e-07,
+      "video_dimensions": [
+        760,
+        1080
+      ]
+    },
+    {
+      "annotation_rows": 709789,
+      "annotation_time_seconds": 424.4577911244578,
+      "boxes_outside_reference": 402,
+      "classes": [
+        "Biker",
+        "Bus",
+        "Car",
+        "Cart",
+        "Pedestrian",
+        "Skater"
+      ],
+      "clip": "deathCircle/video0",
+      "coordinate_scale": [
+        0.554601226993865,
+        0.5544147843942505
+      ],
+      "coordinate_transform_required": true,
+      "duration_seconds": 424.457791,
+      "evaluated_exposure_seconds": 0,
+      "fps": 29.97,
+      "inference_status": "not started",
+      "max_annotation_frame": 12720,
+      "reference_dimensions": [
+        1630,
+        1948
+      ],
+      "source_group": "deathCircle",
+      "time_alignment_delta_seconds": -1.2445781294445624e-07,
+      "video_dimensions": [
+        904,
+        1080
+      ]
+    }
+  ],
+  "downloads": {
+    "annotations/bookstore/video0/annotations.txt": {
+      "declared_bytes": 15341167,
+      "download_bytes": 1591727,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2Fbookstore%2Fvideo0%2Fannotations.txt",
+      "extracted_bytes": 15341167,
+      "headers": {
+        "Content-Length": "1591727",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "0aeb9bd06fb5a82c064b18438d2abb8ec4e1ac86f945bdbaa6eecab3dc48752e",
+      "sha256": "58ec509091faa3e81f5d77c5ab43388ec3a8e7988f9a69952ac523c09799a2b4"
+    },
+    "annotations/bookstore/video0/reference.jpg": {
+      "declared_bytes": 80307,
+      "download_bytes": 80307,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2Fbookstore%2Fvideo0%2Freference.jpg",
+      "extracted_bytes": 80307,
+      "headers": {
+        "Content-Length": "80307",
+        "Content-Range": null,
+        "Content-Type": "image/jpeg"
+      },
+      "raw_sha256": "fb7fe3d7253335ecab3f7678f148c675f2504e2b5f17a624c642b5252195b2fc",
+      "sha256": "fb7fe3d7253335ecab3f7678f148c675f2504e2b5f17a624c642b5252195b2fc"
+    },
+    "annotations/deathCircle/video0/annotations.txt": {
+      "declared_bytes": 30007509,
+      "download_bytes": 3323523,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2FdeathCircle%2Fvideo0%2Fannotations.txt",
+      "extracted_bytes": 30007509,
+      "headers": {
+        "Content-Length": "3323523",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "c7e92237196746e6e36e1dcc78d430834eeca11e2763726d1cec578e1819814d",
+      "sha256": "f7b598bb4f19cc15dec0f63b2a46f9c3eed58457cb932c4841896f2a56a2898b"
+    },
+    "annotations/deathCircle/video0/reference.jpg": {
+      "declared_bytes": 278084,
+      "download_bytes": 278084,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2FdeathCircle%2Fvideo0%2Freference.jpg",
+      "extracted_bytes": 278084,
+      "headers": {
+        "Content-Length": "278084",
+        "Content-Range": null,
+        "Content-Type": "image/jpeg"
+      },
+      "raw_sha256": "4ec0dcc67f7068f03d64a0ea5b9302cfe26932c15db391ab7af24d5be67fa1d2",
+      "sha256": "4ec0dcc67f7068f03d64a0ea5b9302cfe26932c15db391ab7af24d5be67fa1d2"
+    },
+    "annotations/little/video0/annotations.txt": {
+      "declared_bytes": 2086527,
+      "download_bytes": 249650,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2Flittle%2Fvideo0%2Fannotations.txt",
+      "extracted_bytes": 2086527,
+      "headers": {
+        "Content-Length": "249650",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "7d6b74ea26a30e0f54b0c6b362cc69a19e7fd75467492877291450d68b4192ab",
+      "sha256": "8da212a093d1c62103f163cfa3668fa446ffe967eed198e16f771657f1d3a9d8"
+    },
+    "annotations/little/video0/reference.jpg": {
+      "declared_bytes": 266999,
+      "download_bytes": 266999,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2Flittle%2Fvideo0%2Freference.jpg",
+      "extracted_bytes": 266999,
+      "headers": {
+        "Content-Length": "266999",
+        "Content-Range": null,
+        "Content-Type": "image/jpeg"
+      },
+      "raw_sha256": "e7f6870761f6e62fbbb2ce284d880caa47b410a89e52e827eda09da87b866a20",
+      "sha256": "e7f6870761f6e62fbbb2ce284d880caa47b410a89e52e827eda09da87b866a20"
+    },
+    "annotations/nexus/video0/annotations.txt": {
+      "declared_bytes": 6633103,
+      "download_bytes": 660725,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2Fnexus%2Fvideo0%2Fannotations.txt",
+      "extracted_bytes": 6633103,
+      "headers": {
+        "Content-Length": "660725",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "4ea6abd163ce067cd552f1ab11ff831e5d6226583d26871a8f71255e52f3dec2",
+      "sha256": "957f9994093c99fd38e920c83635b5ce7558f40248d7147b2b954cceaf4d625b"
+    },
+    "annotations/nexus/video0/reference.jpg": {
+      "declared_bytes": 170518,
+      "download_bytes": 170518,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/annotations%2Fnexus%2Fvideo0%2Freference.jpg",
+      "extracted_bytes": 170518,
+      "headers": {
+        "Content-Length": "170518",
+        "Content-Range": null,
+        "Content-Type": "image/jpeg"
+      },
+      "raw_sha256": "49d2e5b288d906321df0f10cce73c61c999b66f81a4de1615e35b9444137b718",
+      "sha256": "49d2e5b288d906321df0f10cce73c61c999b66f81a4de1615e35b9444137b718"
+    },
+    "video/bookstore/video0/video.mp4": {
+      "declared_bytes": 104387977,
+      "download_bytes": 104401167,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/video%2Fbookstore%2Fvideo0%2Fvideo.mp4",
+      "extracted_bytes": 104387977,
+      "headers": {
+        "Content-Length": "104401167",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "ac685811a1da962215fe6afe1669a6dade1b52d076e55d82c0172386bc36f5bf",
+      "sha256": "88c1f9790cf21c20f6672827eaa15878a7ae7c8a066ff7fdba1dce1a5693f0ff"
+    },
+    "video/deathCircle/video0/video.mp4": {
+      "declared_bytes": 32752341,
+      "download_bytes": 32710654,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/video%2FdeathCircle%2Fvideo0%2Fvideo.mp4",
+      "extracted_bytes": 32752341,
+      "headers": {
+        "Content-Length": "32710654",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "c3d0167401b02f5a1be723b68ced8bb7c6e9b58e224f8fcac0da763335cef1c5",
+      "sha256": "c60587461072712c990b9a6be03030a1feae4baa5bbeb10ad523233c1d5b27db"
+    },
+    "video/little/video0/video.mp4": {
+      "declared_bytes": 4104975,
+      "download_bytes": 4100924,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/video%2Flittle%2Fvideo0%2Fvideo.mp4",
+      "extracted_bytes": 4104975,
+      "headers": {
+        "Content-Length": "4100924",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "c9dc0a91cfe8158a3bf6f65c62d19cf125fa2ffbc7d2991211be53e8c9649158",
+      "sha256": "e869ce7dd66f65e1b244ab87cf7e5cdb7b7a73f455aef5b719bf5cec0c099447"
+    },
+    "video/nexus/video0/video.mp4": {
+      "declared_bytes": 22558652,
+      "download_bytes": 22488793,
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/aryashah2k/stanford-drone-dataset/video%2Fnexus%2Fvideo0%2Fvideo.mp4",
+      "extracted_bytes": 22558652,
+      "headers": {
+        "Content-Length": "22488793",
+        "Content-Range": null,
+        "Content-Type": "application/zip"
+      },
+      "raw_sha256": "8087e588a20c31965b33acc71aa66f9eaae2a71406e79c36193392e65010f8df",
+      "sha256": "c4ca93a39d8e65cc584d648abcb7daa542cb69b9a46bb721485d800b011beed9"
+    }
+  },
+  "raw_seconds": 1343.17651,
+  "protocol_frames_per_clip": 300,
+  "evaluated_frames": 1200,
+  "evaluated_seconds": 40.04004004004004,
+  "label_types": [
+    "Pedestrian dense tracking with generated/occluded flags"
+  ],
+  "unavailable_labels": [
+    "worn helmet association",
+    "factory hazard onset",
+    "independent target CCTV review"
+  ]
+}

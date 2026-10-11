@@ -11,6 +11,7 @@
 | Bukti publikasi, referensi dan workflow belajar | [Laporan publikasi](../reports/VERIFIKASI_PUBLIK.md), [referensi](../reports/REFERENSI_GITHUB.md), [workflow](../reports/WORKFLOW_REVIEW_BELAJAR.md) |
 | Kontrak event, filter, interval dan penjelasan N-gram | [Kontrak CCTV/N-gram](EVENT_CONTRACT.md), [verifikasi integrasi/GPU](../reports/VERIFIKASI_CCTV_NGRAM.md) |
 | Pengukuran akademik/detector/tracking terbaru | [Validasi 11 Oktober](../reports/VALIDATION_20261011.md), [paket CSV/JSON](../../extensions/results/README.md) |
+| Review label CVAT dan eksperimen objek kecil/tracking | [Panduan akurasi](TRACKING_ACCURACY.md) |
 | Roadmap dan status implementasi | [Checklist](../../tasks/todo.md), [roadmap rinci](../../tasks/roadmap_checklist.md) |
 
 ## Yang tersedia sekarang
