@@ -1,0 +1,82 @@
+{
+  "cctv": "plan after academic final verification; public image benchmark if labels available; site/track/incident truths required separately",
+  "core": "frozen; no historical rescore",
+  "date": "2026-10-11",
+  "indonesian": {
+    "accepted_docs": 300,
+    "excluded_pilot": "data/indonesian/wiki-pilot-20261010-final/documents.jsonl",
+    "max_candidates": 5000,
+    "minimum_groups": 200,
+    "models": [
+      "1-kn",
+      "2-kn",
+      "3-kn",
+      "2-wb",
+      "3-wb",
+      "2-mkn",
+      "3-mkn",
+      "3-interpolation_em"
+    ],
+    "namespace": 0,
+    "nonredirect": true,
+    "split": "primary seed42 grouped80/10/10; seeds43,44 only development train/dev robustness, primary test never reused for tuning",
+    "start_title": "A",
+    "test": "select normalized minimum dev CE; freeze winner and same-order KN baseline, then single heldout comparison + group bootstrap; not population-general confirmatory"
+  },
+  "purpose": "academic-first validation, then CCTV",
+  "schema_version": 1,
+  "synthetic": {
+    "baselines": [
+      "frozen transition rules incl BOS/EOS",
+      "pair-frequency <2",
+      "unigram",
+      "rule-priority then LM vs random vs chronological"
+    ],
+    "calibration": "separate fresh normal group maxima; alpha0.05 source p-value (1+number >= score)/(m+1)",
+    "difficulty": [
+      "unseen pairs easy",
+      "seen pairs and identical pair multiset different trigram hard",
+      "rare valid negative",
+      "known no-helmet rule independent"
+    ],
+    "duration": "train-derived gap bins optional ablation; no camera exposure inference",
+    "groups": {
+      "calibration": 30,
+      "dev": 10,
+      "test": 30,
+      "train": 30
+    },
+    "kind": "constructed symbolic scenarios; not expert/site ground truth",
+    "labels": "synthetic construction rubric only; no operational precision claim",
+    "models": {
+      "methods": [
+        "kneser_ney",
+        "witten_bell",
+        "modified_kneser_ney"
+      ],
+      "orders": [
+        1,
+        2,
+        3
+      ]
+    },
+    "noise": [
+      "clean",
+      "drop10pct",
+      "duplicate10pct",
+      "helmet-flip10pct",
+      "track-fragment"
+    ],
+    "review_budgets": [
+      10,
+      20,
+      40
+    ],
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "selection": "dev token-weighted CE; lexical ties"
+  }
+}

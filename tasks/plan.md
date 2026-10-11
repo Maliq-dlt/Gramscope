@@ -1,10 +1,24 @@
-# Rencana aktif — N-gram untuk analisis kejadian CCTV
+# Rencana aktif â€” N-gram untuk analisis kejadian CCTV
 
 Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari video unggahan**. Status: **implementasi fokus tersedia; verifikasi dan publikasi tercatat pada checklist**.
 
-[Task aktif dan kriteria selesai](todo.md#pekerjaan-aktif--n-gram-dan-cctv) · [Kemampuan akademik](../extensions/README.md) · [Verifikasi terakhir](../extensions/reports/VERIFICATION.md)
+[Task aktif dan kriteria selesai](todo.md#pekerjaan-aktif--n-gram-dan-cctv) Â· [Kemampuan akademik](../extensions/README.md) Â· [Verifikasi terakhir](../extensions/reports/VERIFICATION.md)
 
 > Arahan terbaru pengguna: fokus hanya pada N-gram dan CCTV; fitur baru harus membantu memahami model statistik atau meninjau rekaman. Bagian ini menjadi acuan pekerjaan berikutnya. Rencana lama di bawah dipertahankan sebagai riwayat; task lama yang di luar scope tidak otomatis menjadi pekerjaan aktif. Penyempitan scope tidak menghapus fitur/data yang sudah ada.
+
+## Siklus validasi akademik → CCTV, 11 Oktober 2026
+
+Arahan terbaru: kerjakan akademik dahulu, fase berurutan dengan hasil/cek per fase; setelah gate akademik lanjut plan CCTV. Makalah ditulis pengguna. Source/hasil/data lama dipertahankan. [Protokol beku](../extensions/reports/validation_protocol.json) merekam seed, grid, split, baseline dan batas; [checklist](todo.md#siklus-validasi-baru). Fase lama di bawah adalah riwayat.
+
+| Fase akademik | Hasil konkret | Gate untuk lanjut |
+| --- | --- | --- |
+| A1 Protokol | Scope, baseline aturan + pasangan, rubrik sintetis, split train/dev/calibration/test, budget, snapshot hash | Protokol tersimpan sebelum scoring/test; model core/historis aman |
+| A2 Skenario lebih sulit | Easy unseen-pair, hard dengan pair counts sama, rare-valid dan hazard known; 3 seed | Baseline menerima hard yang pair-identik; label konstruksi tidak diklaim pakar K3 |
+| A3 Derau/kalibrasi/review | Drop/duplicate/flip/fragment, durasi, source calibration terpisah, reviewer budget | Threshold tidak fit test/dev reuse; finite-sample p dan unit source jelas; noise bukan anomali truth |
+| A4 Corpus ID | 300 introduction baru, provenance/license, exclude pilot/dedup; primary holdout dan development robustness | >=200 groups; tokenizer baku; primary test tetap ditahan sampai selection; tidak memilih seed test terbaik |
+| A5 Verifikasi | CSV/JSON per fase, receipts, test/lint/type/build, audit preservasi dan review | Angka konsisten, hasil negatif dicatat; klaim hanya constructed study dan bounded corpus holdout |
+
+Sesudah A5, rencana CCTV disusun berdasarkan data aktual: C1 inventaris/kontrak label; C2 benchmark detector berlabel; C3 ledger/rules/novelty dan review; C4 privasi/akses/lisensi; C5 regressions/biaya/hasil. Bukti lokasi nyata/IDF1/false-alert-hour/delay tidak diganti oleh gambar publik atau simulasi. Jika input acuan belum ada, siapkan evaluator dan catat gate belum terpenuhi, jangan centang akurasi operasional.
 
 ## Data akademik, 11 Oktober 2026
 
@@ -14,7 +28,7 @@ Permintaan tambahan pengguna dibatasi pada data untuk makalah; makalah ditulis p
 
 Satu alur: pengguna mengunggah rekaman, memeriksa hasil tracking, memperbaiki kotak/label, mengesahkan kejadian, melihat urutan yang perlu ditinjau, lalu bertanya dan mengunduh ringkasan dengan bukti. N-gram menjelaskan seberapa biasa urutan kejadian menurut rekaman training; angka jumlah objek dan fakta helm tetap berasal dari catatan terverifikasi.
 
-Contoh demo yang dituju: video area pekerja/gerbang memperlihatkan orang dan kendaraan. Pengguna memperbaiki satu objek yang terlewat; aplikasi menunjukkan revisi dan sumber hasil. Pengguna menanyakan crossing orang pada detik 10–30, membuka frame bukti, meninjau status helm, lalu melihat skor N-gram beserta kontribusi setiap simbol. Urutan jarang ditandai untuk review, tidak otomatis disebut insiden.
+Contoh demo yang dituju: video area pekerja/gerbang memperlihatkan orang dan kendaraan. Pengguna memperbaiki satu objek yang terlewat; aplikasi menunjukkan revisi dan sumber hasil. Pengguna menanyakan crossing orang pada detik 10â€“30, membuka frame bukti, meninjau status helm, lalu melihat skor N-gram beserta kontribusi setiap simbol. Urutan jarang ditandai untuk review, tidak otomatis disebut insiden.
 
 ## Yang tersedia dan yang perlu diperkuat
 
@@ -81,11 +95,11 @@ flowchart TD
 
 | Fase | Hasil | Gerbang |
 | --- | --- | --- |
-| **0 — Kontrak dan baseline** | Definisi kejadian, satuan hitungan, revisi, dataset evaluasi dan batas resource | Kontrak cocok dengan kode; hasil lama aman; tidak menjanjikan mutu dari smoke tests |
-| **1 — Review ke ledger** | Koreksi/learning transparan, kejadian orang/kendaraan/helm dengan bukti revisi | Koreksi → hasil → ledger konsisten; unknown tidak jadi no-helmet; source split aman |
-| **2 — Pertanyaan berbukti** | Filter rekaman/kelas/arah/rentang video yang sama di UI, query dan bukti | Tidak menjawab filter unsupported sebagai agregat semua data; stale/retract dikecualikan |
-| **3 — N-gram kejadian** | Run offline dari review disahkan, kontribusi simbol dan tautan balik ke video | Baseline/dev/test terpisah, sumber independen dan model/threshold dapat diaudit |
-| **4 — Demo lengkap dan rilis** | Ringkasan unduhan, alur UI ringkas, laporan biaya/mutu dan CI | End-to-end nyata, keamanan/regresi/build, batas penggunaan dan preservasi terbukti |
+| **0 â€” Kontrak dan baseline** | Definisi kejadian, satuan hitungan, revisi, dataset evaluasi dan batas resource | Kontrak cocok dengan kode; hasil lama aman; tidak menjanjikan mutu dari smoke tests |
+| **1 â€” Review ke ledger** | Koreksi/learning transparan, kejadian orang/kendaraan/helm dengan bukti revisi | Koreksi â†’ hasil â†’ ledger konsisten; unknown tidak jadi no-helmet; source split aman |
+| **2 â€” Pertanyaan berbukti** | Filter rekaman/kelas/arah/rentang video yang sama di UI, query dan bukti | Tidak menjawab filter unsupported sebagai agregat semua data; stale/retract dikecualikan |
+| **3 â€” N-gram kejadian** | Run offline dari review disahkan, kontribusi simbol dan tautan balik ke video | Baseline/dev/test terpisah, sumber independen dan model/threshold dapat diaudit |
+| **4 â€” Demo lengkap dan rilis** | Ringkasan unduhan, alur UI ringkas, laporan biaya/mutu dan CI | End-to-end nyata, keamanan/regresi/build, batas penggunaan dan preservasi terbukti |
 
 Task rinci/dependency berada di [checklist aktif](todo.md#pekerjaan-aktif--n-gram-dan-cctv). Setiap task harus menghasilkan alur yang bisa dipakai; tidak membuka fitur berikutnya hanya untuk menutupi task yang gagal. Fase menunjukkan urutan dependency, bukan janji selesai dalam satu minggu.
 

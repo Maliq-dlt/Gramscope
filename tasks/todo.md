@@ -2,6 +2,21 @@
 
 Tanggal: **11 Oktober 2026**. [Rencana aktif](plan.md) · [Bukti implementasi sebelumnya](../extensions/reports/VERIFICATION.md).
 
+## Siklus validasi baru
+
+- [x] A1 Bekukan protokol/grid/rubrik/budget sebelum run dan snapshot berkas terlindungi.
+- [ ] A2 Run skenario bertingkat dengan rules/pair/LM dan tiga seed; cek hard pair invariance.
+- [ ] A3 Uji derau/durasi, calibration source terpisah dan reviewer-budget; export unit benar.
+- [ ] A4 Corpus ID baru/dedup, selection dev, primary holdout sekali dan robustness development.
+- [ ] A5 Validasi data/tes/source/build/preservasi dan review; finalkan hasil akademik.
+- [ ] C1 Setelah A5, buat protokol CCTV berdasarkan inventaris label/sumber aktual.
+- [ ] C2 Evaluator detector berlabel publik/site; batas generalisasi jelas.
+- [ ] C3 Verifikasi rules vs novelty, reviewer budget dan gate ground truth/exposure.
+- [ ] C4 Read/download audit, retensi/backup/deletion dan lisensi dalam scope lokal.
+- [ ] C5 Regresi, biaya dan hasil; data operasional yang belum ada tetap gate terbuka.
+
+Centang berarti hasil dan verifikasi ada; runner tidak berarti akurasi lapangan terbukti.
+
 ## Pekerjaan aktif — N-gram dan CCTV
 
 Status: **implementasi fungsional fase 0–4 terverifikasi lokal; 172 tes akademik lulus (termasuk tes paket data). Kualitas kamera independen masih belum dapat diukur**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
