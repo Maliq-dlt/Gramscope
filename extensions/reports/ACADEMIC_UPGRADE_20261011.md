@@ -40,7 +40,9 @@ Untuk mengisolasi mekanisme lebih baik, satu probe acak per dokumen test yang me
 
 CSV mentah, NLL per unit, split/group IDs, seed, discount trials, vocabulary/budget/protocol/source/code fingerprints disimpan. Registry completed tidak boleh ditimpa. Data publik tidak memuat corpus penuh, checkpoint atau video pribadi. Metrik paling baru pada paket ini; angka 185/187 tes dan jumlah hash pada laporan terdahulu tetap snapshot historis, bukan diganti blind dengan angka terbaru.
 
-Verifikasi lokal awal: 198 tes akademik lulus; Ruff lint/format 89 file, Ty dan wheel/sdist lulus. Audit numerik independen pada loss tersimpan cocok untuk seluruh CE/PP/CI/probe/split. Audit dev-only tambahan mereproduksi SE/seleksi dari parameter tersimpan tanpa retune atau rescore test: 20.295 baris loss dev, maksimum selisih 4×10⁻¹⁴; [data turunan](../results/academic_upgrade_v2/dev_reproduction/). Preservasi akhir dicatat pada paket. Tidak mengubah UI/runtime studio pada fase akademik.
+Verifikasi lokal final: **199 tes akademik**, Ruff lint/format 93 file, Ty serta wheel/sdist lulus; [receipt terbaru](../results/academic_upgrade_v2/verification_local.json) menjadi rujukan angka paket ini. Audit numerik independen pada loss tersimpan cocok untuk seluruh CE/PP/CI/probe/split. Audit dev-only mereproduksi SE/seleksi tanpa retune atau rescore test: 20.295 baris, maksimum selisih 4×10⁻¹⁴; [data turunan](../results/academic_upgrade_v2/dev_reproduction/).
+
+[Audit preservasi](../results/academic_upgrade_v2/preservation.json): 39.874 berkas snapshot identik, tujuh dokumen diperbarui dengan cadangan asli, tidak ada berkas hilang. Snapshot tidak atomik pada empat dokumen checklist; cadangannya cocok dengan commit baseline setelah normalisasi akhir baris. Core dan perubahan pengguna terpisah tetap dipertahankan. [Provenance kode](../results/academic_upgrade_v2/code_provenance.json) memetakan hash byte eksekusi Windows CRLF dan blob Git LF: isi cocok, hash mentah tidak selalu sama. Protokol/historis tidak ditulis ulang.
 
 ## CCTV: batas yang tetap harus dipenuhi
 

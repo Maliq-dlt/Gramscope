@@ -37,7 +37,7 @@
     "bundled_media_weights": false
   },
   "links": {
-    "local_checked": 117,
+    "local_checked": 121,
     "missing": 0
   },
   "studio_scope": "new MOT offline collector/evaluator only; no UI/live model changes",
@@ -46,5 +46,28 @@
     "oneSE dev heuristic",
     "pointwise conditional CI; Reuters token-weighted effective test groups20.2",
     "site PPE reviewed person-head relation still absent"
-  ]
+  ],
+  "clean_checkout": {
+    "source_commit": "0df17d2b6f740ee72168721cc169d4fdc062d596",
+    "academic_checks": {
+      "format": 0,
+      "build": 0,
+      "ty": 0,
+      "pytest": 0,
+      "ruff": 0
+    },
+    "academic_tests": 199,
+    "studio_lint_format_typecheck": true,
+    "mot_and_continuous_checks": true,
+    "studio_wheel_sdist_package_audit": true,
+    "initial_setup_failures": "First academic attempt lacked local .tmp; Ty initially resolved unrelated Hermes environment. Created checkout cache directories and explicitly selected project Python; checks passed.",
+    "scientific_test_rerun": false
+  },
+  "preservation": {
+    "snapshot_files": 39881,
+    "unchanged": 39874,
+    "intentional_document_updates": 7,
+    "missing": 0,
+    "details": "preservation.json"
+  }
 }

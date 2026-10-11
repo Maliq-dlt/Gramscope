@@ -1,0 +1,38 @@
+{
+  "format": "preservation-audit-v1",
+  "baseline_commit": "1200e1f63adb8c026072db346507f7212fd66b3d",
+  "snapshot_files": 39881,
+  "unchanged_files": 39874,
+  "missing_files": 0,
+  "intentional_document_changes": [
+    "extensions/README.md",
+    "extensions/results/README.md",
+    "README.md",
+    "tasks/ngram_academic/plan.md",
+    "tasks/ngram_academic/todo.md",
+    "tasks/plan.md",
+    "tasks/todo.md"
+  ],
+  "original_backups_verified_against_baseline": {
+    "extensions/README.md": "de56274b1dbb13d7094d9ec2f90e00aef791d4845a67ad08d4b67ffd53ca43a7",
+    "extensions/results/README.md": "4a5e9f61db15b8a695f98d2ff47e3aa08b1be0c62cca06e1e9bf1a094b0ad0e9",
+    "README.md": "bd799e3ab2aeb85795ceef62c837f6b10c851b4fb75d8f5751e484ff5f14e12f",
+    "tasks/ngram_academic/plan.md": "43f778d2e5ac1f6a644066b39c2744b4a8c3dd017695d97e1b5253871bdf92ce",
+    "tasks/ngram_academic/todo.md": "db49e65835bd57549f8e2ebe82ae46af7984fc1852a57d4d249f7c31637a37f1",
+    "tasks/plan.md": "ee43cc09b68fcb0d8d27d1c4679777f0276537e95bd357cabfbbf4b2581834d0",
+    "tasks/todo.md": "54b60b514ca7a752863364bd727a9de024b3fb7187e50854d36a314efb322ed6",
+    ".gitattributes": "bccef78163d3a2ae620430464abcf7ad7f85988f61972e2af3c3ba3bc4e25dc9",
+    ".github/workflows/ci.yml": "79a8bd5d481f868313ef6d3e9c50c0d2e4125e71124349f62fb6229f42b7458d",
+    "NOTICE.md": "c1ab48d7a54deae8543ac5bfd4ea4b6f24f162789cca73029783254188d955b5",
+    "industrial_ai/MANIFEST.in": "3f32aff09f409b406473f82a538d5177c6428cf1df37fc41084a9a5ec45142fc"
+  },
+  "snapshot_non_atomic_document_entries": [
+    "tasks/ngram_academic/plan.md",
+    "tasks/ngram_academic/todo.md",
+    "tasks/plan.md",
+    "tasks/todo.md"
+  ],
+  "snapshot_note": "Four task documents were captured during authorized edits. Original backups match baseline Git content after line-ending normalization; the initial snapshot was not atomic. No snapshot hashes were rewritten.",
+  "frozen_core_sha256_match": true,
+  "unrelated_user_files_excluded": 9
+}
