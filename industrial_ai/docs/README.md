@@ -9,6 +9,7 @@
 | Melihat bukti UI terkini dan keterbatasannya | [Verifikasi UI](VERIFICATION_UI.md) |
 | Logo dan atribusi | [Panduan logo](brand/guidelines.md), [lisensi komponen](../assets/THIRD_PARTY_LICENSES.txt) |
 | Bukti publikasi, referensi dan workflow belajar | [Laporan publikasi](../reports/VERIFIKASI_PUBLIK.md), [referensi](../reports/REFERENSI_GITHUB.md), [workflow](../reports/WORKFLOW_REVIEW_BELAJAR.md) |
+| Kontrak event, filter, interval dan penjelasan N-gram | [Kontrak CCTV/N-gram](EVENT_CONTRACT.md), [verifikasi integrasi/GPU](../reports/VERIFIKASI_CCTV_NGRAM.md) |
 | Roadmap dan status implementasi | [Checklist](../../tasks/todo.md), [roadmap rinci](../../tasks/roadmap_checklist.md) |
 
 ## Yang tersedia sekarang

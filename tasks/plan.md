@@ -1,6 +1,6 @@
 # Rencana aktif — N-gram untuk analisis kejadian CCTV
 
-Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari video unggahan**. Status: **rencana**, belum implementasi tambahan.
+Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari video unggahan**. Status: **implementasi fokus tersedia; verifikasi dan publikasi tercatat pada checklist**.
 
 [Task aktif dan kriteria selesai](todo.md#pekerjaan-aktif--n-gram-dan-cctv) · [Kemampuan akademik](../extensions/README.md) · [Verifikasi terakhir](../extensions/reports/VERIFICATION.md)
 
@@ -71,7 +71,7 @@ flowchart TD
 - Novelty adalah indikasi statistik untuk review. Pelanggaran yang umum tidak boleh lolos aturan hanya karena surprisal rendah. Aturan helm diverifikasi dan skor novelty ditampilkan terpisah.
 - Model probabilistik/threshold dipilih dev; test berlabel ditahan sampai konfigurasi dibekukan. Unigram/frequency baseline, bigram KN/WB dan MKN dibandingkan; MKN tidak dipaksakan menjadi pemenang.
 - NLL/CE diukur per simbol dengan EOS/boundary jelas. Skor simbol tidak dibandingkan langsung dengan PP corpus bahasa. Biaya CPU satu lookup bukan latensi seluruh video/chat.
-- Draft ringkasan dibuat dari query deterministik terlebih dahulu. Qwen lokal opsional untuk bahasa; angka/ID/waktu/bukti divalidasi terhadap fakta. Jika tidak cocok, pakai narasi deterministik. Tidak ada pengiriman eksternal.
+- Draft ringkasan dibuat dari query deterministik terlebih dahulu. Implementasi laporan memakai narasi deterministik. Qwen existing tetap tersedia untuk chat; narasi laporan tambahan tidak diperlukan. Tidak ada pengiriman eksternal.
 
 ## Fase dan hasil yang dapat digunakan
 

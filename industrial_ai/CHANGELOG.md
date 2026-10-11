@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-11 — CCTV dan N-gram berbukti
+
+- Ledger v2 menautkan crossing orang/kendaraan dan observasi helm frame/interval ke bukti asli, revisi dan source group; query/ringkasan memakai filter sama.
+- Koreksi tersimpan memperbarui lintasan kandidat, chat/dashboard/detail; hasil detector awal tetap tersedia.
+- Runner novelty mengelompokkan salinan sumber, memilih parameter/ambang pada dev dan menjelaskan P/logP/NLL/EOS ke video; run stale tidak menjadi fakta.
+- Ringkasan JSON/Markdown deterministik, REPL akademik read-only dan regresi CI baru. Training nyata RTX4060 objects/helmets teruji; kualitas kamera independen belum tersedia.
+- Bukti dan batas: [Verifikasi CCTV/N-gram](reports/VERIFIKASI_CCTV_NGRAM.md).
+
 ## 2026-10-10 — migrasi React terbaru
 
 - Seluruh halaman dan tampilan data dinamis dipindahkan ke React 19.3.0 dan

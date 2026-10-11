@@ -66,3 +66,14 @@ Lab browser menampilkan probabilitas/top-k/generasi dan completed run metrics me
 Novelty runner dan tes replay/grouping tersedia. Tanpa rekaman berlabel independen, onset serta exposure hours, belum ada bukti kualitas nyata, false alerts/hour atau delay. Rare sequence bukan hazard. Face recognition, liveness, CCTV causal live dan jawaban temporal bebas tetap membutuhkan evaluasi/implementasi tersendiri.
 
 Verifikasi akademik: `uv run pytest extensions/tests -q`, Ruff/Ty dan build dari [README root](../README.md). Paket publik mempertahankan source/hasil ringkasan; corpus lokal, bobot, video dan identitas tidak ikut.
+
+
+## REPL untuk presentasi
+
+```powershell
+uv run ngram-lm repl --model PATH_CHECKPOINT.json.gz
+```
+
+`/model <path>` mengganti checkpoint, `/topk <context>` memperlihatkan prediksi, `/score <teks>` menghitung skor/perplexity, `/info` membaca metadata dan `/quit` keluar. Path gagal mempertahankan model aktif; tidak melatih atau mengubah checkpoint. REPL memakai tokenizer kata baku. Simbol CCTV memakai runner event tersendiri.
+
+Ledger versi 2 mendukung kendaraan, helm per frame/interval, offset/revisi, bundle simultan, provenance sumber dan EOS. Interval dipertahankan sebagai bukti; scoring belum memodelkan durasi. [Panduan studio](../industrial_ai/README.md#kejadian-cctv-dan-penjelasan-n-gram).

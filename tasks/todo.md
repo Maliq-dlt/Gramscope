@@ -4,7 +4,7 @@ Tanggal: **11 Oktober 2026**. [Rencana aktif](plan.md) · [Bukti implementasi se
 
 ## Pekerjaan aktif — N-gram dan CCTV
 
-Status: **implementasi berjalan per fase; baseline akademik 167 tes lulus**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
+Status: **implementasi fungsional fase 0–4 terverifikasi lokal; 171 tes akademik lulus. Kualitas kamera independen masih belum dapat diukur**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
 
 ### Fase 0 — Kontrak dan baseline
 
@@ -102,7 +102,7 @@ Dependency: 3.1. Scope: M, 3–5 file. Verifikasi: normalisasi, holdout sentinel
 
 Dependency: 3.2, 2.2. Scope: M, 3–5 file. Verifikasi: parity UI/Python, source/revision race, keyboard/mobile, unknown/gap/stale; existing Academic Lab/novelty API regressions. Lokasi: `industrial_ai/academic.py` atau read-only novelty API, `frontend/NgramLab.tsx`/`EventLedger.tsx`, UI/API checks.
 
-**Bukti fase 3:** academic169, novelty v1/v2 HTTP, v2 source-copy grouping, bundle/EOS/NLL parity and immutable run tests. Precision/recall camera independen serta false alerts/hour tetap unavailable karena label/exposure tidak tersedia.
+**Bukti fase 3:** academic171, novelty v1/v2 HTTP, v2 source-copy grouping, bundle/EOS/NLL parity and immutable run tests. Precision/recall camera independen serta false alerts/hour tetap unavailable karena label/exposure tidak tersedia.
 
 **Checkpoint 3:** dari video yang direview sampai penjelasan N-gram dapat digunakan end-to-end; improvement/hazard claims hanya mengikuti label dan bukti nyata.
 
@@ -110,17 +110,17 @@ Dependency: 3.2, 2.2. Scope: M, 3–5 file. Verifikasi: parity UI/Python, source
 
 #### 4.1 Ringkasan rekaman lokal
 
-- [ ] Ekspor ringkasan dari filter/revisi ledger yang sama: periode, satuan count, observasi helm, novelty untuk review, keterbatasan dan event/frame proof.
-- [ ] Narasi deterministik bekerja tanpa LLM; Qwen existing opsional hanya merangkai bahasa dengan validasi angka/ID/waktu/bukti dan fallback jika tidak cocok.
-- [ ] Draft berlabel belum disahkan; revisi sumber membuatnya stale. Tidak ada pengiriman HRD/email/API eksternal atau kesimpulan identitas/bahaya dari novelty.
+- [x] Ekspor ringkasan dari filter/revisi ledger yang sama: periode, satuan count, observasi helm, novelty untuk review, keterbatasan dan event/frame proof.
+- [x] Narasi deterministik bekerja tanpa LLM. Qwen existing tetap untuk chat; laporan memakai fakta deterministik agar tidak perlu validasi narasi tambahan.
+- [x] Draft berlabel belum disahkan; revisi sumber membuatnya stale. Tidak ada pengiriman HRD/email/API eksternal atau kesimpulan identitas/bahaya dari novelty.
 
-Dependency: checkpoint 3. Scope: M, 3–5 file. Verifikasi: parity query/export, stale/retract, LLM mismatch/failure dan akses media. Lokasi: existing chat/export path, report UI, report/fact regression yang material.
+Dependency: checkpoint 3. Scope: M, 3–5 file. Verifikasi: parity query/export, stale/retract, deterministic facts without LLM dan akses media. Lokasi: existing chat/export path, report UI, report/fact regression yang material.
 
 #### 4.2 Verifikasi akhir, dokumentasi dan publikasi
 
-- [ ] Demo nyata menyelesaikan upload→review→ledger→query/bukti→N-gram→ringkasan; ukur kasus crowded/tracking/helm sesuai label, latency p50/p95 per tahap dan peak RAM/VRAM pada mesin tercatat.
-- [ ] Test/lint/typecheck/build/security/package/CI yang relevan lulus; audit dependency menyebut exception NLTK upstream secara jujur; audit hashes menjaga core/bobot/hasil dan perubahan pengguna.
-- [ ] Update README/checklist/report dengan kemampuan dan batas terverifikasi; source docs dirapikan tanpa rename massal, dataset/model/private footage tidak masuk GitHub. Publish main sesuai otorisasi pengguna setelah review/checks.
+- [x] Demo nyata menyelesaikan upload→review→ledger→query/bukti→N-gram→ringkasan; ukur inference klip publik (3 repeats), training GPU fungsional, scoring runner dan RAM/VRAM inference; kasus crowded/quality independen dinyatakan unavailable karena belum berlabel.
+- [x] Test/lint/typecheck/build/security/package lokal yang relevan lulus; CI mencakup regresi baru serta container/HTTPS dan status publik diperiksa pada commit rilis; audit dependency menyebut exception NLTK upstream secara jujur; audit hashes menjaga core/bobot/hasil dan perubahan pengguna.
+- [x] Update README/checklist/report dengan kemampuan dan batas terverifikasi; source docs dirapikan tanpa rename massal, dataset/model/private footage tidak masuk GitHub. Publish main sesuai otorisasi pengguna setelah review/checks.
 
 Dependency: 4.1. Scope: S–M per slice; pisahkan verifikasi dan publikasi jika cakupan >5 file. Verifikasi: commands di bawah, report aktual dan status exact-commit CI; bukan jaminan bebas bug/produksi.
 
@@ -128,9 +128,16 @@ Dependency: 4.1. Scope: S–M per slice; pisahkan verifikasi dan publikasi jika 
 
 ### Tambahan opsional sesudah checkpoint akhir
 
-- [ ] REPL edukasi ringan `/model <checkpoint>`, `/topk <context>`, `/score <teks>`, `/info`, `/quit`; tidak melatih/overwrite dan tidak mengubah sampler historis. Demo simbol memakai kontrak event eksplisit, bukan tokenizer kata.
+- [x] REPL edukasi ringan `/model <checkpoint>`, `/topk <context>`, `/score <teks>`, `/info`, `/quit`; tidak melatih/overwrite dan tidak mengubah sampler historis. Demo simbol memakai kontrak event eksplisit, bukan tokenizer kata.
 
 Dependency: checkpoint akhir. Scope: M, 2–4 file CLI/docs/tests. Verifikasi: bad path/model menjaga sesi lama, bounded input, EOF/Ctrl-C dan parity fungsi existing; satu focused test. Lokasi perkiraan: `extensions/src/repl.py`, CLI entry minimum, test/docs. Ini tidak memblokir rilis video. Temperature/seeding/reranking/chat umum tidak menjadi task aktif.
+
+### Evaluasi mutu yang masih memerlukan data
+
+- [ ] Tambah sumber asli independen ketiga dengan provenance/lisensi dan reference labels tracking/helm/novelty menurut rubrik frozen.
+- [ ] Jalankan evaluasi mutu pada holdout baru (IDF1, precision/recall, exposure untuk false alerts/hour/onset); hasil smoke tidak menjadi nilai kualitas kamera.
+
+Ini gerbang data/evaluasi, bukan fitur runtime yang diam-diam dianggap selesai. Laporan dan batas lengkap: [Verifikasi CCTV/N-gram](../industrial_ai/reports/VERIFIKASI_CCTV_NGRAM.md).
 
 ### Command gerbang yang sudah tersedia
 

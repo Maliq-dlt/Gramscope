@@ -2,7 +2,7 @@
 
 # Video Insight
 
-**Unggah. Tinjau. Koreksi. Tanya rekamannya.**
+**Unggah. Tinjau. Koreksi. Telusuri kejadiannya.**
 
 [Mulai](#mulai-di-windows) · [Cara kerja belajar](#kapan-ai-benar-benar-belajar) · [Verifikasi](#verifikasi) · [Keamanan](../SECURITY.md) · [Peta dokumentasi](docs/README.md)
 
@@ -26,6 +26,21 @@ Face recognition/enrollment, liveness/anti-spoofing, OCR plat dan CCTV live tida
 
 Verifikasi video/chat terisolasi terbaru menjalankan **71 E2E checks** pada CPU/RTX; fixture pengguna existing dipertahankan. Hasil ini tidak mengukur akurasi detector pada pabrik, face/liveness, maupun mutu novelty pada rekaman independen. Rincian batas dan gate terpisah ada di [checklist akademik](../tasks/ngram_academic/todo.md).
 
+## Kejadian CCTV dan penjelasan N-gram
+
+Buka **Lab N-gram → Kejadian terverifikasi**. Pilih rekaman, tinjau frame crossing orang/kendaraan, lalu sahkan. Observasi helm dapat disahkan pada satu frame atau interval dengan bukti kepala-orang. Query memakai kelas, arah dan rentang `[awal,akhir)`; klik bukti membuka video asli pada frame yang tersimpan. Unduh ringkasan Markdown dari filter dan revisi yang sama.
+
+Ekspor ledger privat lalu jalankan eksperimen offline dari root repository:
+
+```powershell
+. .\setup_lokal.ps1
+uv run python -m extensions.experiments.event_novelty --input industrial_ai/.tmp/ledger-events-v2.json --workspace-id ID_WORKSPACE --run-id cctv-run-baru
+```
+
+Minimal **tiga sumber asli independen** diperlukan untuk train/dev/test. Salinan, segmen dan encoding bersumber sama tetap satu split. KN, Witten–Bell, MKN, unigram dan frequency baseline dibandingkan; parameter/ambang dipilih pada dev. Di panel novelty, pilih run/sesi untuk melihat P, log P dan NLL serta membuka bukti. Urutan jarang berarti perlu review; unknown helm bukan pelanggaran. Dataset publik lokal saat ini belum cukup untuk mengukur kualitas dengan tiga sumber independen berlabel.
+
+[Kontrak event dan batas interval](docs/EVENT_CONTRACT.md) · [Verifikasi CCTV/N-gram dan GPU](reports/VERIFIKASI_CCTV_NGRAM.md)
+
 ## Mulai di Windows
 
 Prasyarat: Node.js 20+, npm, [uv](https://docs.astral.sh/uv/getting-started/installation/),
@@ -33,8 +48,8 @@ serta [FFmpeg dan FFprobe](https://ffmpeg.org/download.html) pada PATH.
 Python 3.11 disiapkan uv bila belum tersedia. Gunakan PowerShell.
 
 ```powershell
-git clone https://github.com/Maliq-dlt/N-Gram.git
-cd N-Gram/industrial_ai
+git clone https://github.com/Maliq-dlt/Gramscope.git
+cd Gramscope/industrial_ai
 $env:npm_config_cache = Join-Path $PWD '.cache/npm'
 npm ci
 npm run setup
@@ -67,7 +82,7 @@ komponen halaman berada di `frontend/*.tsx`, tampilan data dinamis di
 Auth memakai `frontend/auth.ts` strict; konfigurasi kompilasi berada di
 `frontend/tsconfig*.json`. `npm run build` memeriksa TypeScript lalu
 membundel React dan motion secara lokal dengan esbuild serta membangun CSS.
-`app.js` production sekitar 260 KB; tidak memakai CDN. Pemutar video tetap
+`app.js` production sekitar 300 KB; tidak memakai CDN. Pemutar video tetap
 terpasang saat berganti tampilan. Inferensi setelah setup memakai model lokal
 tanpa API key/cloud chat; cache/temp/upload/hasil berada dalam subproyek.
 
@@ -121,7 +136,7 @@ berkas. Gunakan satu proses server.
 --build` menjalankannya bila Docker daemon tersedia. Model perlu disiapkan di volume
 `models` melalui setup CLI. Akses container melewati Caddy HTTPS (default
 `https://localhost` dengan CA lokal yang perlu dipercaya pengguna); port aplikasi
-tetap internal. [CI](https://github.com/Maliq-dlt/N-Gram/actions/runs/37948789812) lulus untuk container/image dan published HTTPS; daemon Docker lokal tidak tersedia.
+tetap internal. [CI](https://github.com/Maliq-dlt/Gramscope/actions/runs/37948789812) lulus untuk container/image dan published HTTPS; daemon Docker lokal tidak tersedia.
 
 [Hardening, backup, HTTPS, dan batas implementasi](docs/HARDENING.md) · [Bukti verifikasi keamanan](docs/VERIFICATION_SECURITY.md) · [Kebijakan keamanan](../SECURITY.md).
 
