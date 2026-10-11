@@ -27,7 +27,9 @@
 
 [Status dan hubungan ke CCTV/absensi](tasks/ngram_academic/plan.md) · [Checklist berfase](tasks/ngram_academic/todo.md) · [Metode dan pilot](extensions/README.md) · [Verifikasi](extensions/reports/VERIFICATION.md).
 
-Ledger CCTV versi 2, filter/bukti sinkron, ringkasan lokal dan penjelasan novelty sudah tersedia. [Verifikasi integrasi dan RTX 4060](industrial_ai/reports/VERIFIKASI_CCTV_NGRAM.md).
+Ledger CCTV versi 2, filter/bukti sinkron, ringkasan lokal dan penjelasan novelty sudah tersedia.
+
+[Data untuk makalah](extensions/results/README.md): CSV 72 konfigurasi pilot bahasa yang sudah tersimpan dan eksperimen urutan simbol CCTV baru (11 pembanding/176 sesi). Data CCTV bersifat sintetis terkontrol; tidak mengukur akurasi kamera. [Verifikasi integrasi dan RTX 4060](industrial_ai/reports/VERIFIKASI_CCTV_NGRAM.md).
 
 Witten–Bell, Modified Kneser–Ney dan interpolation EM, run registry/checkpoint v2, grouped research, bootstrap, autocomplete dan benchmark CPU sudah diimplementasikan. Lab browser, ledger kejadian dan absensi manual tersedia. Core dan hasil historis dipertahankan.
 

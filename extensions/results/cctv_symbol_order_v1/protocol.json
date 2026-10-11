@@ -1,0 +1,194 @@
+{
+  "algorithm": "extensions-smoothing-v2",
+  "alphabet": [
+    "BUNDLE:BUS_ENTER_ZONE",
+    "BUNDLE:BUS_EXIT_ZONE",
+    "BUNDLE:CAR_ENTER_ZONE",
+    "BUNDLE:CAR_EXIT_ZONE",
+    "BUNDLE:HELMET_NOT_WORN",
+    "BUNDLE:HELMET_NOT_WORN|PERSON_ENTER_ZONE",
+    "BUNDLE:HELMET_UNKNOWN",
+    "BUNDLE:HELMET_UNKNOWN|PERSON_ENTER_ZONE",
+    "BUNDLE:HELMET_WORN",
+    "BUNDLE:HELMET_WORN|PERSON_ENTER_ZONE",
+    "BUNDLE:PERSON_EXIT_ZONE",
+    "BUNDLE:TRUCK_ENTER_ZONE",
+    "BUNDLE:TRUCK_EXIT_ZONE"
+  ],
+  "boundaries": {
+    "context": "<s>",
+    "predicted_end": "</s>",
+    "reserved_unknown": "<UNK>"
+  },
+  "code_sha256": {
+    "core/src/ngram.py": "eb6b887412a0e30353e9193e5d84816b6c5d79b80ad177d9a4885e2bc048d1bf",
+    "extensions/experiments/event_novelty.py": "5a34ace304698dac40dce34b9f406cbd006d31b5b877ef2192fbb410cd6cb109",
+    "extensions/experiments/registry.py": "1bb456dab232ef9588e311f6856ee203c5b415663da9e4be2203f51f9325d166",
+    "extensions/src/event_sequences.py": "46e45629414f1e900abf7001e82fe1939c03609eaddac9219eee0adf395e317b",
+    "extensions/src/models.py": "2a42b52a57fc52eca41ef62ecd42350adc0b84feb994a13565fa83f3f943fab2",
+    "extensions/src/pipeline.py": "cf52d5ae58ca209abdb425bf7681b9d55e7f2c838f69ca63c74cd3fc1f921f0c"
+  },
+  "experiment": "offline-event-novelty-v2",
+  "frequency_baseline": "alert if any adjacent symbol pair has training count < 2",
+  "grid": {
+    "1-add_k": [
+      {
+        "k": 0.001
+      },
+      {
+        "k": 0.01
+      },
+      {
+        "k": 0.1
+      },
+      {
+        "k": 0.5
+      }
+    ],
+    "1-kneser_ney": [
+      {
+        "discount": 0.5
+      },
+      {
+        "discount": 0.75
+      },
+      {
+        "discount": 0.9
+      }
+    ],
+    "1-modified_kneser_ney": [
+      {}
+    ],
+    "1-witten_bell": [
+      {}
+    ],
+    "2-add_k": [
+      {
+        "k": 0.001
+      },
+      {
+        "k": 0.01
+      },
+      {
+        "k": 0.1
+      },
+      {
+        "k": 0.5
+      }
+    ],
+    "2-kneser_ney": [
+      {
+        "discount": 0.5
+      },
+      {
+        "discount": 0.75
+      },
+      {
+        "discount": 0.9
+      }
+    ],
+    "2-modified_kneser_ney": [
+      {}
+    ],
+    "2-witten_bell": [
+      {}
+    ],
+    "3-add_k": [
+      {
+        "k": 0.001
+      },
+      {
+        "k": 0.01
+      },
+      {
+        "k": 0.1
+      },
+      {
+        "k": 0.5
+      }
+    ],
+    "3-kneser_ney": [
+      {
+        "discount": 0.5
+      },
+      {
+        "discount": 0.75
+      },
+      {
+        "discount": 0.9
+      }
+    ],
+    "3-modified_kneser_ney": [
+      {}
+    ],
+    "3-witten_bell": [
+      {}
+    ]
+  },
+  "label_provenance": null,
+  "limitations": [
+    "Local export status is trusted input, not cryptographic proof of reviewer approval.",
+    "Source hashes group copies in v2; v1 recording independence is user-declared.",
+    "No duration features; event gaps do not establish camera coverage or exposure hours.",
+    "Session scores require the full offline sequence, not causal live detection.",
+    "No hazard, attendance or identity inference; independent labels are user-declared.",
+    "False alerts/hour and delay unavailable without exposure and onset ground truth."
+  ],
+  "loss_units": "natural-log NLL per predicted symbol, including one EOS per session",
+  "max_gap_seconds": 30,
+  "schema_version": 2,
+  "seed": 42,
+  "selection": "minimum token-weighted dev CE; model name breaks ties",
+  "source_sha256": "bd4771c7bb49b60a8f0a47fdd186150d04318162d20dae71ed966f3c5314ab6e",
+  "split": {
+    "dev": [
+      "synthetic-03",
+      "synthetic-07"
+    ],
+    "test": [
+      "synthetic-15",
+      "synthetic-17"
+    ],
+    "train": [
+      "synthetic-00",
+      "synthetic-01",
+      "synthetic-02",
+      "synthetic-04",
+      "synthetic-05",
+      "synthetic-06",
+      "synthetic-08",
+      "synthetic-09",
+      "synthetic-10",
+      "synthetic-11",
+      "synthetic-12",
+      "synthetic-13",
+      "synthetic-14",
+      "synthetic-16",
+      "synthetic-18",
+      "synthetic-19"
+    ]
+  },
+  "split_policy": "seeded original source hash groups; copies share partitions",
+  "test_policy": "parameters and thresholds fixed on dev before single test scoring; prior export exposure unknown",
+  "threshold": "linear 95th percentile of dev session CE; alert when CE > threshold",
+  "tokenizer": "ledger-bundles-v2",
+  "unit": "observed recording/track session separated by event gaps",
+  "vocabulary": [
+    "</s>",
+    "<UNK>",
+    "BUNDLE:BUS_ENTER_ZONE",
+    "BUNDLE:BUS_EXIT_ZONE",
+    "BUNDLE:CAR_ENTER_ZONE",
+    "BUNDLE:CAR_EXIT_ZONE",
+    "BUNDLE:HELMET_NOT_WORN",
+    "BUNDLE:HELMET_NOT_WORN|PERSON_ENTER_ZONE",
+    "BUNDLE:HELMET_UNKNOWN",
+    "BUNDLE:HELMET_UNKNOWN|PERSON_ENTER_ZONE",
+    "BUNDLE:HELMET_WORN",
+    "BUNDLE:HELMET_WORN|PERSON_ENTER_ZONE",
+    "BUNDLE:PERSON_EXIT_ZONE",
+    "BUNDLE:TRUCK_ENTER_ZONE",
+    "BUNDLE:TRUCK_EXIT_ZONE"
+  ],
+  "workspace_id": "academic-controlled-v1"
+}

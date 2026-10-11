@@ -6,6 +6,10 @@ Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari v
 
 > Arahan terbaru pengguna: fokus hanya pada N-gram dan CCTV; fitur baru harus membantu memahami model statistik atau meninjau rekaman. Bagian ini menjadi acuan pekerjaan berikutnya. Rencana lama di bawah dipertahankan sebagai riwayat; task lama yang di luar scope tidak otomatis menjadi pekerjaan aktif. Penyempitan scope tidak menghapus fitur/data yang sudah ada.
 
+## Data akademik, 11 Oktober 2026
+
+Permintaan tambahan pengguna dibatasi pada data untuk makalah; makalah ditulis pengguna. [Paket numerik](../extensions/results/README.md) mencakup CSV pilot bahasa lama serta run simbol terkontrol baru. Eksperimen ini bukan pemenuhan gerbang kualitas kamera nyata/label independen pada rencana berikut.
+
 ## Tujuan yang konkret
 
 Satu alur: pengguna mengunggah rekaman, memeriksa hasil tracking, memperbaiki kotak/label, mengesahkan kejadian, melihat urutan yang perlu ditinjau, lalu bertanya dan mengunduh ringkasan dengan bukti. N-gram menjelaskan seberapa biasa urutan kejadian menurut rekaman training; angka jumlah objek dan fakta helm tetap berasal dari catatan terverifikasi.

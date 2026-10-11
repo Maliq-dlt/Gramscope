@@ -68,6 +68,10 @@ Novelty runner dan tes replay/grouping tersedia. Tanpa rekaman berlabel independ
 Verifikasi akademik: `uv run pytest extensions/tests -q`, Ruff/Ty dan build dari [README root](../README.md). Paket publik mempertahankan source/hasil ringkasan; corpus lokal, bobot, video dan identitas tidak ikut.
 
 
+## Data akademik tambahan
+
+[Indeks CSV/JSON](results/README.md) menyediakan 72 konfigurasi pilot bahasa tanpa evaluasi ulang serta [eksperimen urutan simbol CCTV](results/cctv_symbol_order_v1/README.md): 11 pembanding, 176 sesi dan 638 target per-symbol. Data sintetis terkontrol menunjukkan sensitivitas urutan; baseline pasangan juga berhasil, tanpa klaim keunggulan N-gram atau akurasi kamera. Generator memakai runner existing, core/hasil lama tetap utuh.
+
 ## REPL untuk presentasi
 
 ```powershell

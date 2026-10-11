@@ -4,7 +4,7 @@ Tanggal: **11 Oktober 2026**. [Rencana aktif](plan.md) · [Bukti implementasi se
 
 ## Pekerjaan aktif — N-gram dan CCTV
 
-Status: **implementasi fungsional fase 0–4 terverifikasi lokal; 171 tes akademik lulus. Kualitas kamera independen masih belum dapat diukur**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
+Status: **implementasi fungsional fase 0–4 terverifikasi lokal; 172 tes akademik lulus (termasuk tes paket data). Kualitas kamera independen masih belum dapat diukur**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
 
 ### Fase 0 — Kontrak dan baseline
 
@@ -131,6 +131,15 @@ Dependency: 4.1. Scope: S–M per slice; pisahkan verifikasi dan publikasi jika 
 - [x] REPL edukasi ringan `/model <checkpoint>`, `/topk <context>`, `/score <teks>`, `/info`, `/quit`; tidak melatih/overwrite dan tidak mengubah sampler historis. Demo simbol memakai kontrak event eksplisit, bukan tokenizer kata.
 
 Dependency: checkpoint akhir. Scope: M, 2–4 file CLI/docs/tests. Verifikasi: bad path/model menjaga sesi lama, bounded input, EOF/Ctrl-C dan parity fungsi existing; satu focused test. Lokasi perkiraan: `extensions/src/repl.py`, CLI entry minimum, test/docs. Ini tidak memblokir rilis video. Temperature/seeding/reranking/chat umum tidak menjadi task aktif.
+
+### Data untuk makalah — tambahan 11 Oktober 2026
+
+- [x] Ekspor 72 konfigurasi pilot bahasa ke CSV dari metrik tersimpan, tanpa evaluasi ulang test.
+- [x] Run baru `cctv-symbol-order-v1-20261011`: 11 pembanding, 176 sesi, 638 target, 176 baris perbandingan urutan; sintetis terkontrol.
+- [x] CSV/JSON, input/protokol/hash dan kamus data; tidak menulis makalah pengguna atau mengklaim akurasi kamera.
+- [x] Tes parity NLL, split/dev selection, sensitivitas urutan, immutable output dan tamper rejection.
+
+[Data akademik](../extensions/results/README.md). Gerbang data nyata berikut tetap terbuka.
 
 ### Evaluasi mutu yang masih memerlukan data
 

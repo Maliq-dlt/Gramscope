@@ -45,6 +45,10 @@ Inventaris diperbarui dari source dan hasil pilot pada 10 Oktober 2026.
 
 Rencana lama CCTV di [tasks/plan.md](../plan.md) tetap menjadi catatan jalur video. Checklist lama tidak dibuang atau dianggap selesai akibat rencana baru ini.
 
+## Dataset akademik tambahan
+
+[Data CSV/JSON](../../extensions/results/README.md), 11 Oktober 2026: pilot bahasa tersimpan diekspor menjadi 72 baris CSV dan runner event menjalankan studi urutan sintetis baru. Paket terkontrol tidak menggantikan holdout kamera independen, tidak membuktikan deteksi/absensi dan tidak menulis makalah pengguna.
+
 ## Hubungan N-gram, CCTV, dan absensi
 
 N-gram memprediksi token berikutnya dari beberapa token sebelumnya. Pada teks, token adalah kata. Pada CCTV, **setelah** gambar dianalisis, token dapat berupa simbol kejadian. N-gram tidak mengetahui piksel, wajah, posisi kotak, atau plat tanpa komponen pengamatan lain.

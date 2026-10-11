@@ -1,0 +1,48 @@
+{
+  "data_kind": "synthetic-controlled",
+  "files": {
+    "input_events.json": "07befa699edb1597891be4c11f25dac88e7496f3ababa5f6987ba7f04e58745c",
+    "model_comparison.csv": "9ae4750db4256673650f9766af672759fab1dbc6366d79d3425ce4c2fb56b7ea",
+    "order_contrasts.csv": "37d3598b6e8f93f162a93841247046d874f8ad4b995334b0653744f479a80ddf",
+    "predictions.json": "2ea569979e90256af693396b0b33b4e6af1cfd0c7b6c6a04a16ccd50d448c856",
+    "protocol.json": "e10e3e1af0574355bb3a2eada3f7bbf4ff9705ee91d0fcc871f329ff7ff76c5b",
+    "selection.json": "5b7090137f64baad1e5c5cc8e77f3d8c8e09a03d7f75a5ea73d4a88593f6329c",
+    "sessions.csv": "db36a915c1995924d1f86740360d37a1bf1d221d2bee0d7b8fc4b2e73f18ffd7",
+    "summary.json": "b4475378b1ba22a5ce98c6f7098639f40fa4e6e0e393abb0c60c7ee8e37b9697",
+    "token_probabilities.csv": "448689b53267296a2b6b9e71136ff6c561a5ed4a66bb8d8021428416568d1b1b"
+  },
+  "generator_sha256": "fc9113533ea93c807dd79676564a88069367e9d88873505c595ed13922c73506",
+  "run_id": "cctv-symbol-order-v1-20261011",
+  "schema_version": 1,
+  "source_config_sha256": "326c790e8b79cbeb29538564797e3f93fd355697f407a024aa3001540b5d7940",
+  "source_files": {
+    "counts.json": "fbcf3198115230b09aeae552319969bae4d17fe83cb7e57c19eefc41e5fe7630",
+    "explanations.json": "216bd8b93776d71b5a60432b0981e39fdca63417fe256769603e7279c057af69",
+    "labels.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "predictions.json": "2ea569979e90256af693396b0b33b4e6af1cfd0c7b6c6a04a16ccd50d448c856",
+    "protocol.json": "e10e3e1af0574355bb3a2eada3f7bbf4ff9705ee91d0fcc871f329ff7ff76c5b",
+    "selection.json": "5b7090137f64baad1e5c5cc8e77f3d8c8e09a03d7f75a5ea73d4a88593f6329c",
+    "sessions.json": "890311836bb8e926fe9d9d98293a35d23f681b81668805b1929efd3313e653a4",
+    "stage_event_novelty.claim": "2e82c7a96923caadd6ee17189c0d80fc93c05886727aadd8112a68197c536e4c",
+    "summary.json": "b4475378b1ba22a5ce98c6f7098639f40fa4e6e0e393abb0c60c7ee8e37b9697"
+  },
+  "status": "completed",
+  "table_rows": {
+    "model_comparison.csv": 11,
+    "order_contrasts.csv": 176,
+    "sessions.csv": 176,
+    "token_probabilities.csv": 638
+  },
+  "unavailable_metrics": [
+    "camera precision",
+    "camera recall",
+    "IDF1",
+    "false alerts/hour",
+    "detection delay"
+  ],
+  "versions": {
+    "ngram-assignment": "0.1.0",
+    "nltk": "3.10.3",
+    "numpy": "2.4.6"
+  }
+}

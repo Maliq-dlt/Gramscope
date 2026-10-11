@@ -1,0 +1,2520 @@
+{
+  "1-add_k": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.445071966400354,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.445071966400354,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.445071966400354,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.445071966400354,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.0985140003879947,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.6741367069690782,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "1-kneser_ney": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "1-modified_kneser_ney": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "1-witten_bell": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.4450759664179844,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.098502376294262,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 2.674148649307096,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "2-kneser_ney": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5411132494776323,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7192842490668826,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7192842490668826,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7192842490668826,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.3633116749821435,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.144054243943304,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.144054243943304,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.144054243943304,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5411132494776323,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5337109564565957,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7192842490668826,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7192842490668826,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7192842490668826,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.3633116749821435,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.3633116762321436,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.144054243943304,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.144054243943304,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.144054243943304,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "2-modified_kneser_ney": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.551948334381613,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7326174084111933,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7326174084111933,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7326174084111933,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.957846566873979,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.738589135835139,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.738589135835139,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.738589135835139,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.551948334381613,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5407303803190817,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7326174084111933,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7326174084111933,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7326174084111933,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.957846566873979,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.957846568123979,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.738589135835139,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.738589135835139,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.738589135835139,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "2-witten_bell": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5574403212727664,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7381349640484681,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7381349640484681,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7381349640484681,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.736815009794917,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.598317655585525,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.598317655585525,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 5.598317655585525,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5574403212727664,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5497055449434135,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7381349640484681,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7381349640484681,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7381349640484681,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.736815009794917,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.5560649740237595,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.598317655585525,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.598317655585525,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 5.598317655585525,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "3-kneser_ney": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.530841580585411,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7061290917952174,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7061290917952174,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7061290917952174,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.329450522500796,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.5267108226367645,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.5267108226367645,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 4.5267108226367645,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.530841580585411,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5266490810888101,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7061290917952174,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7061290917952174,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7061290917952174,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.329450522500796,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.329450523750797,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.5267108226367645,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.5267108226367645,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 4.5267108226367645,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "3-modified_kneser_ney": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5447646272059629,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7226006610858172,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7226006610858172,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.7226006610858172,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.822619137365591,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.986090678492545,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.986090678492545,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 3.986090678492545,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5447646272059629,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5352214255286114,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7226006610858172,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7226006610858172,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.7226006610858172,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.822619137365591,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.822619138615591,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.986090678492545,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.986090678492545,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 3.986090678492545,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "3-witten_bell": [
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5219086629950801,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.6955832389096067,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.6955832389096067,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-15",
+      "session_ce": 0.6955832389096067,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.51333509247563,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.633677765826477,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.633677765826477,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-15",
+      "session_ce": 6.633677765826477,
+      "session_index": 0,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5219086629950801,
+      "session_index": 0,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.5214072623033298,
+      "session_index": 0,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.6955832389096067,
+      "session_index": 0,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.6955832389096067,
+      "session_index": 0,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "recording_id": "synthetic-17",
+      "session_ce": 0.6955832389096067,
+      "session_index": 0,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.51333509247563,
+      "session_index": 0,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.332585056704474,
+      "session_index": 0,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.633677765826477,
+      "session_index": 0,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.633677765826477,
+      "session_index": 0,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "recording_id": "synthetic-17",
+      "session_ce": 6.633677765826477,
+      "session_index": 0,
+      "track_id": 16
+    }
+  ],
+  "pair_frequency_lt2": [
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "rare_pairs": 1,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "rare_pairs": 1,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "rare_pairs": 1,
+      "recording_id": "synthetic-15",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 16
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 1
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 2
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 3
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 4
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 5
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 6
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 7
+    },
+    {
+      "alert": false,
+      "rare_pairs": 0,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 8
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 9
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 10
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 11
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 12
+    },
+    {
+      "alert": true,
+      "rare_pairs": 2,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 13
+    },
+    {
+      "alert": true,
+      "rare_pairs": 1,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 14
+    },
+    {
+      "alert": true,
+      "rare_pairs": 1,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 15
+    },
+    {
+      "alert": true,
+      "rare_pairs": 1,
+      "recording_id": "synthetic-17",
+      "session_index": 0,
+      "supported": true,
+      "track_id": 16
+    }
+  ]
+}

@@ -267,6 +267,14 @@ Dependency: 8.1, 7.1, 6.2. Scope: M, 3–5 file. Lokasi: validated query module 
 
 Verifikasi: question→exact expected facts/provenance, unrelated entity regression, stale corrections, unsupported query dan access isolation tests; suite studio dan root tetap lulus. **Checkpoint 8:** ledger dan fakta terbatas tersedia; temporal/subject-filtered chat umum serta gate terakhir tetap dibatasi, tanpa klaim HR/biometrik produksi.
 
+## Tambahan data akademik, 11 Oktober 2026
+
+- [x] Ekspor CSV 72 konfigurasi pilot tanpa rescore; sumber JSON tetap utuh.
+- [x] Dataset simbol terkontrol dan hasil 11 pembanding; split/dev selection, baseline, NLL/CE/PP, batas klaim dan integritas tersedia.
+- [x] [Indeks data](../../extensions/results/README.md) serta guide reproduksi; makalah disusun pengguna.
+
+Ini studi mekanisme simbol, bukan validasi kualitas kamera nyata.
+
 ## Sesudah rencana ini
 
 - Biometrik/liveness: kebutuhan kamera, izin peserta, data, error rates, spoof dataset dan keputusan verifikasi direncanakan sebagai proyek tersendiri bila diminta.
