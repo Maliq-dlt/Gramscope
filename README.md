@@ -23,6 +23,8 @@
 
 ## Pengembangan N-gram akademik
 
+**Fokus berikut:** N-gram untuk kejadian CCTV dari video yang direview. [Rencana aktif](tasks/plan.md) · [Checklist aktif](tasks/todo.md#pekerjaan-aktif--n-gram-dan-cctv). Chatbot umum, RAG dokumen, corpus besar dan biometrik tidak masuk milestone aktif.
+
 [Status dan hubungan ke CCTV/absensi](tasks/ngram_academic/plan.md) · [Checklist berfase](tasks/ngram_academic/todo.md) · [Metode dan pilot](extensions/README.md) · [Verifikasi](extensions/reports/VERIFICATION.md).
 
 Witten–Bell, Modified Kneser–Ney dan interpolation EM, run registry/checkpoint v2, grouped research, bootstrap, autocomplete dan benchmark CPU sudah diimplementasikan. Lab browser, ledger kejadian dan absensi manual tersedia. Core dan hasil historis dipertahankan.

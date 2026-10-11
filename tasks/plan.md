@@ -1,3 +1,112 @@
+# Rencana aktif — N-gram untuk analisis kejadian CCTV
+
+Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari video unggahan**. Status: **rencana**, belum implementasi tambahan.
+
+[Task aktif dan kriteria selesai](todo.md#pekerjaan-aktif--n-gram-dan-cctv) · [Kemampuan akademik](../extensions/README.md) · [Verifikasi terakhir](../extensions/reports/VERIFICATION.md)
+
+> Arahan terbaru pengguna: fokus hanya pada N-gram dan CCTV; fitur baru harus membantu memahami model statistik atau meninjau rekaman. Bagian ini menjadi acuan pekerjaan berikutnya. Rencana lama di bawah dipertahankan sebagai riwayat; task lama yang di luar scope tidak otomatis menjadi pekerjaan aktif. Penyempitan scope tidak menghapus fitur/data yang sudah ada.
+
+## Tujuan yang konkret
+
+Satu alur: pengguna mengunggah rekaman, memeriksa hasil tracking, memperbaiki kotak/label, mengesahkan kejadian, melihat urutan yang perlu ditinjau, lalu bertanya dan mengunduh ringkasan dengan bukti. N-gram menjelaskan seberapa biasa urutan kejadian menurut rekaman training; angka jumlah objek dan fakta helm tetap berasal dari catatan terverifikasi.
+
+Contoh demo yang dituju: video area pekerja/gerbang memperlihatkan orang dan kendaraan. Pengguna memperbaiki satu objek yang terlewat; aplikasi menunjukkan revisi dan sumber hasil. Pengguna menanyakan crossing orang pada detik 10–30, membuka frame bukti, meninjau status helm, lalu melihat skor N-gram beserta kontribusi setiap simbol. Urutan jarang ditandai untuk review, tidak otomatis disebut insiden.
+
+## Yang tersedia dan yang perlu diperkuat
+
+Inventaris pada source HEAD `34e3df8`, diperiksa 11 Oktober 2026. Bukti pengujian sebelumnya bertanggal 10 Oktober; penyusunan rencana tidak menjalankan ulang pengujian aplikasi.
+
+| Bagian | Sudah tersedia | Pekerjaan berikutnya |
+| --- | --- | --- |
+| Video/tracking | Upload, dua pemutar, deteksi orang/kendaraan/helm, koreksi fullscreen dan ekspor revisi | Ukur kasus kerumunan; pastikan asal tiap hasil/koreksi mudah dilacak |
+| Belajar detector | Review antrean, snapshot disahkan, training CPU/Auto/GPU dan analisis ulang kandidat | Validasi alur pada rekaman nyata; jelaskan kapan bobot berubah dan kandidat dipakai |
+| Catatan kejadian | SQLite, crossing orang terpilih, bukti hash, waktu/revisi/stale/retract | Extend crossing kendaraan dan status helm yang benar-benar direview, dengan kontrak versi baru |
+| N-gram | Delapan metode, CLI, Lab, runner novelty offline | Hubungkan pemilihan rekaman dan hasil urutan ke video; bandingkan metode pada simbol yang relevan |
+| Chat fakta | Jawaban terbatas berbukti, isolasi role/workspace | Tambah filter rekaman, kelas, arah dan rentang video yang eksplisit |
+| UI/security/CI | React/TS, profil/tema, RBAC, CSRF/audit, suite academic/studio/container | Pertahankan; tambah regresi untuk setiap alur baru tanpa redesign umum |
+
+## Batas scope
+
+| Masuk rencana aktif | Di luar rencana aktif |
+| --- | --- |
+| Koreksi dan evaluasi orang, kendaraan, helm pada rekaman | Chatbot percakapan umum, DailyDialog dan persona chat |
+| Fine-tuning detector dari review yang disahkan, memakai alur existing | Training dari draft, belajar bobot otomatis tiap kotak, atau mengganti semua model tanpa bukti |
+| Ledger kejadian, filter fakta dan bukti video | RAG dokumen/SOP, filter OCR/PP dan sumber teks umum |
+| Urutan N-gram per track/rekaman dan penjelasan skor | Corpus jutaan token, BPE/SentencePiece, speculative decoding, Transformer dari nol |
+| Draft ringkasan rekaman lokal berdasarkan fakta | Pengiriman HRD/email/9Router atau keputusan K3 otomatis |
+| Perapihan alur UI yang membantu tugas video | Landing page, dashboard umum baru, framework/database baru |
+
+Absensi manual yang sudah ada dipertahankan, tetapi tidak dikembangkan dalam milestone ini. Face recognition/liveness, OCR plat, objek custom tanpa dataset, deployment enterprise dan CCTV live berada di luar milestone aktif. Live satu kamera dapat dibahas setelah alur rekaman lulus, karena membutuhkan causal tracking/replay, reconnect, backpressure dan pengukuran beban; tidak otomatis menyusul sebagai task.
+
+## Peran setiap komponen
+
+```mermaid
+flowchart TD
+    V[Video unggahan] --> D[Detector dan tracker]
+    D --> R[Review kotak, label dan bukti]
+    R --> L[(Ledger kejadian terverifikasi)]
+    R --> T[Snapshot dataset disahkan]
+    T --> C[Training detector kandidat]
+    C --> A[Analisis ulang sebagai revisi baru]
+    A --> R
+    L --> F[Query fakta dengan filter]
+    L --> S[Urutan simbol per rekaman dan track]
+    S --> N[N-gram: skor dan penjelasan urutan]
+    N --> U[Daftar urutan untuk ditinjau]
+    F --> Q[Jawaban dan ringkasan berbukti]
+    U --> Q
+```
+
+**Dua pembelajaran berbeda:** detector mempelajari piksel dari anotasi disahkan; N-gram mempelajari urutan simbol dari ledger disahkan. Simpan koreksi tidak selalu mengubah bobot. Alur existing menunggu seluruh antrean kelompok dan minimal dua sumber asli sebelum training kandidat; sumber tambahan diperlukan untuk test kualitas yang independen. Analisis ulang memakai checkpoint baru dan menyimpan hasil awal. N-gram tidak memperbaiki kotak atau mengenali wajah.
+
+## Keputusan teknis dan aturan hasil
+
+- Reuse FastAPI, SQLite, React/TypeScript, engine N-gram, auth, worker, export dan CI yang ada. Dependency baru hanya jika profiling/kebutuhan nyata membenarkan; tidak ada instalasi tambahan untuk menyusun rencana.
+- `core/`, hasil akademik lama, bobot dasar, video awal dan perubahan pengguna tetap utuh. Eksperimen baru memakai run ID eksklusif dan fingerprint; hasil lama tidak dievaluasi ulang atau ditimpa.
+- Bedakan hasil detector, koreksi reviewer dan hasil kandidat fine-tuned di API/UI/export. Query memakai revisi terpilih dan status; perubahan sumber membuat turunan lama stale.
+- Status helm tetap **dipakai / tidak dipakai / tidak diketahui**. Tidak terlihatnya helm tidak cukup untuk no-helmet; kepala tertutup, helm di tangan dan asosiasi ambigu harus direview. Warna disertai teks/ikon.
+- Crossing menyatakan lintasan pada garis/arah yang dikonfigurasi. Garis bukan otomatis zona bahaya. Hitungan frame, track, crossing dan orang unik adalah satuan berbeda; track tidak disamakan dengan identitas.
+- Event memiliki rekaman/track, offset video atau interval, kelas/status, revisi sumber, reviewer, bukti dan versi schema. Waktu kalender hanya tersedia bila awal rekaman terverifikasi; waktu upload tidak dipakai sebagai waktu kejadian.
+- Kontrak simbol baru diberi versi; migrasi tidak mengubah makna `PERSON_ENTER_ZONE`, `PERSON_EXIT_ZONE`, `HELMET_UNKNOWN` lama. Observasi simultan tidak diurutkan seolah-olah kejadian kausal; dokumentasikan bundling/boundary sebelum fitting. Unknown/gap tetap eksplisit; jeda event tidak membuktikan kamera putus atau exposure.
+- Novelty adalah indikasi statistik untuk review. Pelanggaran yang umum tidak boleh lolos aturan hanya karena surprisal rendah. Aturan helm diverifikasi dan skor novelty ditampilkan terpisah.
+- Model probabilistik/threshold dipilih dev; test berlabel ditahan sampai konfigurasi dibekukan. Unigram/frequency baseline, bigram KN/WB dan MKN dibandingkan; MKN tidak dipaksakan menjadi pemenang.
+- NLL/CE diukur per simbol dengan EOS/boundary jelas. Skor simbol tidak dibandingkan langsung dengan PP corpus bahasa. Biaya CPU satu lookup bukan latensi seluruh video/chat.
+- Draft ringkasan dibuat dari query deterministik terlebih dahulu. Qwen lokal opsional untuk bahasa; angka/ID/waktu/bukti divalidasi terhadap fakta. Jika tidak cocok, pakai narasi deterministik. Tidak ada pengiriman eksternal.
+
+## Fase dan hasil yang dapat digunakan
+
+| Fase | Hasil | Gerbang |
+| --- | --- | --- |
+| **0 — Kontrak dan baseline** | Definisi kejadian, satuan hitungan, revisi, dataset evaluasi dan batas resource | Kontrak cocok dengan kode; hasil lama aman; tidak menjanjikan mutu dari smoke tests |
+| **1 — Review ke ledger** | Koreksi/learning transparan, kejadian orang/kendaraan/helm dengan bukti revisi | Koreksi → hasil → ledger konsisten; unknown tidak jadi no-helmet; source split aman |
+| **2 — Pertanyaan berbukti** | Filter rekaman/kelas/arah/rentang video yang sama di UI, query dan bukti | Tidak menjawab filter unsupported sebagai agregat semua data; stale/retract dikecualikan |
+| **3 — N-gram kejadian** | Run offline dari review disahkan, kontribusi simbol dan tautan balik ke video | Baseline/dev/test terpisah, sumber independen dan model/threshold dapat diaudit |
+| **4 — Demo lengkap dan rilis** | Ringkasan unduhan, alur UI ringkas, laporan biaya/mutu dan CI | End-to-end nyata, keamanan/regresi/build, batas penggunaan dan preservasi terbukti |
+
+Task rinci/dependency berada di [checklist aktif](todo.md#pekerjaan-aktif--n-gram-dan-cctv). Setiap task harus menghasilkan alur yang bisa dipakai; tidak membuka fitur berikutnya hanya untuk menutupi task yang gagal. Fase menunjukkan urutan dependency, bukan janji selesai dalam satu minggu.
+
+## Data dan pengujian
+
+Sumber awal: rekaman publik berlisensi atau rekaman lokal berizin. Pisahkan area ramai/sepi, overlap/occlusion, orang diam, berbagai kendaraan, helm dipakai/tidak/unknown. Pseudonim track cukup; tidak memerlukan identitas karyawan. Catat sumber asli, lisensi, hash, timestamp, label dan alasan review; potongan video yang sama tidak boleh masuk split berbeda.
+
+Gunakan train/dev/test dari sumber rekaman independen. Tiga sumber adalah minimum teknis untuk tiga split, bukan ukuran dataset cukup secara ilmiah. Novelty label memerlukan penilaian independen dengan rubrik; exposure yang diketahui diperlukan untuk false alert/jam. Delay hanya dilaporkan jika onset dan jalur causal tersedia; offline full-session tidak mengklaim kecepatan deteksi live. Jika data belum cukup, rilis kemampuan review/skor dengan batas kualitas eksplisit, tanpa metrik palsu.
+
+Pengujian yang dituju: error count, ID switch/IDF1 jika trajectory truth tersedia, precision/recall helm beserta unknown coverage, precision/recall novelty berlabel, false alerts/hour pada exposure yang diketahui, latency p50/p95 per tahap dan peak RAM/VRAM. Ambang keberhasilan ditulis sebelum melihat test; bandingkan baseline/kandidat pada rekaman yang sama dan laporkan kegagalan.
+
+## Tambahan yang relevan setelah alur utama
+
+**REPL akademik opsional:** `/model <checkpoint>`, `/topk <context>`, `/score <teks>`, `/info` dan `/quit`; memakai fungsi existing tanpa training/overwrite. Demo simbol harus menunjukkan tokenizer/schema event yang berbeda dari kata. Temperature/seeding/best-of-K tidak masuk rencana aktif karena tidak membantu kebenaran fakta CCTV. REPL tidak menjadi syarat video berjalan dan bukan chatbot umum.
+
+## Status dan riwayat
+
+Scope telah ditetapkan pengguna; rincian fase ini adalah rencana teknis untuk pekerjaan berikutnya. Tidak ada fitur, training, evaluasi model, penghapusan file atau publikasi baru pada penyusunan rencana. Angka pengujian terakhir tetap berada pada laporan bertanggal, bukan klaim bahwa semua task berikut sudah lulus.
+
+---
+
+## Arsip rencana sebelumnya
+
+Bagian berikut dipertahankan untuk konteks keputusan lama. Scope aktif di atas mengambil prioritas atas usulan fitur yang lebih luas.
+
 # Rencana Chatbot dan Deteksi Visual Lokal
 
 Tanggal: 8 Oktober 2026. Target: **demonstrasi/portofolio lokal dulu**.

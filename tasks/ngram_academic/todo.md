@@ -1,5 +1,7 @@
 # Checklist — N-gram Academic Lab
 
+> **Scope aktif, 11 Oktober 2026:** pekerjaan berikut berfokus pada N-gram dan kejadian CCTV. [Rencana aktif](../plan.md) dan [task aktif](../todo.md#pekerjaan-aktif--n-gram-dan-cctv) mengambil prioritas; blueprint/checklist berikut tetap menjadi riwayat implementasi dan evaluasi. Usulan di luar fokus tidak otomatis dijalankan.
+
 [Penjelasan dan arsitektur](plan.md) · [Status video yang terpisah](../todo.md)
 
 Tanggal: **10 Oktober 2026**. Checklist diperbarui setelah implementasi, tiga pilot eksploratif dan 72 benchmark model. Kotak tercentang berarti bukti implementasi/gate yang disebut tersedia; kotak kosong menunjukkan kriteria yang belum lengkap, bukan menyatakan seluruh modul belum dibuat. [Hasil dan biaya](../../extensions/README.md) · [Verifikasi publik](../../extensions/reports/VERIFICATION.md).

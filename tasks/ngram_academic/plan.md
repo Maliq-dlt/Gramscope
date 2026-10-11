@@ -1,5 +1,7 @@
 # N-gram Academic Lab — rencana pengembangan
 
+> **Scope aktif, 11 Oktober 2026:** pekerjaan berikut berfokus pada N-gram dan kejadian CCTV. [Rencana aktif](../plan.md) dan [task aktif](../todo.md#pekerjaan-aktif--n-gram-dan-cctv) mengambil prioritas; blueprint/checklist berikut tetap menjadi riwayat implementasi dan evaluasi. Usulan di luar fokus tidak otomatis dijalankan.
+
 > **Status implementasi dan pilot, 10 Oktober 2026.** Registry/checkpoint v2, WB/MKN/EM, grouped document research, bootstrap/diagnostics/benchmark, autocomplete, lab browser, ledger dan absensi manual tersedia. Tiga pilot dan 72 benchmark model selesai. Blueprint berikut tetap memuat gate yang belum semuanya tercapai; lihat [checklist](todo.md), [hasil pilot](../../extensions/README.md) dan [verifikasi](../../extensions/reports/VERIFICATION.md).
 
 ## Hasil dan gerbang yang masih terbuka

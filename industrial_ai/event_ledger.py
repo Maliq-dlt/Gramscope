@@ -11,7 +11,7 @@ from typing import Literal
 from uuid import UUID, uuid4
 
 from fastapi import HTTPException
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 import access
 
@@ -85,14 +85,46 @@ def source(job_id: str):
     return folder, summary, metadata, digest(metadata)
 
 
+CLASSES = {"person", "car", "bus", "truck", "motorcycle", "bicycle"}
+
+
+class HelmetReview(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    status: Literal["worn", "not_worn", "unknown"] = "unknown"
+    association: Literal["head_visible", "held_in_hand", "occluded", "ambiguous", "unreviewed"] = (
+        "unreviewed"
+    )
+    head_bbox: tuple[float, float, float, float] | None = None
+
+    @model_validator(mode="after")
+    def validate_association(self):
+        if self.head_bbox is not None:
+            x1, y1, x2, y2 = self.head_bbox
+            if not all(math.isfinite(v) for v in self.head_bbox) or not (
+                0 <= x1 < x2 <= 1 and 0 <= y1 < y2 <= 1
+            ):
+                raise ValueError("Head box must have positive area inside the frame.")
+        if self.status != "unknown" and (
+            self.association != "head_visible" or self.head_bbox is None
+        ):
+            raise ValueError(
+                "Known helmet status requires reviewer-confirmed visible head association."
+            )
+        return self
+
+
 class ImportCrossings(BaseModel):
-    recorded_at: str = Field(max_length=80)
+    model_config = ConfigDict(extra="forbid")
+    schema_version: Literal[1, 2] = 1
+    recorded_at: str | None = Field(default=None, max_length=80)
+    expected_fingerprint: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    helmet_reviews: dict[int, HelmetReview] = Field(default_factory=dict, max_length=1000)
     crossing_indices: list[int] = Field(min_length=1, max_length=1000)
 
     @field_validator("recorded_at")
     @classmethod
     def valid_time(cls, value):
-        return timestamp(value)
+        return timestamp(value) if value is not None else None
 
 
 class Attendance(BaseModel):
@@ -197,9 +229,12 @@ class Ledger:
                 )
             ]
         fingerprints = {}
+        integrity = {}
         for row in rows:
             row["payload"] = json.loads(row["payload"])
             row["status"] = "retracted" if row["retracted"] else "verified"
+            if row["occurred_at"].startswith("video+"):
+                row["occurred_at"] = None
             if row["job_id"] and not row["retracted"]:
                 if row["job_id"] not in fingerprints:
                     try:
@@ -208,6 +243,29 @@ class Ledger:
                         fingerprints[row["job_id"]] = None
                 if fingerprints[row["job_id"]] != row["source_fingerprint"]:
                     row["status"] = "stale"
+                if row["payload"].get("schema_version") == 2 and row["status"] == "verified":
+                    payload = row["payload"]
+                    key = (row["job_id"], payload["evidence_sha256"])
+                    if key not in integrity:
+                        try:
+                            folder = source(row["job_id"])[0]
+                            with (folder / "original.mp4").open("rb") as stream:
+                                video_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+                            proof_hash = hashlib.sha256(
+                                (
+                                    folder / ("ledger_" + payload["evidence_sha256"] + ".jpg")
+                                ).read_bytes()
+                            ).hexdigest()
+                            integrity[key] = (
+                                video_hash == payload["video_sha256"]
+                                and proof_hash == payload["evidence_sha256"]
+                                and original_source(row["job_id"])
+                                == payload["original_source_sha256"]
+                            )
+                        except (OSError, HTTPException):
+                            integrity[key] = False
+                    if not integrity[key]:
+                        row["status"] = "stale"
         return rows
 
     def retract(self, event_id, reason):
@@ -292,11 +350,177 @@ def facts(rows, role=None):
     }
 
 
+def original_source(job_id):
+    """Copies/reanalyses share the original upload hash; never use job ID as a split group."""
+    seen = set()
+    while job_id not in seen:
+        seen.add(job_id)
+        folder, _, metadata, _ = source(job_id)
+        parent = metadata["state"].get("source_job_id")
+        if not parent:
+            path = folder / "upload.bin"
+            if not path.is_file():
+                path = folder / "original.mp4"
+            try:
+                with path.open("rb") as stream:
+                    return hashlib.file_digest(stream, "sha256").hexdigest()
+            except OSError as error:
+                raise HTTPException(409, "Sumber asli tidak tersedia untuk provenance.") from error
+        job_id = parent
+    raise HTTPException(409, "Relasi sumber rekaman tidak valid.")
+
+
+def import_v2(job_id, request, folder, summary, metadata, fingerprint):
+    if request.expected_fingerprint != fingerprint:
+        raise HTTPException(409, "Revisi berubah; tinjau ulang preview sebelum mengesahkan.")
+    if set(request.helmet_reviews) - set(request.crossing_indices):
+        raise HTTPException(422, "Review helm harus terkait crossing terpilih.")
+    from app import frame_image
+
+    tracks = {t["id"]: t for t in summary.get("tracks", [])}
+    entries = []
+    source_hash = original_source(job_id)
+    with (folder / "original.mp4").open("rb") as stream:
+        video_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+    for index in dict.fromkeys(request.crossing_indices):
+        if not 0 <= index < len(summary.get("crossings", [])):
+            raise HTTPException(422, "Crossing tidak tersedia.")
+        crossing = summary["crossings"][index]
+        kind, seconds = crossing["kind"], crossing["seconds"]
+        track = tracks.get(crossing["track_id"])
+        if (
+            kind not in CLASSES
+            or not track
+            or track["kind"] != kind
+            or crossing["direction"] not in {"up", "down"}
+            or type(seconds) not in (int, float)
+            or not math.isfinite(seconds)
+            or not 0 <= seconds <= summary["duration"]
+        ):
+            raise HTTPException(422, "Kelas, track, arah atau offset crossing tidak valid.")
+        if kind != "person" and index in request.helmet_reviews:
+            raise HTTPException(422, "Review helm hanya untuk track orang.")
+        review = request.helmet_reviews.get(index, HelmetReview())
+        frame_index = min(int(seconds * summary["fps"]), summary["frames"] - 1)
+        image = frame_image(folder, frame_index, summary)
+        image_hash = hashlib.sha256(image).hexdigest()
+        evidence = folder / ("ledger_" + image_hash + ".jpg")
+        if not evidence.exists():
+            pending = evidence.with_suffix(".pending")
+            pending.write_bytes(image)
+            pending.replace(evidence)
+        payload = {
+            "schema_version": 2,
+            "recording_id": job_id,
+            "track_id": crossing["track_id"],
+            "seconds": seconds,
+            "interval_seconds": [seconds, seconds],
+            "class_name": kind,
+            "direction": crossing["direction"],
+            "line": summary["line"],
+            "source_revision": fingerprint,
+            "original_source_sha256": source_hash,
+            "video_sha256": video_hash,
+            "annotation_revision": metadata["annotations"]["revision"],
+            "correction_revision": metadata["corrections"]["revision"],
+            "model_id": metadata["state"]["model_id"],
+            "result_source": "fine_tuned_candidate"
+            if metadata["state"]["model_id"]
+            else "original_detector",
+            "review_status": "reviewer_approved_crossing",
+            "recorded_at": request.recorded_at,
+            "frame_index": frame_index,
+            "evidence_seconds": frame_index / summary["fps"],
+            "evidence_mode": "original_exact_frame",
+            "evidence_sha256": image_hash,
+            "helmet_status": review.status if kind == "person" else None,
+            "head_association": review.model_dump() if kind == "person" else None,
+        }
+        when = (
+            (datetime.fromisoformat(request.recorded_at) + timedelta(seconds=seconds)).isoformat()
+            if request.recorded_at
+            else f"video+{seconds:.9f}"
+        )
+        symbol = kind.upper() + ("_ENTER_ZONE" if crossing["direction"] == "down" else "_EXIT_ZONE")
+        symbols = [symbol]
+        if kind == "person":
+            symbols.append(
+                {"worn": "HELMET_WORN", "not_worn": "HELMET_NOT_WORN", "unknown": "HELMET_UNKNOWN"}[
+                    review.status
+                ]
+            )
+        for symbol in symbols:
+            entries.append(
+                {
+                    "source_key": f"v2:{job_id}:{fingerprint}:{index}:{symbol}",
+                    "source_fingerprint": fingerprint,
+                    "job_id": job_id,
+                    "track_id": crossing["track_id"],
+                    "occurred_at": when,
+                    "symbol": symbol,
+                    "payload": payload,
+                }
+            )
+    # Source can be edited during frame decoding. Fail closed before writing the ledger.
+    if source(job_id)[3] != fingerprint:
+        raise HTTPException(409, "Revisi berubah selama penyiapan bukti.")
+    try:
+        return {"events": Ledger(access.store()).append("observation", entries)}
+    except ValueError as error:
+        raise HTTPException(409, str(error)) from error
+
+
 def install(app):
+    @app.get("/api/ledger/jobs/{job_id}/preview")
+    def preview(job_id: str):
+        _, summary, metadata, fingerprint = source(job_id)
+        return {
+            "schema_version": 2,
+            "source_revision": fingerprint,
+            "annotation_revision": metadata["annotations"]["revision"],
+            "correction_revision": metadata["corrections"]["revision"],
+            "model_id": metadata["state"]["model_id"],
+            "crossings": summary.get("crossings", []),
+            "tracks": summary.get("tracks", []),
+            "duration": summary["duration"],
+        }
+
+    @app.get("/api/ledger/events/{event_id}/proof")
+    def proof(event_id: str):
+        from fastapi.responses import Response
+
+        row = next(
+            (
+                r
+                for r in Ledger(access.store()).rows()
+                if r["id"] == event_id and r["category"] == "observation"
+            ),
+            None,
+        )
+        if row is None:
+            raise HTTPException(404, "Bukti tidak tersedia dalam workspace ini.")
+        if row["status"] != "verified" or row["payload"].get("schema_version") != 2:
+            raise HTTPException(409, "Bukti stale/ditarik atau hanya snapshot legacy.")
+        folder = source(row["job_id"])[0]
+        path = folder / ("ledger_" + row["payload"]["evidence_sha256"] + ".jpg")
+        try:
+            data = path.read_bytes()
+        except OSError as error:
+            raise HTTPException(404, "Frame bukti tidak tersedia.") from error
+        if hashlib.sha256(data).hexdigest() != row["payload"]["evidence_sha256"]:
+            raise HTTPException(409, "Integritas frame bukti gagal.")
+        return Response(data, media_type="image/jpeg", headers={"Cache-Control": "no-store"})
+
     @app.post("/api/ledger/jobs/{job_id}/import")
     def import_crossings(job_id: str, request: ImportCrossings):
         reviewer()
         folder, summary, metadata, fingerprint = source(job_id)
+        if request.schema_version == 2:
+            return import_v2(job_id, request, folder, summary, metadata, fingerprint)
+        if request.recorded_at is None:
+            raise HTTPException(
+                422, "Versi 1 memerlukan waktu rekaman; gunakan versi 2 untuk offset."
+            )
         entries = []
         start = datetime.fromisoformat(request.recorded_at)
         tracks = {track["id"]: track for track in summary.get("tracks", [])}

@@ -1309,7 +1309,7 @@ function switchResultMode() {
     const at = original.currentTime;
     tracked.src = $('resultMode').value === 'corrections' ? ($('correctedOption').dataset.url || '') : mediaUrl('tracked.mp4');
     tracked.addEventListener('loadedmetadata', () => { tracked.currentTime = Math.min(at, tracked.duration); }, { once: true });
-    $('comparisonBadge').textContent = $('resultMode').value === 'corrections' ? 'Koreksi pengguna · belum bukti training' : (summary.model_id ? 'Hasil model fine-tuning' : 'Hasil model dasar');
+    $('comparisonBadge').textContent = $('resultMode').value === 'corrections' ? 'Koreksi pengguna · belum bukti training' : (summary.model_id ? 'Hasil kandidat fine-tuned' : 'Hasil detector awal');
 }
 $('resultMode').onchange = () => { if ($('resultMode').value === 'corrections' && $('correctedOption').disabled) {
     $('resultMode').value = 'ai';

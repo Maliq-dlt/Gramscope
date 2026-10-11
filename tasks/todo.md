@@ -1,3 +1,174 @@
+# Checklist aktif — N-gram dan CCTV
+
+Tanggal: **11 Oktober 2026**. [Rencana aktif](plan.md) · [Bukti implementasi sebelumnya](../extensions/reports/VERIFICATION.md).
+
+## Pekerjaan aktif — N-gram dan CCTV
+
+Status: **implementasi berjalan per fase; baseline akademik 167 tes lulus**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
+
+### Fase 0 — Kontrak dan baseline
+
+#### 0.1 Definisi kejadian dan scope
+
+- [x] Batasi pekerjaan baru pada N-gram dan analisis CCTV dari video unggahan; pisahkan kemampuan lama, task baru dan fitur di luar scope.
+- [x] Tetapkan urutan dependency, batas data/hasil, peran detector vs N-gram, dan gerbang verifikasi.
+- [x] Bekukan contoh payload versi event berikut dengan offset/interval, satuan count, status helm, simultaneous observations, revisi dan bukti berdasarkan review kode saat implementasi.
+
+Dependency: tidak ada. Perkiraan scope: S, 1–2 dokumen. Verifikasi: contoh satu rekaman/track/helm/vehicle dapat ditelusuri ke kontrak/API; bukan placeholder runtime. Lokasi: `tasks/plan.md`, kontrak dekat `industrial_ai/event_ledger.py` dan `extensions/src/event_sequences.py`.
+
+#### 0.2 Dataset dan baseline terukur
+
+- [x] Pilih rekaman berizin, simpan source hashes/lisensi dan split source-group; potongan/copy sumber yang sama tetap satu split.
+- [x] Bekukan rubrik, subset label untuk tracking/helm/novelty, baseline dan ambang evaluasi sebelum membuka test; data tidak cukup ditulis sebagai batas nyata.
+- [x] Jalankan suite existing dan audit hasil/core/bobot/perubahan pengguna; ukur baseline biaya pada subset kecil sebelum scaling.
+
+Dependency: 0.1. Scope: M, 3–5 file metadata/runner/report. Verifikasi: provenance/split diperiksa, baseline metrics/logs dan SHA-256 tersimpan lokal; fixture tidak disebut kualitas pabrik. Lokasi: dataset lokal ignored, runner/checks `extensions/experiments/` atau `industrial_ai/tests/`, report existing.
+
+**Checkpoint 0:** kontrak dibekukan, data siap atau batasnya diketahui; setup/tes existing tidak dibuat ulang, hasil lama utuh.
+
+### Fase 1 — Review menjadi kejadian
+
+#### 1.1 Koreksi dan pembelajaran transparan
+
+- [x] UI/API/export menampilkan sumber hasil dan revisinya: detector awal, koreksi reviewer, atau kandidat fine-tuned.
+- [x] Simpan koreksi memperbarui hasil/bukti yang direview; edit membatalkan approval terkait dan stale turunan tanpa menghapus riwayat.
+- [x] Reuse antrean belajar existing: draft/satu sumber tidak melatih; antrean selesai dan sumber memadai menghasilkan snapshot/checkpoint kandidat lalu analisis ulang baru. Tampilkan progress/error/cancel secara nyata.
+
+Dependency: 0.2. Scope: M, 3–5 file; pisahkan koreksi persistensi dan presentasi learning jika lebih besar. Verifikasi: save→refresh/restart→hasil/chat/bukti; parameter update/checkpoint dipakai pada isolated learning check; latihan nyata belum membuktikan peningkatan akurasi. Lokasi: `industrial_ai/app.py`, `review.py`, `frontend/Annotation.tsx` atau controller terkait, `tests/workflow_check.py`/`review_counts_check.py`.
+
+#### 1.2 Crossing orang dan kendaraan terverifikasi
+
+- [x] Extend impor ledger untuk kelas kendaraan existing tanpa mengubah catatan person/schema historis; track dan crossing memiliki scope rekaman dan arah garis.
+- [x] Reviewer memilih kejadian dengan frame bukti yang tepat pada waktu crossing; waktu tak diketahui tetap offset video, bukan waktu upload.
+- [x] Retraction/revisi/dedup/workspace tetap aman; counts frame/track/crossing tidak digabung sebagai orang atau kendaraan unik.
+
+Dependency: 1.1 dan 0.1. Scope: M, 3–5 file. Verifikasi: person/car/bus, crossing berulang, direction, bukti missing/stale, rollback dan akses lintas workspace pada `tests/ledger_check.py`. Lokasi: `industrial_ai/event_ledger.py`, `storage.py` bila perlu migration, `frontend/EventLedger.tsx`, ledger regression.
+
+#### 1.3 Status helm yang dapat dipertanggungjawabkan
+
+- [x] Review mengesahkan dipakai/tidak dipakai/unknown beserta asosiasi kepala-orang; kepala tertutup, helm di tangan dan occlusion tidak otomatis menjadi no-helmet.
+- [x] Event helm terikat frame/interval, track, revisi dan bukti; status simultan dengan crossing tidak dianggap urutan fisik berdasarkan sorting saja.
+- [x] Warna/label/bukti dan ledger menyatakan hal yang sama; hasil prediction/review tetap terpisah dan unknown coverage dilaporkan.
+
+Dependency: 1.1, 1.2. Scope: M, 3–5 file. Verifikasi: fixture asosiasi helm dan review/retraction; quality dinilai pada data independen dari 0.2. Lokasi: `industrial_ai/vision.py`/`review.py`, `event_ledger.py`, event UI dan regression material.
+
+**Bukti fase 1:** `industrial_ai/tests/ledger_v2_check.py`, legacy ledger, workflow29, security101, typecheck/build/UI suites, training objects/helmets nyata di `.tmp/` (9 checks tiap grup; parameter berubah). Kualitas dataset independen belum tersedia.
+
+**Checkpoint 1:** satu rekaman dapat dikoreksi, disimpan, dianalisis ulang kandidat bila eligible, lalu diimpor sebagai kejadian berbukti; hasil awal tetap tersedia.
+
+### Fase 2 — Jawaban yang mengikuti pertanyaan
+
+#### 2.1 Filter fakta yang eksplisit
+
+- [ ] Query terstruktur mendukung rekaman/revisi, kelas, arah crossing dan rentang offset video dengan aturan boundary terdokumentasi; nol berbeda dengan tidak ada coverage.
+- [ ] API/UI memakai filter sama; stale/retracted/unknown tidak dipakai sebagai fakta pasti; count disertai satuan dan filter.
+- [ ] Bahasa chat hanya memetakan bentuk pertanyaan yang benar-benar didukung; filter ambigu/negasi/identitas/compound unsupported meminta klarifikasi atau ditolak, tidak fallback ke agregat semua rekaman.
+
+Dependency: checkpoint 1. Scope: M, 3–5 file. Verifikasi: rentang boundary, kelas orang vs kendaraan, out-of-range, stale/retract dan akses; `tests/fact_check.py` dan ledger HTTP checks. Lokasi: `industrial_ai/fact_query.py`, `event_ledger.py`, `chat.py`/`app.py` hanya integrasi minimum, factual regressions.
+
+#### 2.2 Bukti dan posisi video sinkron
+
+- [ ] Jawaban menyertakan event ID, sumber/revisi dan offset; klik bukti membuka frame/waktu pada rekaman dan mode hasil yang benar.
+- [ ] Pergantian rekaman/revisi saat request berlangsung tidak menempelkan jawaban atau bukti lama ke sumber baru; hilang/corrupt evidence tampil sebagai unavailable.
+- [ ] Keyboard/mobile/fullscreen tetap dapat dipakai; detail teknis diletakkan di panel lanjutan tanpa menghapus informasi penting.
+
+Dependency: 2.1. Scope: M, 3–5 file. Verifikasi: chat orang hanya bukti orang, response race, seek/bounds, keyboard/mobile dan media regression. Lokasi: `industrial_ai/frontend/ChatPanel.tsx`, `EventLedger.tsx`, `VideoPanel.tsx` atau controller `studio.ts`, existing UI checks.
+
+**Checkpoint 2:** pertanyaan terdukung menghasilkan count dan bukti tepat pada filter sama; angka/ID tidak dibuat oleh N-gram/Qwen.
+
+### Fase 3 — N-gram benar-benar memakai kejadian CCTV
+
+#### 3.1 Kontrak urutan dan label
+
+- [ ] Adapter schema baru mendukung simbol orang/kendaraan/helm yang disahkan; unit per sumber/track/session, bundling simultan, EOS/gap/unknown eksplisit dan versioned.
+- [ ] Training mengambil ledger valid milik workspace dengan source revisions; edit/retract membuat run turunan stale. Identitas/nama tidak menjadi token prediksi atau manifest publik.
+- [ ] Train/dev/test dipisah sumber asli, reviewer event bukan otomatis label novelty; label novelty memakai rubrik/provenance independen. Exposure kamera tidak disimpulkan dari jeda event.
+
+Dependency: checkpoint 1, 0.2; bisa bersamaan dengan 2.1 setelah kontrak shared stabil. Scope: M, 3–5 file. Verifikasi: duplicate/gap/simultaneous/version mismatch/retraction dan isolasi workspace; `extensions/tests/test_event_novelty.py`, `industrial_ai/tests/novelty_api_check.py`. Lokasi: `extensions/src/event_sequences.py`, `experiments/event_novelty.py`, ledger export, tests.
+
+#### 3.2 Eksperimen dan kalibrasi urutan
+
+- [ ] Reuse runner/registry; bandingkan frequency/unigram, KN/WB dan MKN secara dev-only dengan fixed split/units; jangan mengasumsikan MKN terbaik.
+- [ ] Threshold disimpan dengan model/schema/source/code fingerprints; test dijalankan sekali setelah pemilihan, reports lama tetap utuh.
+- [ ] Laporkan precision/recall berlabel serta false alert/jam hanya bila exposure diketahui; delay/live tidak diklaim dari full-session offline. Ukur biaya scoring/runner terpisah dari detector.
+
+Dependency: 3.1. Scope: M, 3–5 file. Verifikasi: normalisasi, holdout sentinel, threshold boundaries, immutable receipts dan meaningful baseline; labelled replay baru memakai run ID baru. Lokasi: existing event runner/tests, benchmark/report akademik.
+
+#### 3.3 Penjelasan skor kembali ke video
+
+- [ ] Pengguna memilih run/revisi/rekaman; UI menunjukkan model, threshold, urutan simbol, P/logP dan kontribusi NLL dengan definisi satuan, lalu membuka event/frame bukti.
+- [ ] Urutan jarang diberi label perlu review; no-helmet terverifikasi ditampilkan terpisah dan tidak dibatalkan oleh skor novelty rendah.
+- [ ] Raw JSON/provenance menjadi detail lanjutan; empty/stale/corrupt run dan unsupported simbol jelas tanpa hasil palsu.
+
+Dependency: 3.2, 2.2. Scope: M, 3–5 file. Verifikasi: parity UI/Python, source/revision race, keyboard/mobile, unknown/gap/stale; existing Academic Lab/novelty API regressions. Lokasi: `industrial_ai/academic.py` atau read-only novelty API, `frontend/NgramLab.tsx`/`EventLedger.tsx`, UI/API checks.
+
+**Checkpoint 3:** dari video yang direview sampai penjelasan N-gram dapat digunakan end-to-end; improvement/hazard claims hanya mengikuti label dan bukti nyata.
+
+### Fase 4 — Ringkasan dan demo yang siap dibaca
+
+#### 4.1 Ringkasan rekaman lokal
+
+- [ ] Ekspor ringkasan dari filter/revisi ledger yang sama: periode, satuan count, observasi helm, novelty untuk review, keterbatasan dan event/frame proof.
+- [ ] Narasi deterministik bekerja tanpa LLM; Qwen existing opsional hanya merangkai bahasa dengan validasi angka/ID/waktu/bukti dan fallback jika tidak cocok.
+- [ ] Draft berlabel belum disahkan; revisi sumber membuatnya stale. Tidak ada pengiriman HRD/email/API eksternal atau kesimpulan identitas/bahaya dari novelty.
+
+Dependency: checkpoint 3. Scope: M, 3–5 file. Verifikasi: parity query/export, stale/retract, LLM mismatch/failure dan akses media. Lokasi: existing chat/export path, report UI, report/fact regression yang material.
+
+#### 4.2 Verifikasi akhir, dokumentasi dan publikasi
+
+- [ ] Demo nyata menyelesaikan upload→review→ledger→query/bukti→N-gram→ringkasan; ukur kasus crowded/tracking/helm sesuai label, latency p50/p95 per tahap dan peak RAM/VRAM pada mesin tercatat.
+- [ ] Test/lint/typecheck/build/security/package/CI yang relevan lulus; audit dependency menyebut exception NLTK upstream secara jujur; audit hashes menjaga core/bobot/hasil dan perubahan pengguna.
+- [ ] Update README/checklist/report dengan kemampuan dan batas terverifikasi; source docs dirapikan tanpa rename massal, dataset/model/private footage tidak masuk GitHub. Publish main sesuai otorisasi pengguna setelah review/checks.
+
+Dependency: 4.1. Scope: S–M per slice; pisahkan verifikasi dan publikasi jika cakupan >5 file. Verifikasi: commands di bawah, report aktual dan status exact-commit CI; bukan jaminan bebas bug/produksi.
+
+**Checkpoint akhir:** semua task aktif yang diklaim selesai mempunyai bukti, sistem tetap berjalan, hasil lama aman; kualitas yang belum terbukti dinyatakan sebagai batas, bukan disembunyikan.
+
+### Tambahan opsional sesudah checkpoint akhir
+
+- [ ] REPL edukasi ringan `/model <checkpoint>`, `/topk <context>`, `/score <teks>`, `/info`, `/quit`; tidak melatih/overwrite dan tidak mengubah sampler historis. Demo simbol memakai kontrak event eksplisit, bukan tokenizer kata.
+
+Dependency: checkpoint akhir. Scope: M, 2–4 file CLI/docs/tests. Verifikasi: bad path/model menjaga sesi lama, bounded input, EOF/Ctrl-C dan parity fungsi existing; satu focused test. Lokasi perkiraan: `extensions/src/repl.py`, CLI entry minimum, test/docs. Ini tidak memblokir rilis video. Temperature/seeding/reranking/chat umum tidak menjadi task aktif.
+
+### Command gerbang yang sudah tersedia
+
+Jalankan hanya yang material pada setiap slice; suite penuh pada checkpoint akhir. Cache/runtime fixtures tetap di repository dan server asli tidak dipakai untuk pengujian mutasi.
+
+```powershell
+# Dari root
+. .\setup_lokal.ps1
+uv run --locked pytest -q
+uv run --locked ruff check core extensions jalankan_notebook.py
+uv run --locked ruff format --check core extensions jalankan_notebook.py
+uv run --locked ty check core/src extensions/src extensions/experiments jalankan_notebook.py
+uv build --out-dir .tmp/packages
+
+# Dari industrial_ai, setelah environment existing disiapkan
+Set-Location industrial_ai
+. .\setup_lokal.ps1
+npm run typecheck
+npm run check
+npm run build
+uv run --locked python tests/ledger_check.py
+uv run --locked python tests/fact_check.py
+uv run --locked python tests/novelty_api_check.py
+uv run --locked python tests/academic_check.py
+uv run --locked python tests/workflow_check.py
+uv run --locked python tests/tracking_check.py
+uv run --locked python tests/security_check.py
+uv run --locked python tests/package_check.py
+
+git diff --check
+```
+
+Tambahkan scoped Ruff/format/Ty untuk file studio yang berubah sesuai konfigurasi existing; quality assertions baru harus menguji perilaku, bukan meniru implementasi. Training/inference nyata dijalankan dengan fixture terisolasi pada checkpoint yang menyentuh learning; quality dataset nyata tetap berbeda dari smoke fixture.
+
+---
+
+## Riwayat checklist sebelumnya
+
+Status berikut merupakan snapshot bertanggal. Task lama di luar fokus tidak otomatis aktif; tidak ada fitur atau data yang dihapus oleh rencana baru.
+
 # To-do Video Insight Lokal
 
 Target: demonstrasi/portofolio lokal. Diperbarui 9 Oktober 2026.

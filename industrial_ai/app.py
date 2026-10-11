@@ -395,8 +395,21 @@ def read_annotations(folder: Path) -> dict:
 
 def result_summary(folder: Path) -> dict:
     summary = access.read_document(folder / "summary.json")
-    summary["manual_frames"] = read_annotations(folder)["frames"]
-    return reviewed_summary(summary)
+    annotations = read_annotations(folder)
+    summary["manual_frames"] = annotations["frames"]
+    summary = reviewed_summary(summary)
+    state = read_state(folder)
+    corrections = access.read_document(folder / "tracking_corrections.json", {"revision": 0})
+    summary["result_provenance"] = {
+        "detector_source": "fine_tuned_candidate" if state.get("model_id") else "original_detector",
+        "model_id": state.get("model_id"),
+        "source_job_id": state.get("source_job_id"),
+        "annotation_revision": annotations["revision"],
+        "correction_revision": corrections["revision"],
+        "has_review_corrections": bool(annotations["frames"] or corrections["revision"]),
+        "weight_update_on_save": False,
+    }
+    return summary
 
 
 @app.get("/api/jobs/{job_id}/summary")
