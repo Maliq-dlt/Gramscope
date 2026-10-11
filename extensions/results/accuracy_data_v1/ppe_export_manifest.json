@@ -1,0 +1,56 @@
+{
+  "files": {
+    "ppe_comparison_snapshot.py.txt": {
+      "bytes": 12821,
+      "sha256": "eaa15068fabde502cbbdf43c818b673746075924511db84a6733f961eaf13880"
+    },
+    "ppe_completed.json": {
+      "bytes": 1580,
+      "sha256": "2b3bc0580ce03235d82121acfac6e719214fb7c8dc1ea82f85cb0f594b3a9066"
+    },
+    "ppe_evaluation_protocol.json": {
+      "bytes": 1216,
+      "sha256": "ac22808aad1014c04468770d8a56886b3e2b7238201d0d126ecdea09d7876d47"
+    },
+    "ppe_evaluation_snapshot.py.txt": {
+      "bytes": 16233,
+      "sha256": "dc89dc631a523c82efc18afb510ec59d748fa0321794b752ff114878f0c8cf7f"
+    },
+    "ppe_operating_selection.json": {
+      "bytes": 240,
+      "sha256": "a579cb8345e93544832d29488a08c7eaf7ae4e83f82317c6e4156498b430ab1f"
+    },
+    "ppe_per_group_counts.csv": {
+      "bytes": 1935,
+      "sha256": "6b4ec6f42f137fe6163b5f80949942c7a3129a605a648e0f4f8b1717dd3a9bf7"
+    },
+    "ppe_selection.json": {
+      "bytes": 294,
+      "sha256": "ab88a4b863371b601ab96de2df32156d723523a9b83511ef77ce1f7972d39b8a"
+    },
+    "ppe_test_metrics.csv": {
+      "bytes": 530,
+      "sha256": "01dcf90bbe7d1b3622aa3a3e24c7dc7f86e9acb8cf5d7ecafba7b95c6f8fce86"
+    },
+    "ppe_training_execution.json": {
+      "bytes": 333,
+      "sha256": "4fb6598490ce0065989d526732b64c3e2269c35761a016543839b5cdfdc46a5e"
+    },
+    "ppe_training_results.csv": {
+      "bytes": 2577,
+      "sha256": "7781318d6fc14326e37aff2854356d21ce0fe0b34a4b0410af8c53ca066dda52"
+    },
+    "ppe_uncertainty.json": {
+      "bytes": 2002,
+      "sha256": "433220f3e594b818329dd84ca092fa2d551d8cac60476eb0ce3cd2c696147a11"
+    }
+  },
+  "paths": "file names relative to this manifest; private inputs retained locally",
+  "schema": "ppe-q3-public-export-v1",
+  "source_sha256": {
+    "comparison_code": "eaa15068fabde502cbbdf43c818b673746075924511db84a6733f961eaf13880",
+    "completed": "2b3bc0580ce03235d82121acfac6e719214fb7c8dc1ea82f85cb0f594b3a9066",
+    "evaluator_code": "dc89dc631a523c82efc18afb510ec59d748fa0321794b752ff114878f0c8cf7f",
+    "training_snapshot": "8eb16fe9a7c32b0d66a3dd6f9d882f8e8caccbd7f24418eaff8eab334e3f7357"
+  }
+}

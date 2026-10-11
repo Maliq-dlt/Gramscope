@@ -1,0 +1,6 @@
+{
+  "code_sha256": "8eb16fe9a7c32b0d66a3dd6f9d882f8e8caccbd7f24418eaff8eab334e3f7357",
+  "snapshot_sha256": "8eb16fe9a7c32b0d66a3dd6f9d882f8e8caccbd7f24418eaff8eab334e3f7357",
+  "preparation_protocol_sha256": "9d18d01d514ed2db4734e7e9127282a27538be15c6a3f676da278a06d4fd15c9",
+  "status": "training running; no test evaluated"
+}

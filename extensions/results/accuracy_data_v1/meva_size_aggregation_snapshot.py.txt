@@ -1,0 +1,153 @@
+"""Summarize saved MEVA Q2 ledgers without video, model, or tracker execution."""
+
+import csv
+import hashlib
+import json
+import math
+import sys
+from collections import Counter
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "industrial_ai"))
+from meva_diagnostics import matches  # noqa: E402
+
+LEDGERS = ROOT / "industrial_ai/.tmp/accuracy-meva-q2"
+OUTPUT = ROOT / "extensions/results/accuracy_data_v1"
+RUNS = (("dev", 640), ("dev", 960), ("test", 960))
+MANIFESTS = (
+    ROOT / "industrial_ai/data/public/meva-examples-video12-20261011-q1/manifest.json",
+    ROOT / "industrial_ai/data/public/meva-examples-extra-dates-20261011-q1/manifest.json",
+)
+BUCKETS = ("<32", "32..<96", ">=96")
+EXPECTED = {
+    ("dev", 640): (2517, 1588, 836),
+    ("dev", 960): (2517, 2176, 1902),
+    ("test", 960): (522, 271, 83),
+}
+
+
+def sha256(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def main():
+    dimensions = {}
+    manifest_hashes = {}
+    for path in MANIFESTS:
+        data = path.read_bytes()
+        manifest_hashes[path.relative_to(ROOT).as_posix()] = sha256(data)
+        for clip, video in json.loads(data)["videos"].items():
+            size = (video["probe"]["width"], video["probe"]["height"])
+            if clip in dimensions and dimensions[clip] != size:
+                raise ValueError(f"Conflicting source dimensions: {clip}")
+            dimensions[clip] = size
+
+    rows = []
+    frames = []
+    ledger_hashes = {}
+    totals = {}
+    used_clips = set()
+    for split, resolution in RUNS:
+        path = LEDGERS / f"{split}-{resolution}.jsonl"
+        ledger_hashes[path.relative_to(ROOT).as_posix()] = sha256(path.read_bytes())
+        counts = {bucket: Counter(gt=0, raw_matched=0, track_matched=0) for bucket in BUCKETS}
+        sampled = raw_empty = track_empty = 0
+        seen = set()
+        clips = set()
+        with path.open(encoding="utf-8") as stream:
+            for line_number, line in enumerate(stream, 1):
+                record = json.loads(line)
+                clip, frame = record["clip"], record["frame"]
+                if clip not in dimensions or (clip, frame) in seen:
+                    raise ValueError(f"Unknown clip or duplicate frame: {path}:{line_number}")
+                seen.add((clip, frame))
+                clips.add(clip)
+                used_clips.add(clip)
+                gt, raw, tracked = record["gt"], record["raw"], record["tracked"]
+                if not gt or not all(isinstance(items, list) for items in (gt, raw, tracked)):
+                    raise ValueError(f"Invalid sampled frame: {path}:{line_number}")
+                raw_matched = {i for i, _ in matches(gt, raw)}
+                track_matched = {i for i, _ in matches(gt, tracked)}
+                for index, target in enumerate(gt):
+                    x1, y1, x2, y2 = target["bbox"]
+                    width, height = dimensions[clip]
+                    if not (
+                        all(math.isfinite(v) for v in (x1, y1, x2, y2))
+                        and 0 <= x1 < x2 <= width
+                        and 0 <= y1 < y2 <= height
+                    ):
+                        raise ValueError(f"Invalid source-pixel GT box: {path}:{line_number}")
+                    box_height = y2 - y1
+                    bucket = "<32" if box_height < 32 else "32..<96" if box_height < 96 else ">=96"
+                    counts[bucket]["gt"] += 1
+                    counts[bucket]["raw_matched"] += index in raw_matched
+                    counts[bucket]["track_matched"] += index in track_matched
+                sampled += 1
+                raw_empty += not raw
+                track_empty += not tracked
+
+        total = sum(counts.values(), Counter())
+        totals[(split, resolution)] = (total["gt"], total["raw_matched"], total["track_matched"])
+        for bucket, count in (*counts.items(), ("all", total)):
+            n = count["gt"]
+            rows.append(
+                {
+                    "split": split,
+                    "resolution": resolution,
+                    "gt_height_px": bucket,
+                    "gt": n,
+                    "raw_matched": count["raw_matched"],
+                    "track_matched": count["track_matched"],
+                    "raw_recall": count["raw_matched"] / n if n else "",
+                    "track_recall": count["track_matched"] / n if n else "",
+                }
+            )
+        frames.append(
+            {
+                "split": split,
+                "resolution": resolution,
+                "clips": len(clips),
+                "sampled_gt_frames": sampled,
+                "raw_empty_frames": raw_empty,
+                "track_empty_frames": track_empty,
+            }
+        )
+
+    assert totals == EXPECTED, f"Q2 ledger totals differ from saved metrics: {totals}"
+    source_sizes = {}
+    for clip in sorted(used_clips):
+        width, height = dimensions[clip]
+        source_sizes.setdefault(f"{width}x{height}", []).append(clip)
+
+    OUTPUT.mkdir(parents=True, exist_ok=True)
+    with (OUTPUT / "meva_size_recall.csv").open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+    metadata = {
+        "ledger_sha256": ledger_hashes,
+        "source_manifest_sha256": manifest_hashes,
+        "source_video_probe_resolution_px": source_sizes,
+        "sampled_frame_counts": frames,
+        "method": (
+            "GT box height y2-y1 in original source pixels; full-frame "
+            "meva_diagnostics.matches at IoU >= 0.5, then assign matched GT "
+            "to bucket. Empty means no prediction on a sampled GT frame."
+        ),
+        "limits": [
+            "Sparse, GT-conditioned, partial MEVA examples sampled at 5 Hz; "
+            "unlabeled frames are not negatives.",
+            "No false-positive rate, precision, whole-video IDF1, or incident exposure estimate.",
+            "Probe dimensions come from saved ffprobe metadata; annotation/source "
+            "coordinate identity remains an assumption.",
+            "Tracker skipped unlabeled gaps in the saved evaluation.",
+        ],
+    }
+    (OUTPUT / "meva_size_diagnostics.json").write_text(
+        json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+if __name__ == "__main__":
+    main()

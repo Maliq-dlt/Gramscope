@@ -1,0 +1,67 @@
+{
+  "base_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "batch": 8,
+  "classes": [
+    "person",
+    "helmet",
+    "head"
+  ],
+  "code_sha256": "3cbf0920c8beb09f7e081a7008340f09dfecbfd8193487b7393dfb376f6d2978",
+  "dataset_sha256": "4747f51cac891a59a55c354a7b0f3c3addb4478ab214e74c16f26a6a205abf73",
+  "epochs": 20,
+  "freeze": 10,
+  "head_is_nohelmet": false,
+  "imgsz": 640,
+  "limits": [
+    "Pexels photos not factory CCTV",
+    "Head cannot establish helmet absence or worn association",
+    "Pretraining corpus overlap is not fully auditable"
+  ],
+  "samples_sha256": "13c1c960e73c30ce88348b697fea0e6494319181816e3287fdf08e47fe92e0f6",
+  "seed": 20261011,
+  "selection": "best checkpoint by validation only; test untouched until checkpoint seal",
+  "source": "data\\public\\sh17-v1",
+  "source_label_map": {
+    "0": 0,
+    "10": 1,
+    "12": 2
+  },
+  "split_summary": {
+    "data_kind": "real public labeled photographs",
+    "groups": 922,
+    "images": 8099,
+    "input_sha256": "4747f51cac891a59a55c354a7b0f3c3addb4478ab214e74c16f26a6a205abf73",
+    "labels": {
+      "ear": 7730,
+      "ear-mufs": 318,
+      "face": 8950,
+      "face-guard": 134,
+      "face-mask": 670,
+      "foot": 759,
+      "glasses": 1945,
+      "gloves": 2790,
+      "hands": 15850,
+      "head": 11985,
+      "helmet": 927,
+      "medical-suit": 157,
+      "person": 13802,
+      "safety-suit": 240,
+      "safety-vest": 530,
+      "shoes": 4560,
+      "tool": 4647
+    },
+    "limitations": [
+      "Photographer and visual groups isolated; unknown cross-photographer session links can remain",
+      "Head labels do not imply missing helmet",
+      "Not a surveillance-site/incident benchmark"
+    ],
+    "partitions": {
+      "dev": 707,
+      "test": 1177,
+      "train": 6215
+    },
+    "phash_distance": 6,
+    "samples_sha256": "13c1c960e73c30ce88348b697fea0e6494319181816e3287fdf08e47fe92e0f6",
+    "seed": 20261011
+  }
+}

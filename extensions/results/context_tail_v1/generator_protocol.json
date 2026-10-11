@@ -1,0 +1,50 @@
+{
+  "study": "context-tail-v1",
+  "data_kind": "synthetic shared event grammar; source groups are not cameras, reviewers, or independent safety labels",
+  "seeds": [
+    101,
+    202,
+    303
+  ],
+  "source_groups": {
+    "train": 120,
+    "dev": 40,
+    "calibration": 80,
+    "test": 80
+  },
+  "split_before_generation": "shuffle distinct synthetic source IDs per seed, partition IDs, then draw each source profile and cases",
+  "symbol_dictionary": {
+    "E": "PERSON_ENTER_ZONE",
+    "U": "HELMET_UNKNOWN",
+    "W": "HELMET_WORN",
+    "N": "HELMET_NOT_WORN",
+    "X": "PERSON_EXIT_ZONE"
+  },
+  "stochastic_generator": {
+    "train_sessions_per_source": "uniform integer 3..7",
+    "train_visits_per_session": "uniform integer 1..4",
+    "source_rare_rate": "uniform 0.03..0.16",
+    "source_motif_rate": "uniform 0.12..0.32",
+    "train_visit_hazard_rate": "uniform 0.02..0.08",
+    "background_visits": "uniform integer 0..3, scenario-dependent, common visits only",
+    "visit_variation": "common E U^(1..3) W^(1..3) U^(0..1) X; rare E W^(1..2) U^(1..3) W^(0..1) X; known E U^(1..2) N X",
+    "matched_local_normal": "EUUWWUX",
+    "matched_local_hard": "EUWWUUX",
+    "pairing": "same stochastic prefix and suffix; replacement preserves full-session unigram and bigram multisets but changes trigrams"
+  },
+  "selection": "trigram Witten-Bell or Modified Kneser-Ney, epsilon 1e-8 or 1e-4, minimum dev cross entropy, lexicographic tie-break; freeze before calibration and test",
+  "calibration": "80 normal source maxima over common, rare-valid, and matched-normal sessions; conformal p=(1+# calibration scores >= test score)/(80+1); alpha=0.05",
+  "scores": {
+    "tail": "max token -log q, q=(1+sum_y c(h,y) I[P(y|h)<=P(x|h)])/(1+c(h)); q is a score transform, not a conformal p-value",
+    "tail_missing_context": "deterministic raw-count trigram to bigram to unigram backoff; record token coverage by count order",
+    "cross_entropy": "mean token negative log likelihood including EOS",
+    "pairfrequency": "add-one empirical bigram conditional negative log likelihood mean",
+    "allowed_pairs": "count disallowed adjacent symbol transitions, including boundaries and legal adjacent visits"
+  },
+  "test_once": "80 fresh groups; each has common, rare-valid, paired-normal, one hard replacement, and one known-nohelmet rule case; score each clean case once after saved selection/calibration/test claim",
+  "primary_estimate": "paired hard-replacement source recall difference tail minus cross entropy at alpha=0.05; percentile bootstrap 5000 resamples of source groups",
+  "secondary": "normal source alarms, rare-valid case alarms, top-40 and top-80 novelty review budgets across four scores",
+  "known_nohelmet": "separate deterministic rule queue, never counted as novelty-positive",
+  "noise_diagnostic": "drop, duplicate, flip U/W, and fragment each test sequence; reuse unchanged clean calibration; no false-alarm guarantee under shift",
+  "claim_limit": "synthetic grammar demonstration only; no measured CCTV accuracy, K3 safety performance, or source independence"
+}

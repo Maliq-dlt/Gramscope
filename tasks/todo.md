@@ -1,3 +1,13 @@
+## Siklus kualitas data dan akurasi (aktif)
+
+- [x] Q1: sumber resmi/lisensi, akuisisi, audit label/decode/dedup dan protokol beku.
+- [x] Q2: diagnosis detector sebelum tracker dan output tracker pada ground-camera GT.
+- [x] Q3: kandidat dipilih train/dev; winner dibekukan dan satu evaluasi test baru.
+- [x] Q4: hipotesis tail N-gram, CE/aturan/pasangan, data real versus konstruksi, kalibrasi/CI/budget.
+- [ ] Q5: tests/lint/type/build, review, preservasi, data/docs dan GitHub main + CI.
+
+Gate operasional lama tetap terbuka: anotasi lokasi pabrik, onset insiden/exposure dan audit produksi tidak digantikan dataset publik.
+
 # Checklist aktif — N-gram dan CCTV
 
 Tanggal: **11 Oktober 2026**. [Rencana aktif](plan.md) · [Bukti implementasi sebelumnya](../extensions/reports/VERIFICATION.md).

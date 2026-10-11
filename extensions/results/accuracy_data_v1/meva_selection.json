@@ -1,0 +1,8 @@
+{
+  "dev_raw_recall": {
+    "640": 0.6309098132697656,
+    "960": 0.8645212554628526
+  },
+  "policy": "max dev annotated recall; ties lower cost",
+  "winner_resolution": 960
+}

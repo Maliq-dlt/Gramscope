@@ -1,0 +1,244 @@
+"""GT-conditioned MEVA detector/tracker diagnostics; partial labels are not negatives."""
+
+import argparse
+import csv
+import json
+import time
+from collections import defaultdict
+from pathlib import Path
+from types import SimpleNamespace
+from typing import cast
+
+# isort: off
+import runtime  # cache paths before ML imports
+import cv2
+import numpy as np
+from scipy.optimize import linear_sum_assignment
+from ultralytics import YOLO
+from ultralytics.engine.results import Results
+from ultralytics.trackers.byte_tracker import BYTETracker
+
+# isort: on
+from prepare_sh17 import save, sha
+from tracking_benchmark import pairwise_iou
+
+ROOT = runtime.ROOT
+
+
+def matches(targets, predictions):
+    matrix = pairwise_iou(targets, predictions)
+    if not matrix.size:
+        return []
+    # Cardinality first, then IoU; unmatched predictions are unknown with partial GT.
+    left, right = linear_sum_assignment(-((matrix >= 0.5).astype(float) * 1000 + matrix))
+    return [(int(i), int(j)) for i, j in zip(left, right) if matrix[i, j] >= 0.5]
+
+
+def run(sources, output):
+    if output.exists() or not output.resolve().is_relative_to((ROOT / ".tmp").resolve()):
+        raise ValueError("Fresh output inside industrial_ai/.tmp required")
+    output.mkdir(parents=True)
+    clips = []
+    for source in sources:
+        manifest = json.loads((source / "manifest.json").read_text())
+        for stem, row in sorted(manifest["videos"].items()):
+            normalized = source / "normalized" / (stem + ".json")
+            video = source / "videos" / (stem + ".r13.avi")
+            if sha(video) != row["sha256"]:
+                raise ValueError("Video fingerprint mismatch")
+            if not normalized.is_file() or normalized.is_symlink():
+                raise ValueError("Missing normalized annotation")
+            clips.append((source, stem, row, normalized))
+    dates = sorted({stem[:10] for _, stem, _, _ in clips})
+    if len(dates) < 3:
+        raise ValueError("Need at least three dates for disjoint dev/test")
+    if len({stem for _, stem, _, _ in clips}) != len(clips):
+        raise ValueError("Duplicate video sources")
+    dev_dates, test_dates = dates[:2], dates[2:]
+    for partition_dates in (dev_dates, test_dates):
+        if not any(
+            any("Person" in typ["classes"] for typ in json.loads(path.read_text())["types"])
+            for _, stem, _, path in clips
+            if stem[:10] in partition_dates
+        ):
+            raise ValueError("Both partitions need annotated persons")
+    protocol = {
+        "data": "MEVA public sparse examples",
+        "source_manifests": {str(s): sha(s / "manifest.json") for s in sources},
+        "dev_dates": dev_dates,
+        "test_dates": test_dates,
+        "resolutions": [640, 960],
+        "sampling": "all person-annotated frames at 5Hz stride6, no unlabeled negatives",
+        "coordinates": "identity canvas based on r13 same-frame official FAQ + bounds; explicit assumption",
+        "annotation_sha256": {stem: sha(path) for _, stem, _, path in clips},
+        "model_sha256": sha(ROOT / "models/yolo26n.pt"),
+        "conf": 0.1,
+        "iou_match": 0.5,
+        "metric": "annotated-target recall and matched-ID consistency; no FP precision whole-video IDF1 or incident exposure",
+        "code_sha256": sha(Path(__file__)),
+    }
+    save(output / "protocol.json", protocol)
+    model = YOLO(ROOT / "models/yolo26n.pt")
+    device, reason = runtime.select_device("auto")
+    save(output / "device.json", {"device": device, "reason": reason})
+
+    def evaluate(partition, resolution):
+        rows = []
+        with (output / f"{partition}-{resolution}.jsonl").open("x", encoding="utf-8") as stream:
+            for source, stem, receipt, normalized in clips:
+                if (stem[:10] in dev_dates) != (partition == "dev"):
+                    continue
+                annotation = json.loads(normalized.read_text())
+                classes = {r["actor_id"]: r["classes"] for r in annotation["types"]}
+                frames = defaultdict(list)
+                for row in annotation["geometry"]:
+                    if "Person" in classes[row["actor_id"]] and row["frame"] % 6 == 0:
+                        frames[row["frame"]].append(
+                            {"track_id": row["actor_id"], "bbox": row["xyxy"]}
+                        )
+                if not frames:
+                    continue
+                tracker = BYTETracker(
+                    SimpleNamespace(
+                        track_high_thresh=0.1,
+                        track_low_thresh=0.05,
+                        new_track_thresh=0.1,
+                        track_buffer=30,
+                        match_thresh=0.8,
+                        fuse_score=True,
+                    ),
+                )
+                cap = cv2.VideoCapture(str(source / "videos" / (stem + ".r13.avi")))
+                previous_frame = None
+                previous, links, gt_count, raw_count, tracked_count, switches = {}, 0, 0, 0, 0, 0
+                timing = []
+                for frame_no, targets in sorted(frames.items()):
+                    cap.set(cv2.CAP_PROP_POS_FRAMES, frame_no)
+                    ok, image = cap.read()
+                    if not ok:
+                        raise ValueError(f"Decode failure {stem}/{frame_no}")
+                    if previous_frame is not None and frame_no - previous_frame != 6:
+                        tracker = BYTETracker(
+                            SimpleNamespace(
+                                track_high_thresh=0.1,
+                                track_low_thresh=0.05,
+                                new_track_thresh=0.1,
+                                track_buffer=30,
+                                match_thresh=0.8,
+                                fuse_score=True,
+                            ),
+                        )
+                        previous = {}
+                    previous_frame = frame_no
+                    start = time.perf_counter()
+                    result = cast(
+                        Results,
+                        next(
+                            iter(
+                                model.predict(
+                                    image,
+                                    imgsz=resolution,
+                                    conf=0.1,
+                                    classes=[0],
+                                    device=device,
+                                    verbose=False,
+                                )
+                            )
+                        ),
+                    )
+                    if result.boxes is None:
+                        raise ValueError("Detector returned no box container")
+                    timing.append(time.perf_counter() - start)
+                    boxes = result.boxes.cpu().numpy()
+                    raw = [{"bbox": list(map(float, b))} for b in boxes.xyxy]
+                    tracked = [
+                        {"bbox": list(map(float, b[:4])), "track_id": int(b[4])}
+                        for b in tracker.update(boxes, image)
+                    ]
+                    raw_matches, track_matches = matches(targets, raw), matches(targets, tracked)
+                    gt_count += len(targets)
+                    raw_count += len(raw_matches)
+                    tracked_count += len(track_matches)
+                    for a, b in track_matches:
+                        gt, identity = targets[a]["track_id"], tracked[b]["track_id"]
+                        if gt in previous and frame_no - previous[gt][0] == 6:
+                            links += 1
+                            switches += identity != previous[gt][1]
+                        previous[gt] = (frame_no, identity)
+                    record = {
+                        "clip": stem,
+                        "frame": frame_no,
+                        "gt": targets,
+                        "raw": raw,
+                        "tracked": tracked,
+                    }
+                    stream.write(json.dumps(record) + "\n")
+                cap.release()
+                rows.append(
+                    {
+                        "clip": stem,
+                        "date": stem[:10],
+                        "partition": partition,
+                        "resolution": resolution,
+                        "frames": len(frames),
+                        "gt": gt_count,
+                        "raw_matched": raw_count,
+                        "track_matched": tracked_count,
+                        "raw_recall": raw_count / gt_count,
+                        "track_recall": tracked_count / gt_count,
+                        "matched_adjacent_links": links,
+                        "matched_id_changes": switches,
+                        "inference_p50_ms": float(np.median(timing)) * 1000,
+                    }
+                )
+                print(json.dumps(rows[-1]), flush=True)
+        return rows
+
+    dev = [row for resolution in (640, 960) for row in evaluate("dev", resolution)]
+    scores = {
+        r: sum(x["raw_matched"] for x in dev if x["resolution"] == r)
+        / sum(x["gt"] for x in dev if x["resolution"] == r)
+        for r in (640, 960)
+    }
+    winner = max(scores, key=lambda r: (scores[r], -r))
+    save(
+        output / "selection.json",
+        {
+            "dev_raw_recall": scores,
+            "winner_resolution": winner,
+            "policy": "max dev annotated recall; ties lower cost",
+        },
+    )
+    with (output / "test.claim").open("x") as claim:
+        claim.write(sha(output / "selection.json"))
+    test = evaluate("test", winner)
+    if not test:
+        raise ValueError("Empty heldout person frames")
+    with (output / "metrics.csv").open("x", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(dev[0]))
+        writer.writeheader()
+        writer.writerows(dev + test)
+    save(
+        output / "manifest.json",
+        {
+            "status": "completed",
+            "protocol_sha256": sha(output / "protocol.json"),
+            "selection": winner,
+            "rows": len(dev + test),
+            "files": {p.name: sha(p) for p in output.iterdir() if p.is_file()},
+            "limits": [
+                "Sparse GT-conditioned diagnostic only",
+                "Tracking updates skip unlabeled gaps; no whole-video IDF1",
+                "No independent factory incident labels",
+                "Source-coordinate identity assumption not exhaustively verified",
+            ],
+        },
+    )
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source", type=Path, action="append", required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    run(args.source, args.output)

@@ -1,0 +1,740 @@
+"""Read-only Q4 audit of frozen synthetic and MEVA sequence artifacts."""
+
+from __future__ import annotations
+
+import csv
+import hashlib
+import json
+import math
+import random
+import sys
+from collections import Counter, defaultdict
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+from core.src.ngram import events  # noqa: E402
+from extensions.experiments import registry  # noqa: E402
+from extensions.experiments.event_study import conformal_p  # noqa: E402
+
+OUT = ROOT / ".tmp/accuracy-upgrade/q4-check.json"
+TAIL = ROOT / "extensions/results/context_tail_v1"
+MEVA = ROOT / "extensions/results/meva_sequence_v1"
+SOURCE = ROOT / "industrial_ai/data/public/meva-examples-20261011-q1/normalized"
+SEEDS = (101, 202, 303)
+METRICS = ("tail", "ce", "pairfrequency", "allowed_pairs")
+MODELS = (
+    "unigram_wb",
+    "bigram_wb",
+    "bigram_kn",
+    "bigram_mkn",
+    "trigram_wb",
+    "trigram_kn",
+    "trigram_mkn",
+)
+DATES = {
+    "train": ("2018-03-07", "2018-03-09", "2018-03-11"),
+    "dev": ("2018-03-12",),
+    "test": ("2018-03-13", "2018-03-15"),
+}
+
+
+def require(ok, label):
+    if not ok:
+        raise ValueError(label)
+
+
+def same(a, b):
+    if isinstance(a, bool) or isinstance(b, bool):
+        return a is b
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        return (
+            math.isfinite(a)
+            and math.isfinite(b)
+            and math.isclose(a, b, rel_tol=1e-12, abs_tol=1e-12)
+        )
+    if isinstance(a, dict) and isinstance(b, dict):
+        return a.keys() == b.keys() and all(same(a[key], b[key]) for key in a)
+    if isinstance(a, (list, tuple)) and isinstance(b, (list, tuple)):
+        return len(a) == len(b) and all(same(x, y) for x, y in zip(a, b))
+    return a == b
+
+
+def match(actual, expected, label):
+    require(same(actual, expected), f"{label}: mismatch")
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read_json(path):
+    value = json.loads(path.read_text(encoding="utf-8"))
+
+    def finite(item):
+        if isinstance(item, float):
+            require(math.isfinite(item), f"{path}: nonfinite JSON number")
+        elif isinstance(item, dict):
+            for child in item.values():
+                finite(child)
+        elif isinstance(item, list):
+            for child in item:
+                finite(child)
+
+    finite(value)
+    return value
+
+
+def read_csv(path):
+    with path.open(newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream)
+        require(
+            reader.fieldnames and len(set(reader.fieldnames)) == len(reader.fieldnames),
+            f"{path}: invalid header",
+        )
+        rows = list(reader)
+    require(
+        all(None not in row and None not in row.values() for row in rows), f"{path}: ragged CSV"
+    )
+    return rows
+
+
+def number(row, key):
+    value = float(row[key])
+    require(math.isfinite(value), f"{key}: nonfinite CSV number")
+    return value
+
+
+def integer(row, key):
+    value = int(row[key])
+    require(str(value) == str(row[key]), f"{key}: invalid integer")
+    return value
+
+
+def boolean(row, key):
+    require(row[key] in ("True", "False"), f"{key}: invalid boolean")
+    return row[key] == "True"
+
+
+def hashes(directory, mapping, expected):
+    require(set(mapping) == set(expected), f"{directory}: file list")
+    require(
+        {path.name for path in directory.iterdir() if path.is_file()}
+        == set(expected) | {"manifest.json"},
+        f"{directory}: unexpected files",
+    )
+    for name, digest in mapping.items():
+        path = directory / name
+        require(not path.is_symlink() and sha(path) == digest, f"{path}: hash")
+
+
+def code_hashes(mapping, expected):
+    require(set(mapping) == set(expected), "code file list")
+    for name, digest in mapping.items():
+        path = ROOT / name
+        require(
+            path.is_file() and not path.is_symlink() and sha(path) == digest, f"{name}: code hash"
+        )
+
+
+def check_tail(seed):
+    directory = TAIL / f"seed{seed}"
+    config = read_json(directory / "protocol.json")
+    cases = read_json(directory / "cases.json")
+    selection = read_json(directory / "selection.json")
+    calibration = read_json(directory / "calibration.json")
+    result = read_json(directory / "summary.json")
+    manifest = read_json(directory / "manifest.json")
+    hashes(
+        directory,
+        manifest["files_sha256"],
+        (
+            "protocol.json",
+            "cases.json",
+            "selection.json",
+            "calibration.json",
+            "scores.csv",
+            "sources.csv",
+            "review.csv",
+            "stress.csv",
+            "summary.json",
+        ),
+    )
+    run_id = f"context-tail-v1-seed{seed}"
+    require(manifest["run_id"] == run_id, f"{run_id}: run ID")
+    match(manifest["config_sha256"], registry.fingerprint(config), f"{run_id}: config fingerprint")
+    run = registry.read_run(run_id)
+    match(run["config"], config, f"{run_id}: private config")
+    require(run["stages"].get("TAIL") == "completed", f"{run_id}: stage")
+    private = registry.run_directory(run_id)
+    match(
+        read_json(private / "public_manifest.json"),
+        {
+            "output": str(directory.relative_to(ROOT)),
+            "files_sha256": manifest["files_sha256"],
+        },
+        f"{run_id}: publication",
+    )
+    match(manifest["test_claim_sha256"], sha(private / "test.claim"), f"{run_id}: test claim hash")
+    match(
+        (private / "test.claim").read_text(encoding="utf-8"),
+        registry.fingerprint(
+            {"config": config, "selection": selection, "calibration": calibration}
+        ),
+        f"{run_id}: test claim",
+    )
+    require(
+        config["experiment"] == "context-tail-v1" and config["seed"] == seed, f"{run_id}: protocol"
+    )
+    require(config["alpha"] == 0.05 and config["budgets"] == [40, 80], f"{run_id}: thresholds")
+    match(
+        config["generator_protocol_sha256"],
+        sha(TAIL / "generator_protocol.json"),
+        f"{run_id}: generator hash",
+    )
+    code_hashes(
+        config["code_sha256"],
+        (
+            "extensions/experiments/context_tail_study.py",
+            "extensions/experiments/event_study.py",
+            "extensions/src/models.py",
+            "core/src/ngram.py",
+        ),
+    )
+    match(config["case_sha256"], registry.fingerprint(cases), f"{run_id}: cases hash")
+    groups = {"train": 120, "dev": 40, "calibration": 80, "test": 80}
+    split = config["split"]
+    require({key: len(value) for key, value in split.items()} == groups, f"{run_id}: split size")
+    require(len(set(sum(split.values(), []))) == 320, f"{run_id}: source overlap")
+    by_source = defaultdict(dict)
+    for case in cases:
+        source = case["source_group"]
+        require(source in split[case["partition"]], f"{run_id}: partition/source")
+        require(case["id"] == f"{source}-{case['scenario']}", f"{run_id}: case ID")
+        require(case["scenario"] not in by_source[source], f"{run_id}: duplicate scenario")
+        by_source[source][case["scenario"]] = case
+    require(len(by_source) == 320, f"{run_id}: group count")
+    scenarios = {
+        "dev": {"common", "rare_valid", "paired_normal", "known_nohelmet"},
+        "calibration": {"common", "rare_valid", "paired_normal"},
+        "test": {"common", "rare_valid", "paired_normal", "hard_replacement", "known_nohelmet"},
+    }
+    for partition, sources in split.items():
+        for source in sources:
+            group = by_source[source]
+            require(
+                3 <= len(group) <= 7
+                if partition == "train"
+                else set(group) == scenarios[partition],
+                f"{run_id}: scenarios",
+            )
+            for case in group.values():
+                match(
+                    case["latent_novel"],
+                    case["scenario"] == "hard_replacement",
+                    f"{run_id}: novelty label",
+                )
+                match(
+                    case["known_nohelmet_rule"],
+                    case["scenario"] == "known_nohelmet",
+                    f"{run_id}: rule label",
+                )
+    trials = selection["trials"]
+    require(
+        len(trials) == 4
+        and {(row["method"], row["epsilon"]) for row in trials}
+        == {
+            (method, epsilon)
+            for method in ("witten_bell", "modified_kneser_ney")
+            for epsilon in (1e-8, 1e-4)
+        },
+        f"{run_id}: dev trials",
+    )
+    require(
+        all(math.isfinite(row["dev_ce"]) and row["dev_targets"] > 0 for row in trials),
+        f"{run_id}: dev numbers",
+    )
+    match(
+        selection["winner"],
+        min(trials, key=lambda row: (row["dev_ce"], row["method"], row["epsilon"])),
+        f"{run_id}: dev winner",
+    )
+    match(result["selected_model"], selection["winner"], f"{run_id}: summary winner")
+    require(set(calibration) == set(METRICS), f"{run_id}: calibration metrics")
+    require(
+        all(
+            len(calibration[name]) == 80 and all(math.isfinite(v) for v in calibration[name])
+            for name in METRICS
+        ),
+        f"{run_id}: calibration units",
+    )
+
+    test_cases = {row["id"]: row for source in split["test"] for row in by_source[source].values()}
+    scored_rows = read_csv(directory / "scores.csv")
+    require(
+        len(scored_rows) == 400 and {row["id"] for row in scored_rows} == set(test_cases),
+        f"{run_id}: 400 scored cases",
+    )
+    scored = {}
+    for row in scored_rows:
+        case = test_cases[row["id"]]
+        require(row["id"] not in scored, f"{run_id}: repeated scored case")
+        for key, value in case.items():
+            require(row[key] == str(value), f"{run_id}: scored case {key}")
+        require(all(number(row, name) >= 0 for name in METRICS), f"{run_id}: negative score")
+        require(integer(row, "targets") > 0, f"{run_id}: targets")
+        require(
+            sum(integer(row, f"order_{n}") for n in (1, 2, 3)) == integer(row, "targets"),
+            f"{run_id}: count order coverage",
+        )
+        scored[row["id"]] = row
+    require(
+        sum(row["scenario"] != "known_nohelmet" for row in scored_rows) == 320,
+        f"{run_id}: novelty queue",
+    )
+    require(
+        sum(row["scenario"] == "known_nohelmet" for row in scored_rows) == 80,
+        f"{run_id}: rule queue",
+    )
+    hard_pairs = Counter(
+        pair
+        for source in split["train"]
+        for case in by_source[source].values()
+        for pair in events(case["symbols"], 2)
+    )
+    pair_min = min(hard_pairs[pair] for pair in events("EUWWUUX", 2))
+    require(pair_min >= 2, f"{run_id}: hard pair training support")
+    for source in split["test"]:
+        group = by_source[source]
+        normal = group["paired_normal"]["symbols"]
+        replacement = group["hard_replacement"]["symbols"]
+        require(Counter(normal) == Counter(replacement), f"{run_id}: matched unigram")
+        require(
+            Counter(events(normal, 2)) == Counter(events(replacement, 2)),
+            f"{run_id}: matched pairs",
+        )
+        require(
+            Counter(events(normal, 3)) != Counter(events(replacement, 3)),
+            f"{run_id}: hard triple contrast",
+        )
+    source_rows = read_csv(directory / "sources.csv")
+    require(len(source_rows) == 320, f"{run_id}: source metric rows")
+    indexed = {}
+    for row in source_rows:
+        key = (row["source_group"], row["metric"])
+        require(
+            key not in indexed and key[0] in split["test"] and key[1] in METRICS,
+            f"{run_id}: source metric key",
+        )
+        group = by_source[key[0]]
+        normal = [scored[group[name]["id"]] for name in ("common", "rare_valid", "paired_normal")]
+        replacement = scored[group["hard_replacement"]["id"]]
+        normal_max = max(number(case, key[1]) for case in normal)
+        hard_max = max(
+            number(normal[0], key[1]), number(normal[1], key[1]), number(replacement, key[1])
+        )
+        np = conformal_p(calibration[key[1]], normal_max)
+        hp = conformal_p(calibration[key[1]], hard_max)
+        for field, expected in (
+            ("normal_max", normal_max),
+            ("hard_replacement_max", hard_max),
+            ("normal_p", np),
+            ("hard_replacement_p", hp),
+        ):
+            match(number(row, field), expected, f"{run_id}: {field}")
+        for field in ("normal_p", "hard_replacement_p"):
+            value = number(row, field)
+            require(
+                1 / 81 <= value <= 1 and any(same(value, n / 81) for n in range(1, 82)),
+                f"{run_id}: {field} lattice",
+            )
+        match(boolean(row, "normal_alert"), np <= 0.05, f"{run_id}: normal alert")
+        match(boolean(row, "hard_replacement_alert"), hp <= 0.05, f"{run_id}: hard alert")
+        indexed[key] = row
+    require(len(indexed) == 320, f"{run_id}: source metric coverage")
+    clean = {}
+    for metric in METRICS:
+        subset = [indexed[(source, metric)] for source in sorted(split["test"])]
+        clean[metric] = {
+            "normal_source_alerts": sum(boolean(row, "normal_alert") for row in subset),
+            "hard_replacement_source_alerts": sum(
+                boolean(row, "hard_replacement_alert") for row in subset
+            ),
+            "rare_valid_case_alarms": sum(
+                conformal_p(
+                    calibration[metric],
+                    number(scored[by_source[source]["rare_valid"]["id"]], metric),
+                )
+                <= 0.05
+                for source in split["test"]
+            ),
+            "source_groups": 80,
+        }
+    match(result["clean"], clean, f"{run_id}: clean summary")
+    paired = [
+        (
+            int(boolean(indexed[(source, "tail")], "hard_replacement_alert")),
+            int(boolean(indexed[(source, "ce")], "hard_replacement_alert")),
+        )
+        for source in sorted(split["test"])
+    ]
+    rng = random.Random(seed + 4919)
+    # ponytail: resample saved paired alerts; no score or model inference is rerun.
+    differences = []
+    for _ in range(5000):
+        picked = (paired[rng.randrange(80)] for _ in range(80))
+        differences.append(math.fsum(tail - ce for tail, ce in picked) / 80)
+    differences.sort()
+    match(
+        result["paired_recall_difference"],
+        {
+            "tail_minus_ce": math.fsum(tail - ce for tail, ce in paired) / 80,
+            "bootstrap_95_percentile": [differences[125], differences[4874]],
+            "resamples": 5000,
+            "resample_unit": "synthetic source group",
+        },
+        f"{run_id}: paired bootstrap",
+    )
+
+    review_rows = read_csv(directory / "review.csv")
+    require(len(review_rows) == 8, f"{run_id}: review rows")
+    review = []
+    review_index = {(row["metric"], integer(row, "budget_sessions")): row for row in review_rows}
+    require(len(review_index) == 8, f"{run_id}: review duplicate")
+    queue = [row for row in scored_rows if row["scenario"] != "known_nohelmet"]
+    for metric in METRICS:
+        ordered = sorted(
+            queue,
+            key=lambda case: (
+                -number(case, metric),
+                registry.fingerprint([seed, case["id"], "shared-tie"]),
+            ),
+        )
+        for budget in (40, 80):
+            row = review_index[(metric, budget)]
+            picked = ordered[:budget]
+            found = sum(boolean(case, "latent_novel") for case in picked)
+            expected = {
+                "metric": metric,
+                "budget_sessions": budget,
+                "reviewed": budget,
+                "novel_found": found,
+                "novel_total": 80,
+                "recall": found / 80,
+                "precision": found / budget,
+                "rare_valid_reviewed": sum(case["scenario"] == "rare_valid" for case in picked),
+            }
+            for field, value in expected.items():
+                if field not in ("metric",):
+                    match(number(row, field), value, f"{run_id}: review {metric}/{budget}/{field}")
+            review.append(expected)
+    match(result["review"], review, f"{run_id}: review JSON")
+    stress_rows = read_csv(directory / "stress.csv")
+    require(len(stress_rows) == 1280, f"{run_id}: noise rows")
+    seen = set()
+    for row in stress_rows:
+        key = (row["operation"], row["source_group"], row["metric"])
+        require(
+            key not in seen
+            and key[0] in ("drop", "duplicate", "flip", "fragment")
+            and key[1] in split["test"]
+            and key[2] in METRICS,
+            f"{run_id}: noise key",
+        )
+        seen.add(key)
+    stress = {}
+    for operation in ("drop", "duplicate", "flip", "fragment"):
+        stress[operation] = {}
+        for metric in METRICS:
+            subset = [
+                row
+                for row in stress_rows
+                if (row["operation"], row["metric"]) == (operation, metric)
+            ]
+            require(len(subset) == 80, f"{run_id}: noise source count")
+            stress[operation][metric] = {
+                "normal_source_alerts": sum(boolean(row, "normal_alert") for row in subset),
+                "hard_replacement_source_alerts": sum(
+                    boolean(row, "hard_replacement_alert") for row in subset
+                ),
+                "source_groups": len(subset),
+            }
+    match(result["noise_diagnostic"], stress, f"{run_id}: noise summary")
+    match(
+        result["coverage"],
+        {f"order_{n}": sum(integer(row, f"order_{n}") for row in scored_rows) for n in (1, 2, 3)},
+        f"{run_id}: coverage",
+    )
+    known = [row for row in scored_rows if row["scenario"] == "known_nohelmet"]
+    match(
+        result["known_nohelmet_rule_queue"],
+        {
+            "test_cases": sum(boolean(row, "known_nohelmet_rule") for row in known),
+            "rule_flagged": sum(
+                boolean(row, "known_nohelmet_rule") and "N" in row["symbols"] for row in known
+            ),
+            "novelty_positive": sum(boolean(row, "latent_novel") for row in known),
+        },
+        f"{run_id}: known rule",
+    )
+    train = [case for source in split["train"] for case in by_source[source].values()]
+    for key, expected in (
+        ("train_sessions", len(train)),
+        ("train_distinct_lengths", len({len(case["symbols"]) for case in train})),
+        ("test_sessions", 400),
+        ("test_sources", 80),
+        ("hard_pair_min_training_count", pair_min),
+    ):
+        match(result[key], expected, f"{run_id}: {key}")
+    return {
+        "winner": selection["winner"],
+        "clean": clean,
+        "paired_recall_difference": result["paired_recall_difference"],
+    }
+
+
+def aggregate(rows):
+    count = sum(integer(row, "predicted_tokens") for row in rows)
+    require(count > 0, "zero predicted tokens")
+    return (
+        math.fsum(number(row, "cross_entropy") * integer(row, "predicted_tokens") for row in rows)
+        / count
+    )
+
+
+def check_meva():
+    manifest = read_json(MEVA / "manifest.json")
+    require(
+        manifest["schema"] == 1 and manifest["status"] == "evaluated", "MEVA: evaluation status"
+    )
+    hashes(
+        MEVA,
+        manifest["files"],
+        (
+            "source_files.json",
+            "counts.json",
+            "selection.json",
+            "dev_sequences.csv",
+            "test_sequences.csv",
+            "test_dates.json",
+            "test.claim",
+        ),
+    )
+    code_hashes(
+        manifest["code"],
+        (
+            "extensions/experiments/meva_sequence_study.py",
+            "extensions/src/models.py",
+            "core/src/ngram.py",
+            "core/src/preprocess.py",
+        ),
+    )
+    source_hashes = read_json(MEVA / "source_files.json")
+    source_files = sorted(SOURCE.glob("*.json"))
+    require(len(source_files) == 64 and len(source_hashes) == 64, "MEVA: source file count")
+    match(
+        source_hashes,
+        {path.relative_to(ROOT).as_posix(): sha(path) for path in source_files},
+        "MEVA: source hashes",
+    )
+    clips = {}
+    actors = 0
+    for path in source_files:
+        require(
+            not path.is_symlink() and path.resolve().parent == SOURCE.resolve(), "MEVA: source path"
+        )
+        record = read_json(path)
+        require(record["clip"] == path.stem, "MEVA: clip identity")
+        date = path.stem[:10]
+        require(date in set(sum(DATES.values(), ())), "MEVA: date")
+        require(path.stem not in clips, "MEVA: repeated clip")
+        clips[path.stem] = (date, record)
+        actors += len(record["actor_sequences"])
+        require(
+            all(len(actor["events"]) == 1 for actor in record["actor_sequences"]),
+            "MEVA: non-singleton actor",
+        )
+    require(actors == 195, "MEVA: expected 195 singleton actor sequences")
+    match(
+        {part: sum(date in dates for date, _ in clips.values()) for part, dates in DATES.items()},
+        {"train": 29, "dev": 13, "test": 22},
+        "MEVA: split clips",
+    )
+    selection = read_json(MEVA / "selection.json")
+    match(
+        selection["split_dates"],
+        {part: list(dates) for part, dates in DATES.items()},
+        "MEVA: selected split dates",
+    )
+    match(selection["train_clips"], 29, "MEVA: train clips")
+    match(selection["dev_clips"], 13, "MEVA: dev clips")
+    train_actors = sum(
+        len(record["actor_sequences"]) for date, record in clips.values() if date in DATES["train"]
+    )
+    match(selection["train_actor_sequences"], train_actors, "MEVA: train actors")
+    match(
+        selection["train_singleton_actor_sequences"], train_actors, "MEVA: train singleton actors"
+    )
+    require(selection["train_state_tokens"] > 0, "MEVA: train state tokens")
+    dev_rows = read_csv(MEVA / "dev_sequences.csv")
+    test_rows = read_csv(MEVA / "test_sequences.csv")
+    for part, rows, count in (
+        ("dev", dev_rows, 13),
+        ("test", test_rows, 22),
+    ):
+        require(len(rows) == 7 * count, f"MEVA: {part} row count")
+        expected_clips = {clip for clip, (date, _) in clips.items() if date in DATES[part]}
+        for model in MODELS:
+            group = [row for row in rows if row["model"] == model]
+            require(
+                len(group) == count and {row["clip"] for row in group} == expected_clips,
+                f"MEVA: {part} model/clip coverage",
+            )
+        require(
+            len({(row["model"], row["clip"]) for row in rows}) == len(rows),
+            f"MEVA: {part} duplicate model/clip",
+        )
+        for row in rows:
+            date, record = clips[row["clip"]]
+            require(row["date"] == date and date in DATES[part], f"MEVA: {part} date")
+            require(
+                integer(row, "activities") == len(record["activities"]), f"MEVA: {part} activities"
+            )
+            state = integer(row, "state_tokens")
+            predicted = integer(row, "predicted_tokens")
+            require(state > 0 and predicted == state + 1, f"MEVA: {part} target counts")
+            require(0 <= integer(row, "cooccurrence_tokens") <= state, f"MEVA: {part} cooccurrence")
+            require(0 <= integer(row, "oov_tokens") <= state, f"MEVA: {part} OOV")
+            require(number(row, "cross_entropy") >= 0, f"MEVA: {part} entropy")
+        for clip in expected_clips:
+            group = [row for row in rows if row["clip"] == clip]
+            for field in (
+                "activities",
+                "state_tokens",
+                "cooccurrence_tokens",
+                "predicted_tokens",
+                "oov_tokens",
+            ):
+                require(
+                    len({row[field] for row in group}) == 1, f"MEVA: {part} inconsistent {field}"
+                )
+    match(
+        selection["dev_state_tokens"],
+        sum(integer(row, "state_tokens") for row in dev_rows if row["model"] == MODELS[0]),
+        "MEVA: dev states",
+    )
+    trials = selection["trials"]
+    require(
+        len(trials) == 7 and {row["model"] for row in trials} == set(MODELS), "MEVA: dev trials"
+    )
+    for trial in trials:
+        match(
+            trial["dev_cross_entropy"],
+            aggregate([row for row in dev_rows if row["model"] == trial["model"]]),
+            "MEVA: dev weighted entropy",
+        )
+    winner = min(
+        trials,
+        key=lambda row: (
+            row["dev_cross_entropy"],
+            row["model"],
+        ),
+    )["model"]
+    match(selection["winner"], winner, "MEVA: selected winner")
+    match(manifest["winner"], winner, "MEVA: manifest winner")
+    dates_json = read_json(MEVA / "test_dates.json")
+    match(dates_json["winner"], winner, "MEVA: test winner")
+    require(len(dates_json["dates"]) == 14, "MEVA: date rows")
+    seen = set()
+    for row in dates_json["dates"]:
+        model, date = row["model"], row["date"]
+        require(
+            model in MODELS and date in DATES["test"] and (model, date) not in seen,
+            "MEVA: date key",
+        )
+        seen.add((model, date))
+        group = [case for case in test_rows if (case["model"], case["date"]) == (model, date)]
+        for field, source_field in (
+            ("clips", None),
+            ("state_tokens", "state_tokens"),
+            ("predicted_tokens", "predicted_tokens"),
+            ("oov_tokens", "oov_tokens"),
+        ):
+            expected = (
+                len(group)
+                if source_field is None
+                else sum(integer(case, source_field) for case in group)
+            )
+            match(row[field], expected, f"MEVA: {model}/{date}/{field}")
+        match(row["cross_entropy"], aggregate(group), f"MEVA: {model}/{date} weighted entropy")
+        rng = random.Random(int(hashlib.sha256(f"{model}/{date}".encode()).hexdigest()[:16], 16))
+        boot = sorted(
+            aggregate([group[rng.randrange(len(group))] for _ in group]) for _ in range(1000)
+        )
+        match(
+            row["within_date_clip_bootstrap_p05_p95_descriptive"],
+            [boot[50], boot[949]],
+            f"MEVA: {model}/{date} bootstrap",
+        )
+    heldout = {
+        name: digest
+        for name, digest in source_hashes.items()
+        if Path(name).stem[:10] in DATES["test"]
+    }
+    claim = registry.fingerprint(heldout)
+    match((MEVA / "test.claim").read_text(encoding="utf-8"), claim, "MEVA: test claim")
+    receipt = read_json(ROOT / ".tmp/meva-sequence-test-claims" / (claim + ".json"))
+    match(receipt["source_sha256"], claim, "MEVA: claim source")
+    match(receipt["selection_sha256"], sha(MEVA / "selection.json"), "MEVA: claim selection")
+    return {
+        "winner": winner,
+        "clips": {"train": 29, "dev": 13, "test": 22},
+        "singleton_actor_sequences": actors,
+        "date_cross_entropy": [
+            {
+                "model": row["model"],
+                "date": row["date"],
+                "cross_entropy": row["cross_entropy"],
+                "predicted_tokens": row["predicted_tokens"],
+                "loss_numerator": math.fsum(
+                    number(case, "cross_entropy") * integer(case, "predicted_tokens")
+                    for case in test_rows
+                    if (case["model"], case["date"]) == (row["model"], row["date"])
+                ),
+            }
+            for row in dates_json["dates"]
+        ],
+    }
+
+
+def main():
+    required = [TAIL / f"seed{seed}" / "manifest.json" for seed in SEEDS] + [MEVA / "manifest.json"]
+    missing = [str(path.relative_to(ROOT)) for path in required if not path.exists()]
+    if missing:
+        print(json.dumps({"status": "pending", "missing": missing}, indent=2))
+        return 2
+    report = {"status": "pass", "seeds": {}, "meva": None, "errors": []}
+    for seed in SEEDS:
+        try:
+            report["seeds"][str(seed)] = check_tail(seed)
+        except (OSError, ValueError, KeyError, TypeError, ZeroDivisionError) as error:
+            report["errors"].append(f"seed{seed}: {error}")
+    try:
+        report["meva"] = check_meva()
+    except (OSError, ValueError, KeyError, TypeError, ZeroDivisionError) as error:
+        report["errors"].append(f"MEVA: {error}")
+    if report["errors"]:
+        report["status"] = "fail"
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8"
+    )
+    print(f"Q4 {report['status']}: {OUT.relative_to(ROOT)}")
+    for error in report["errors"]:
+        print(error)
+    return bool(report["errors"])
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,63 @@
+{
+  "academic": {
+    "pytest": "187 passed in12.25s",
+    "ruff_check": "pass",
+    "ruff_format": "79 files formatted",
+    "ty": "pass",
+    "build": "wheel/sdist pass; new gap regression in current187tests"
+  },
+  "studio": {
+    "backend_suites": 24,
+    "backend_source": "backend-results.json",
+    "ruff_check": "pass (excludes unrelated tests/e2e.py)",
+    "ruff_format": "72 files formatted",
+    "ty": "pass six research modules",
+    "acquisition_selfcheck": "pass",
+    "ppe_comparison_selfcheck": "pass after exact legacyprotocol reader regression",
+    "ui": {
+      "strict_typecheck": "pass",
+      "suites": 10,
+      "build": "pass",
+      "logs": "industrial_ai/.tmp/accuracy-upgrade/ui-*.txt"
+    }
+  },
+  "state": "Q1-Q4complete; Q5localverification complete, publication pending",
+  "core_sha256": {
+    "files": 15,
+    "status": "all original hashes match"
+  },
+  "preservation": {
+    "files": 3780,
+    "missing": [],
+    "changed": [
+      "extensions/results/README.md"
+    ]
+  },
+  "backend_suite_exitcodes": {
+    "storage_check": 0,
+    "profile_api_check": 0,
+    "ledger_check": 0,
+    "ledger_v2_check": 0,
+    "novelty_v2_check": 0,
+    "novelty_api_check": 0,
+    "academic_check": 0,
+    "fact_check": 0,
+    "security_check": 0,
+    "deployment_check": 0,
+    "self_check": 0,
+    "review_counts_check": 0,
+    "tracking_check": 0,
+    "corrections_check": 0,
+    "workflow_check": 0,
+    "video_finetune_check": 0,
+    "source_group_check": 0,
+    "detector_benchmark_check": 0,
+    "tracking_reference_check": 0,
+    "tracking_benchmark_check": 0,
+    "audit_read_check": 0,
+    "test_sh17_reference": 0,
+    "test_meva_reference": 0,
+    "test_meva_diagnostics": 0
+  },
+  "scope": "research data+collector/evaluator; no runtimeUI/detector deployment/corechange"
+}

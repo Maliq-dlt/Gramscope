@@ -1,0 +1,46 @@
+{
+  "annotation_sha256": {
+    "2018-03-07.16-50-00.16-55-00.admin.G329": "48fa32d72e6ff7eb690323099b19be731e8a253d6025eda14768175a8e66859d",
+    "2018-03-07.16-50-00.16-55-00.bus.G331": "2037e185b50f062becff373b12f2652ca1b117f4d45f855760dcbc53b3903831",
+    "2018-03-07.16-50-01.16-55-01.admin.G326": "eed1d2f481ecee33b75878613cb8a9f3582adecffaaec0acef8f605321ed5357",
+    "2018-03-07.16-50-01.16-55-01.school.G328": "e766396d7b5373c7c04a8cce6c02eb4f7ff4518e7a56eb2618d46400b30727bc",
+    "2018-03-07.16-50-06.16-55-06.school.G336": "9bb7a6ec30648f7f4f79ae579f38503eec5e226cf88b68be7a319b084e2f85fd",
+    "2018-03-07.16-50-07.16-55-07.hospital.G301": "2ee6cfb499cd808fcc41dca3779816cc35146e6306e1ab736d2fb98313be2961",
+    "2018-03-07.16-55-00.17-00-00.bus.G340": "04a69e7a2993d778181ef4269e5230d612f962bd352114747750868a8af93b47",
+    "2018-03-07.17-05-00.17-10-00.school.G299": "09323ea97ef23192447b656d805119ec1aec6cb843155d446ed3cca5474e7684",
+    "2018-03-07.17-30-01.17-35-01.bus.G505": "7e670e7c5213e3659d30a2cdd4a107d2c423249228dbaf4937476ad88bd2ff34",
+    "2018-03-07.17-35-00.17-40-00.school.G421": "1acee95501edd8612591daf40e58d37ea29294a2b1ef257afe38a3accc3f88d9",
+    "2018-03-09.10-10-00.10-15-01.school.G328": "7f9a246ed2a302de011b3e2389d03865404cddc16d0b9a05650072ffc065220a",
+    "2018-03-09.10-10-01.10-15-01.bus.G340": "313a3052fc33f5c1dcd2c3bd8b391a0f982390bcbabb79acd30b79a46dd5f911",
+    "2018-03-11.11-30-01.11-35-01.school.G421": "965aad1e1905aa0e19b6891bf1c2a6fc563c97f906740e0bedcd4ef4fbb813ce",
+    "2018-03-12.10-00-00.10-05-00.hospital.G436": "209dc2b248d9611f1c8e69a6faa1cfe3622dce2fc8f39a9373279d681dfcfcc5",
+    "2018-03-13.17-05-00.17-10-00.school.G328": "58b62681f0ac7104691ba28d4a11902409892a733a3452963a41e6d760c4d0a5",
+    "2018-03-15.14-50-00.14-55-00.school.G424": "020717a7a5090595bcc19b98f59207e2684f475289b681dbb8642246149ea90f"
+  },
+  "code_sha256": "6720781f94e731f6af2ac7f183bb1dd95ef8904cc98fdd7677c9e9756eafdaca",
+  "conf": 0.1,
+  "coordinates": "identity canvas based on r13 same-frame official FAQ + bounds; explicit assumption",
+  "data": "MEVA public sparse examples",
+  "dev_dates": [
+    "2018-03-07",
+    "2018-03-09"
+  ],
+  "iou_match": 0.5,
+  "metric": "annotated-target recall and matched-ID consistency; no FP precision whole-video IDF1 or incident exposure",
+  "model_sha256": "9b09cc8bf347f0fc8a5f7657480587f25db09b34bf33b0652110fb03a8ad4fef",
+  "resolutions": [
+    640,
+    960
+  ],
+  "sampling": "all person-annotated frames at 5Hz stride6, no unlabeled negatives",
+  "source_manifests": {
+    "meva-examples-extra-dates-20261011-q1": "bae72f0c34aa2a90baeec48dd6a8494700ace6a9ba7c34c24043afb5212fc90c",
+    "meva-examples-video12-20261011-q1": "81f4ff8b457876f49a4ec9c9dc6c118f5be9bb495cbe327738ab520dbe689b92"
+  },
+  "test_dates": [
+    "2018-03-11",
+    "2018-03-12",
+    "2018-03-13",
+    "2018-03-15"
+  ]
+}

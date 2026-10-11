@@ -1,0 +1,188 @@
+{
+  "dates": [
+    {
+      "clips": 8,
+      "cross_entropy": 4.086770720201325,
+      "date": "2018-03-13",
+      "model": "unigram_wb",
+      "oov_tokens": 1,
+      "predicted_tokens": 24,
+      "state_tokens": 16,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        3.097517148514713,
+        5.580959564398255
+      ]
+    },
+    {
+      "clips": 14,
+      "cross_entropy": 7.101061592736347,
+      "date": "2018-03-15",
+      "model": "unigram_wb",
+      "oov_tokens": 7,
+      "predicted_tokens": 33,
+      "state_tokens": 19,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        4.934229553457203,
+        8.872379605161637
+      ]
+    },
+    {
+      "clips": 8,
+      "cross_entropy": 4.410881672650907,
+      "date": "2018-03-13",
+      "model": "bigram_wb",
+      "oov_tokens": 1,
+      "predicted_tokens": 24,
+      "state_tokens": 16,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        3.275237957055939,
+        6.10067369149153
+      ]
+    },
+    {
+      "clips": 14,
+      "cross_entropy": 7.165861475046276,
+      "date": "2018-03-15",
+      "model": "bigram_wb",
+      "oov_tokens": 7,
+      "predicted_tokens": 33,
+      "state_tokens": 19,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        4.952980631253692,
+        8.87588350472317
+      ]
+    },
+    {
+      "clips": 8,
+      "cross_entropy": 4.220119821963644,
+      "date": "2018-03-13",
+      "model": "bigram_kn",
+      "oov_tokens": 1,
+      "predicted_tokens": 24,
+      "state_tokens": 16,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        3.221459682837749,
+        5.815314990925231
+      ]
+    },
+    {
+      "clips": 14,
+      "cross_entropy": 7.099247596594901,
+      "date": "2018-03-15",
+      "model": "bigram_kn",
+      "oov_tokens": 7,
+      "predicted_tokens": 33,
+      "state_tokens": 19,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        5.269622113114863,
+        8.933455323583628
+      ]
+    },
+    {
+      "clips": 8,
+      "cross_entropy": 4.220119821963644,
+      "date": "2018-03-13",
+      "model": "bigram_mkn",
+      "oov_tokens": 1,
+      "predicted_tokens": 24,
+      "state_tokens": 16,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        3.2362240486182237,
+        5.944727632129361
+      ]
+    },
+    {
+      "clips": 14,
+      "cross_entropy": 7.099247596594901,
+      "date": "2018-03-15",
+      "model": "bigram_mkn",
+      "oov_tokens": 7,
+      "predicted_tokens": 33,
+      "state_tokens": 19,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        4.966548905097894,
+        8.911709510341025
+      ]
+    },
+    {
+      "clips": 8,
+      "cross_entropy": 4.594914005065626,
+      "date": "2018-03-13",
+      "model": "trigram_wb",
+      "oov_tokens": 1,
+      "predicted_tokens": 24,
+      "state_tokens": 16,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        3.4836542956617227,
+        6.332128625839881
+      ]
+    },
+    {
+      "clips": 14,
+      "cross_entropy": 7.410412744306447,
+      "date": "2018-03-15",
+      "model": "trigram_wb",
+      "oov_tokens": 7,
+      "predicted_tokens": 33,
+      "state_tokens": 19,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        5.234482092290017,
+        9.337710869502782
+      ]
+    },
+    {
+      "clips": 8,
+      "cross_entropy": 4.283040718418258,
+      "date": "2018-03-13",
+      "model": "trigram_kn",
+      "oov_tokens": 1,
+      "predicted_tokens": 24,
+      "state_tokens": 16,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        3.280756144025005,
+        5.86963252535736
+      ]
+    },
+    {
+      "clips": 14,
+      "cross_entropy": 7.14030989020764,
+      "date": "2018-03-15",
+      "model": "trigram_kn",
+      "oov_tokens": 7,
+      "predicted_tokens": 33,
+      "state_tokens": 19,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        4.921009208771503,
+        9.058643660872212
+      ]
+    },
+    {
+      "clips": 8,
+      "cross_entropy": 4.283040718418258,
+      "date": "2018-03-13",
+      "model": "trigram_mkn",
+      "oov_tokens": 1,
+      "predicted_tokens": 24,
+      "state_tokens": 16,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        3.3029224535150474,
+        5.956635169218124
+      ]
+    },
+    {
+      "clips": 14,
+      "cross_entropy": 7.14030989020764,
+      "date": "2018-03-15",
+      "model": "trigram_mkn",
+      "oov_tokens": 7,
+      "predicted_tokens": 33,
+      "state_tokens": 19,
+      "within_date_clip_bootstrap_p05_p95_descriptive": [
+        4.879982640676176,
+        8.923702516121711
+      ]
+    }
+  ],
+  "interpretation": "Two held-out dates and sparse activity labels; bootstrap describes clips within each date, not a population confidence interval. No incident/novelty truth, recall, precision, actor continuity, or camera generalization claim.",
+  "winner": "bigram_kn"
+}

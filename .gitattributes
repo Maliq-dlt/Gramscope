@@ -38,3 +38,23 @@ extensions/src/datasets.py text eol=crlf
 extensions/experiments/prepare_indonesian.py text eol=crlf
 extensions/experiments/stress_aggregation.py -text whitespace=cr-at-eol
 extensions/results/cctv_tracking_v1/summary.md -text whitespace=cr-at-eol
+
+# Accuracy study receipts keep exact bytes on Windows/Linux clones.
+extensions/results/accuracy_data_v1/** -text whitespace=cr-at-eol
+extensions/results/context_tail_v1/** -text whitespace=cr-at-eol
+extensions/results/meva_sequence_v1/** -text whitespace=cr-at-eol
+extensions/experiments/context_tail_study.py -text whitespace=cr-at-eol
+extensions/experiments/meva_sequence_study.py -text whitespace=cr-at-eol
+industrial_ai/prepare_sh17.py -text whitespace=cr-at-eol
+industrial_ai/sh17_quality.py -text whitespace=cr-at-eol
+industrial_ai/prepare_meva_reference.py -text whitespace=cr-at-eol
+industrial_ai/meva_diagnostics.py -text whitespace=cr-at-eol
+industrial_ai/ppe_accuracy_study.py -text whitespace=cr-at-eol
+industrial_ai/ppe_comparison.py -text whitespace=cr-at-eol
+
+# Published source receipt includes these runnable checks.
+extensions/tests/test_context_tail_study.py -text whitespace=cr-at-eol
+extensions/tests/test_meva_sequence_study.py -text whitespace=cr-at-eol
+industrial_ai/tests/test_sh17_reference.py -text whitespace=cr-at-eol
+industrial_ai/tests/test_meva_reference.py -text whitespace=cr-at-eol
+industrial_ai/tests/test_meva_diagnostics.py -text whitespace=cr-at-eol

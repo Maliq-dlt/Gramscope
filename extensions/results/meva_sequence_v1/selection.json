@@ -1,0 +1,54 @@
+{
+  "criterion": "minimum token-weighted development cross-entropy; name breaks ties",
+  "dev_clips": 13,
+  "dev_state_tokens": 21,
+  "split_dates": {
+    "dev": [
+      "2018-03-12"
+    ],
+    "test": [
+      "2018-03-13",
+      "2018-03-15"
+    ],
+    "train": [
+      "2018-03-07",
+      "2018-03-09",
+      "2018-03-11"
+    ]
+  },
+  "train_actor_sequences": 109,
+  "train_clips": 29,
+  "train_singleton_actor_sequences": 109,
+  "train_state_tokens": 83,
+  "trials": [
+    {
+      "dev_cross_entropy": 5.394275500964514,
+      "model": "unigram_wb"
+    },
+    {
+      "dev_cross_entropy": 5.371565768166501,
+      "model": "bigram_wb"
+    },
+    {
+      "dev_cross_entropy": 5.3257212720015294,
+      "model": "bigram_kn"
+    },
+    {
+      "dev_cross_entropy": 5.3257212720015294,
+      "model": "bigram_mkn"
+    },
+    {
+      "dev_cross_entropy": 5.584924211522405,
+      "model": "trigram_wb"
+    },
+    {
+      "dev_cross_entropy": 5.38521522675138,
+      "model": "trigram_kn"
+    },
+    {
+      "dev_cross_entropy": 5.38521522675138,
+      "model": "trigram_mkn"
+    }
+  ],
+  "winner": "bigram_kn"
+}

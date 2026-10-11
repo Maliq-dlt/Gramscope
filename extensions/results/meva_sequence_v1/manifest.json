@@ -1,0 +1,23 @@
+{
+  "code": {
+    "core/src/ngram.py": "eb6b887412a0e30353e9193e5d84816b6c5d79b80ad177d9a4885e2bc048d1bf",
+    "core/src/preprocess.py": "c61964dd1fe7e5b65bad89cebbd047e1905e2b8c0fdcb7c562b2a4a395c4ac31",
+    "extensions/experiments/meva_sequence_study.py": "33bed7ac51d9fd726c1caaa31f3fb39f7e6264bdf22d230611239445fdfaa3ed",
+    "extensions/src/models.py": "2a42b52a57fc52eca41ef62ecd42350adc0b84feb994a13565fa83f3f943fab2"
+  },
+  "dataset": "MEVA public example activity annotations; CC BY 4.0",
+  "files": {
+    "counts.json": "1168f25569f9c9c98b540c176f6a1609db6f5b2450b48954f548e26398591fce",
+    "dev_sequences.csv": "a782afb43644511fa8d4c6835b43a4d1f91849ea70fcbc4629d295fe248cfb3e",
+    "selection.json": "3a0d061c5dd300b41472df2db243865aff9a4fdb978ef423984dc90f0e063cee",
+    "source_files.json": "ce60b629f7cd1d4c27572725c017ba9ddeea599e6d95517e85303ec5f593709d",
+    "test.claim": "0246c75f4dbe27d0b6a1685b826fda724c88c4da21081bca7f1971aa4753e318",
+    "test_dates.json": "57656b1e256f3ae9bb0c0f012bc6b716bd9385097df5746cd902815cd849667e",
+    "test_sequences.csv": "f27b80780e82be22c1b774606a3bebf42cf96550dbcf2702c22973f5ed5d38a7"
+  },
+  "license_url": "https://mevadata.org/resources/MEVA-data-license.txt",
+  "schema": 1,
+  "status": "evaluated",
+  "unit": "clip-level disjoint frame states; labels co-occur only while intervals intersect, and adjacent equal states collapse",
+  "winner": "bigram_kn"
+}

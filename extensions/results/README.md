@@ -1,5 +1,7 @@
 # Data akademik
 
+[Siklus kualitas terbaru](../reports/ACCURACY_UPGRADE_20261011.md): [data sumber/detector/PPE](accuracy_data_v1/README.md), [tail sintetik](context_tail_v1/README.md), dan [MEVA sequence](meva_sequence_v1/selection.json). Q1–Q4 terverifikasi; batas data lokasi nyata tetap terbuka.
+
 | Data | Isi | Jenis bukti |
 | --- | --- | --- |
 | [academic_pilot_metrics.csv](academic_pilot_metrics.csv) | 72 konfigurasi Brown/Reuters/Wikipedia Indonesia, dev CE, test CE dan PP | Ekspor hasil pilot bahasa yang sudah tersimpan; tidak ada evaluasi ulang |

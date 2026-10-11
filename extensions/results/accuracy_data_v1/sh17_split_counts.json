@@ -1,0 +1,26 @@
+{
+  "train": {
+    "images": 6215,
+    "person": 10729,
+    "helmet": 700,
+    "head": 9480,
+    "photographers": 737,
+    "transitive_groups": 737
+  },
+  "test": {
+    "images": 1177,
+    "person": 2096,
+    "helmet": 131,
+    "head": 1635,
+    "photographers": 93,
+    "transitive_groups": 93
+  },
+  "dev": {
+    "images": 707,
+    "person": 977,
+    "helmet": 96,
+    "head": 870,
+    "photographers": 92,
+    "transitive_groups": 92
+  }
+}

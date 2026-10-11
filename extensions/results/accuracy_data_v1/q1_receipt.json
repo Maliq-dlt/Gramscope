@@ -1,0 +1,41 @@
+{
+  "phase": "Q1",
+  "date": "2026-10-11",
+  "status": "passed",
+  "protected_files": 3780,
+  "sources": [
+    {
+      "dataset": "SH17",
+      "archive_bytes": 14096291832,
+      "images": 8099,
+      "photographers": 922,
+      "license": "CC-BY-NC-SA-4.0 + Pexels",
+      "head_is_nohelmet": false
+    },
+    {
+      "dataset": "MEVA",
+      "annotation_clips": 64,
+      "activities": 122,
+      "geom_rows": 66357,
+      "source_dates": 6,
+      "videos": 16,
+      "bytes": 2053636592,
+      "raw_duration_seconds": 4803.467,
+      "decode_passed": 16,
+      "license": "CC-BY-4.0",
+      "evaluated_exposure_seconds": 0
+    }
+  ],
+  "limits": [
+    "MEVA sparse example targets do not establish exhaustively labeled negatives",
+    "Actor sequences all singleton; perclip activity timeline only",
+    "SH17 rights restrict commercial use",
+    "No factory incident onset labels"
+  ],
+  "SH17_summary_sha256": "84933d6186733c5da81417cb24bc3334d9dc2afeeaba860300cb7e7955a91135",
+  "SH17_partitions": {
+    "train": 6215,
+    "dev": 707,
+    "test": 1177
+  }
+}

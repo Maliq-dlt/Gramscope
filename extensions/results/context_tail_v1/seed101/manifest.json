@@ -1,0 +1,16 @@
+{
+  "config_sha256": "371b54a269536f3c8f374013272b09bc39489bebc86b3ada174e55ee449469a0",
+  "files_sha256": {
+    "calibration.json": "7cb9af8ce89e18987f34202c07b11771d16cf4dbe857a6c8472f5f99595cb4ab",
+    "cases.json": "c4f6665ae5ce805aabfafa1e5f96ecd5d6ec7230508dc4c609097ae0137032ce",
+    "protocol.json": "948603029e4816c16ff613c6d4e80587d55af7b3307ab2c712138a670caeb428",
+    "review.csv": "0ad249dbade0b1e00e54c28534f658940d25fc5c4b6e733f6a6698e76989af4a",
+    "scores.csv": "354f10615f5b8b647c9c80629f9b91f9d626f9a8ab9cbdba53fbd964f34857ea",
+    "selection.json": "e1b437dfeb70f8b72f4e1221c4988f6beb0d45527fb3c4610e58bf7438b51114",
+    "sources.csv": "e7d227847e1789d0f4763c958fb38bfe4d1b3229786867ae42922e315d211666",
+    "stress.csv": "41da1a9663ff493cbf3a7a26b563dcded8978bd9195407481e88be37e4bfa57e",
+    "summary.json": "b67dffb50f44a7a984f9a1ec1318b6b2f6254c95c3211b1e9192324a8f4d7f52"
+  },
+  "run_id": "context-tail-v1-seed101",
+  "test_claim_sha256": "7962f3516c8b3479e34d001b6eaac2ab6e753fface3f4203bca4cdcbfcb1544f"
+}

@@ -1,0 +1,21 @@
+{
+  "checkpoint_sha256": "28be8609427011034833fa61894fe8f84575cee9ff6c6710bdb7cab73021be82",
+  "files": {
+    "derived_hashes.json": "da626ff5bbad97e1fb810e34a62fc3adcc44304a4f279d719f17f5d4d25971d0",
+    "dev-baseline_helmet.jsonl": "10fe917ae8734823836d05daaf396b3cbe1c027027932b7c9b40ec747334a4f0",
+    "dev-candidate.jsonl": "5ff0a3eeb7fd348d66fc0eecab8c7f51631902209d107ab035f51403f79dbd3b",
+    "evaluation_protocol.json": "ac22808aad1014c04468770d8a56886b3e2b7238201d0d126ecdea09d7876d47",
+    "operating_selection.json": "a579cb8345e93544832d29488a08c7eaf7ae4e83f82317c6e4156498b430ab1f",
+    "prepared.json": "46cfb368dee4f2dc6a62013348d36ef7409970c42e29919f5ca81dad9dab23b7",
+    "protocol.json": "9d18d01d514ed2db4734e7e9127282a27538be15c6a3f676da278a06d4fd15c9",
+    "selection.json": "ab88a4b863371b601ab96de2df32156d723523a9b83511ef77ce1f7972d39b8a",
+    "test-baseline_helmet.jsonl": "36f8a27b56fb1365a05d91545c104289ca902bf864963df7d0e12e47b2ccaacf",
+    "test-candidate.jsonl": "0251da0c2a8c99bfdf07c918ee13b49f1319d82110816275416bb404c62a6fc4",
+    "test.claim": "8169cd2b58046599336d9d45ca9c60223a9dadf8e30907f3fada99538c42dc0d",
+    "test_metrics.csv": "01dcf90bbe7d1b3622aa3a3e24c7dc7f86e9acb8cf5d7ecafba7b95c6f8fce86",
+    "training_claim.json": "03c8edc794c55df98ad33f00cab8e7c96a07478ea2261d06500a82ca7bb49c46",
+    "training_execution.json": "4fb6598490ce0065989d526732b64c3e2269c35761a016543839b5cdfdc46a5e",
+    "training_snapshot.py": "8eb16fe9a7c32b0d66a3dd6f9d882f8e8caccbd7f24418eaff8eab334e3f7357"
+  },
+  "status": "completed"
+}

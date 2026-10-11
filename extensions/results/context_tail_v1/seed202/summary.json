@@ -1,0 +1,232 @@
+{
+  "clean": {
+    "allowed_pairs": {
+      "hard_replacement_source_alerts": 0,
+      "normal_source_alerts": 0,
+      "rare_valid_case_alarms": 0,
+      "source_groups": 80
+    },
+    "ce": {
+      "hard_replacement_source_alerts": 10,
+      "normal_source_alerts": 10,
+      "rare_valid_case_alarms": 10,
+      "source_groups": 80
+    },
+    "pairfrequency": {
+      "hard_replacement_source_alerts": 8,
+      "normal_source_alerts": 8,
+      "rare_valid_case_alarms": 8,
+      "source_groups": 80
+    },
+    "tail": {
+      "hard_replacement_source_alerts": 0,
+      "normal_source_alerts": 0,
+      "rare_valid_case_alarms": 0,
+      "source_groups": 80
+    }
+  },
+  "coverage": {
+    "order_1": 0,
+    "order_2": 0,
+    "order_3": 8448
+  },
+  "hard_pair_min_training_count": 630,
+  "known_nohelmet_rule_queue": {
+    "novelty_positive": 0,
+    "rule_flagged": 80,
+    "test_cases": 80
+  },
+  "noise_diagnostic": {
+    "drop": {
+      "allowed_pairs": {
+        "hard_replacement_source_alerts": 0,
+        "normal_source_alerts": 0,
+        "source_groups": 80
+      },
+      "ce": {
+        "hard_replacement_source_alerts": 11,
+        "normal_source_alerts": 8,
+        "source_groups": 80
+      },
+      "pairfrequency": {
+        "hard_replacement_source_alerts": 13,
+        "normal_source_alerts": 13,
+        "source_groups": 80
+      },
+      "tail": {
+        "hard_replacement_source_alerts": 11,
+        "normal_source_alerts": 12,
+        "source_groups": 80
+      }
+    },
+    "duplicate": {
+      "allowed_pairs": {
+        "hard_replacement_source_alerts": 0,
+        "normal_source_alerts": 0,
+        "source_groups": 80
+      },
+      "ce": {
+        "hard_replacement_source_alerts": 11,
+        "normal_source_alerts": 11,
+        "source_groups": 80
+      },
+      "pairfrequency": {
+        "hard_replacement_source_alerts": 3,
+        "normal_source_alerts": 3,
+        "source_groups": 80
+      },
+      "tail": {
+        "hard_replacement_source_alerts": 0,
+        "normal_source_alerts": 0,
+        "source_groups": 80
+      }
+    },
+    "flip": {
+      "allowed_pairs": {
+        "hard_replacement_source_alerts": 0,
+        "normal_source_alerts": 0,
+        "source_groups": 80
+      },
+      "ce": {
+        "hard_replacement_source_alerts": 11,
+        "normal_source_alerts": 11,
+        "source_groups": 80
+      },
+      "pairfrequency": {
+        "hard_replacement_source_alerts": 10,
+        "normal_source_alerts": 10,
+        "source_groups": 80
+      },
+      "tail": {
+        "hard_replacement_source_alerts": 0,
+        "normal_source_alerts": 0,
+        "source_groups": 80
+      }
+    },
+    "fragment": {
+      "allowed_pairs": {
+        "hard_replacement_source_alerts": 80,
+        "normal_source_alerts": 80,
+        "source_groups": 80
+      },
+      "ce": {
+        "hard_replacement_source_alerts": 80,
+        "normal_source_alerts": 80,
+        "source_groups": 80
+      },
+      "pairfrequency": {
+        "hard_replacement_source_alerts": 80,
+        "normal_source_alerts": 80,
+        "source_groups": 80
+      },
+      "tail": {
+        "hard_replacement_source_alerts": 80,
+        "normal_source_alerts": 80,
+        "source_groups": 80
+      }
+    }
+  },
+  "paired_recall_difference": {
+    "bootstrap_95_percentile": [
+      -0.2,
+      -0.05
+    ],
+    "resample_unit": "synthetic source group",
+    "resamples": 5000,
+    "tail_minus_ce": -0.125
+  },
+  "review": [
+    {
+      "budget_sessions": 40,
+      "metric": "tail",
+      "novel_found": 21,
+      "novel_total": 80,
+      "precision": 0.525,
+      "rare_valid_reviewed": 19,
+      "recall": 0.2625,
+      "reviewed": 40
+    },
+    {
+      "budget_sessions": 80,
+      "metric": "tail",
+      "novel_found": 47,
+      "novel_total": 80,
+      "precision": 0.5875,
+      "rare_valid_reviewed": 33,
+      "recall": 0.5875,
+      "reviewed": 80
+    },
+    {
+      "budget_sessions": 40,
+      "metric": "ce",
+      "novel_found": 11,
+      "novel_total": 80,
+      "precision": 0.275,
+      "rare_valid_reviewed": 29,
+      "recall": 0.1375,
+      "reviewed": 40
+    },
+    {
+      "budget_sessions": 80,
+      "metric": "ce",
+      "novel_found": 29,
+      "novel_total": 80,
+      "precision": 0.3625,
+      "rare_valid_reviewed": 50,
+      "recall": 0.3625,
+      "reviewed": 80
+    },
+    {
+      "budget_sessions": 40,
+      "metric": "pairfrequency",
+      "novel_found": 0,
+      "novel_total": 80,
+      "precision": 0.0,
+      "rare_valid_reviewed": 40,
+      "recall": 0.0,
+      "reviewed": 40
+    },
+    {
+      "budget_sessions": 80,
+      "metric": "pairfrequency",
+      "novel_found": 0,
+      "novel_total": 80,
+      "precision": 0.0,
+      "rare_valid_reviewed": 80,
+      "recall": 0.0,
+      "reviewed": 80
+    },
+    {
+      "budget_sessions": 40,
+      "metric": "allowed_pairs",
+      "novel_found": 8,
+      "novel_total": 80,
+      "precision": 0.2,
+      "rare_valid_reviewed": 9,
+      "recall": 0.1,
+      "reviewed": 40
+    },
+    {
+      "budget_sessions": 80,
+      "metric": "allowed_pairs",
+      "novel_found": 18,
+      "novel_total": 80,
+      "precision": 0.225,
+      "rare_valid_reviewed": 21,
+      "recall": 0.225,
+      "reviewed": 80
+    }
+  ],
+  "seed": 202,
+  "selected_model": {
+    "dev_ce": 0.6868451411656131,
+    "dev_targets": 3154,
+    "epsilon": 1e-08,
+    "method": "witten_bell"
+  },
+  "source_kind": "synthetic shared grammar, no footage or independent safety labels",
+  "test_sessions": 400,
+  "test_sources": 80,
+  "train_distinct_lengths": 28,
+  "train_sessions": 630
+}

@@ -6,6 +6,26 @@ Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari v
 
 > Arahan terbaru pengguna: fokus hanya pada N-gram dan CCTV; fitur baru harus membantu memahami model statistik atau meninjau rekaman. Bagian ini menjadi acuan pekerjaan berikutnya. Rencana lama di bawah dipertahankan sebagai riwayat; task lama yang di luar scope tidak otomatis menjadi pekerjaan aktif. Penyempitan scope tidak menghapus fitur/data yang sudah ada.
 
+## Siklus kualitas data dan akurasi — 11 Oktober 2026
+
+Target: memperkuat data nyata, memisahkan error deteksi/tracking, dan menguji hipotesis skor urutan N-gram. Hasil historis termasuk hard alarm **0/30**, IDF1=0 pada aerial SDD, dan recall NO-Hardhat=15% tetap baseline beku. Tidak menyesuaikan parameter terhadap test lama.
+
+| Fase | Pekerjaan berurutan | Bukti/gate |
+| --- | --- | --- |
+| Q1 Data/protokol | Verifikasi SH17 dan MEVA sumber resmi, lisensi, download/label/decode/dedup, partisi sumber dan snapshot preservasi | Hash sumber/label/protokol sebelum inference; head tidak dipetakan menjadi nohelmet; gate dataset ditulis jujur |
+| Q2 Diagnosis | Catat prediksi sebelum dan sesudah tracker pada ground-camera berlabel; ukur skala objek/FP/FN/IDF1 dan frame/time alignment | Metrik raw detector dan tracker terpisah, termasuk frame kosong; tidak memakai identitas wajah |
+| Q3 Kandidat | Bandingkan resolusi/tracker dan training PPE dengan train/dev saja; bekukan winner | Manifest seleksi sebelum satu test baru; checkpoints lokal; bobot dasar/hasil awal aman |
+| Q4 N-gram | Skor tail frekuensi bersyarat + CE + aturan/pasangan; source calibration terpisah; urutan real berlabel aktivitas serta anomali konstruksi terpisah | Recall hard/rare-valid/normal, coverage, paired CI dan budget review; q bukan p-value; tanpa klaim K3 dari label aktivitas |
+| Q5 Validasi | Test fokus/full, lint/type/build, review ringan, audit angka/hash, data CSV/JSON dan dokumentasi/publikasi main | Hasil negatif tetap dilaporkan; CI exact commit; perubahan pengguna tidak diterbitkan |
+
+MEVA adalah rekaman kamera nyata dengan aktor/skenario terkontrol; bukan label insiden pabrik spontan. SH17 adalah foto Pexels berlabel PPE, bukan CCTV; lisensi akademik NC-SA berlaku. Public datasets tidak menggantikan label lokasi pengguna. VIRAT memerlukan acceptance individual dan tidak dipakai tanpa itu.
+
+Candidate sequence experiment memakai data stokastik baru dengan empat partisi sebelum scoring. Kalibrasi maksimum satu grup normal memerlukan peluang observasi sebanding; conformal hanya di bawah exchangeability grup normal. Noise dan pergeseran kamera dilaporkan sebagai stress, tanpa guarantee. Hipotesis tail tidak dijanjikan memperbaiki 0/30.
+
+Hasil Q1–Q4 tersedia pada [laporan kualitas](../extensions/reports/ACCURACY_UPGRADE_20261011.md): kandidat PPE mengurangi false-positive kotak helm, recall belum naik; tail berguna untuk ranking konstruksi sintetik tetapi tidak menghasilkan hard-only alarm. MEVA masih diagnostik parsial. Kandidat tidak otomatis dipasang pada studio. Q5 menunggu publikasi dan CI exact commit.
+
+Subagent: sesuai pilihan terbaru pengguna, tugas kecil memakai gpt-6-sol dengan reasoning rendah/sedang; tugas kompleks dibatasi sesuai kebutuhan. Council tetap dihentikan. Sumber/hasil baru terisolasi; core dan eksperimen historis tidak diedit.
+
 ## Siklus validasi akademik → CCTV, 11 Oktober 2026
 
 Arahan terbaru: kerjakan akademik dahulu, fase berurutan dengan hasil/cek per fase; setelah gate akademik lanjut plan CCTV. Makalah ditulis pengguna. Source/hasil/data lama dipertahankan. [Protokol beku](../extensions/reports/validation_protocol.json) merekam seed, grid, split, baseline dan batas; [checklist](todo.md#siklus-validasi-baru). Fase lama di bawah adalah riwayat.

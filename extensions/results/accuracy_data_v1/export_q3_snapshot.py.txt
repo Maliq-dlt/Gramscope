@@ -1,0 +1,290 @@
+"""Export sealed Q3 PPE evidence after evaluation and offline comparison finish."""
+
+import csv
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+RUN = ROOT / "industrial_ai/.tmp/accuracy-ppe-q3-final"
+COMPARISON = ROOT / ".tmp/accuracy-upgrade/ppe-comparison"
+PUBLIC = ROOT / "extensions/results/accuracy_data_v1"
+MODELS = ("baseline_helmet", "candidate")
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(path):
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def document(path):
+    require(path.is_file() and not path.is_symlink(), f"Missing or linked input: {path.name}")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def table(path):
+    require(path.is_file() and not path.is_symlink(), f"Missing or linked input: {path.name}")
+    with path.open("r", encoding="utf-8-sig", newline="") as stream:
+        return list(csv.DictReader(stream))
+
+
+def check_counts(metrics, groups, uncertainty, expected_images, expected_gt=131):
+    require(
+        groups and len({row["visual_group"] for row in groups}) == len(groups), "Invalid groups"
+    )
+    require(len(groups) == uncertainty["groups"], "Group count differs")
+    require(
+        sum(int(row["images"]) for row in groups) == expected_images == uncertainty["images"],
+        "Image count differs",
+    )
+    helmet = {(row["model"], row["class"]): row for row in metrics}
+    require(len(helmet) == len(metrics), "Duplicate metric class")
+    require(
+        set(helmet)
+        == {
+            ("candidate", "person"),
+            ("candidate", "helmet"),
+            ("candidate", "head"),
+            ("baseline_helmet", "helmet"),
+        },
+        "Unexpected model/class metrics",
+    )
+    for model in MODELS:
+        fields = [f"{model}_{name}" for name in ("tp", "fp", "fn")]
+        counts = tuple(sum(int(row[field]) for row in groups) for field in fields)
+        reported = helmet[(model, "helmet")]
+        require(
+            all(int(row[field]) >= 0 for row in groups for field in fields), "Negative group counts"
+        )
+        require(
+            counts == tuple(int(reported[name]) for name in ("tp", "fp", "fn")),
+            f"{model} group/metric counts differ",
+        )
+        require(
+            counts[0] + counts[2] == int(reported["gt"]) == expected_gt,
+            f"{model} helmet GT differs",
+        )
+        require(
+            dict(zip(("tp", "fp", "fn"), counts))
+            == uncertainty["comparison"]["observed"][model]["counts"],
+            f"{model} uncertainty counts differ",
+        )
+    require(all(int(row["images"]) > 0 for row in groups), "Empty source group")
+
+
+def self_check():
+    metrics = [
+        {"model": "baseline_helmet", "class": "helmet", "gt": 2, "tp": 1, "fp": 0, "fn": 1},
+        {"model": "candidate", "class": "helmet", "gt": 2, "tp": 2, "fp": 1, "fn": 0},
+        *({"model": "candidate", "class": name} for name in ("person", "head")),
+    ]
+    groups = [
+        {
+            "visual_group": "a",
+            "images": 1,
+            "baseline_helmet_tp": 1,
+            "baseline_helmet_fp": 0,
+            "baseline_helmet_fn": 1,
+            "candidate_tp": 2,
+            "candidate_fp": 1,
+            "candidate_fn": 0,
+        }
+    ]
+    uncertainty = {
+        "groups": 1,
+        "images": 1,
+        "comparison": {
+            "observed": {
+                model: {
+                    "counts": {name: groups[0][f"{model}_{name}"] for name in ("tp", "fp", "fn")}
+                }
+                for model in MODELS
+            }
+        },
+    }
+    check_counts(metrics, groups, uncertainty, 1, 2)
+    metrics[1]["fn"] = 1
+    try:
+        check_counts(metrics, groups, uncertainty, 1, 2)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("A changed test metric passed reconciliation")
+    print("Q3 offline export self-check passed")
+
+
+def export():
+    require(
+        RUN.is_dir() and COMPARISON.is_dir() and PUBLIC.is_dir(),
+        "Q3, comparison, and public folders required",
+    )
+    require(
+        not any(path.is_symlink() for path in (RUN, COMPARISON, PUBLIC)), "Linked evidence folder"
+    )
+    completed = document(RUN / "completed.json")
+    files = completed["files"]
+    required = {
+        "protocol.json",
+        "derived_hashes.json",
+        "selection.json",
+        "evaluation_protocol.json",
+        "operating_selection.json",
+        "test.claim",
+        "test_metrics.csv",
+        "training_execution.json",
+        "training_snapshot.py",
+        "test-baseline_helmet.jsonl",
+        "test-candidate.jsonl",
+    }
+    require(
+        completed["status"] == "completed" and required <= set(files), "Incomplete sealed Q3 run"
+    )
+    require(
+        set(files) == {p.name for p in RUN.iterdir() if p.is_file() and p.name != "completed.json"},
+        "Q3 inventory changed",
+    )
+    require(not any(p.is_symlink() for p in RUN.iterdir()), "Linked Q3 input")
+    for name, expected in files.items():
+        path = RUN / name
+        require(
+            Path(name).name == name and path.is_file() and digest(path) == expected,
+            f"Q3 seal mismatch: {name}",
+        )
+
+    protocol = document(RUN / "protocol.json")
+    selection = document(RUN / "selection.json")
+    operating = document(RUN / "operating_selection.json")
+    evaluation = document(RUN / "evaluation_protocol.json")
+    execution = document(RUN / "training_execution.json")
+    checkpoint = RUN / "training/weights/best.pt"
+    require(checkpoint.is_file() and not checkpoint.is_symlink(), "Missing sealed checkpoint")
+    require(
+        selection["winner"] == "training/weights/best.pt"
+        and digest(checkpoint)
+        == selection["sha256"]
+        == operating["checkpoint_sha256"]
+        == completed["checkpoint_sha256"],
+        "Checkpoint seal differs",
+    )
+    require(
+        selection["protocol_sha256"] == digest(RUN / "protocol.json"), "Training protocol differs"
+    )
+    require(
+        (RUN / "test.claim").read_text(encoding="utf-8")
+        == digest(RUN / "operating_selection.json"),
+        "Test claim differs",
+    )
+    evaluator = ROOT / "industrial_ai/ppe_accuracy_study.py"
+    comparator = ROOT / "industrial_ai/ppe_comparison.py"
+    require(evaluation["code_sha256"] == digest(evaluator), "Evaluator differs from test execution")
+    require(
+        evaluation["derived_sha256"] == digest(RUN / "derived_hashes.json"),
+        "Prepared inputs differ",
+    )
+    require(
+        execution["snapshot_sha256"] == digest(RUN / "training_snapshot.py"),
+        "Training snapshot differs",
+    )
+    published_training = PUBLIC / "ppe_training_snapshot.py.txt"
+    require(
+        published_training.is_file()
+        and not published_training.is_symlink()
+        and digest(published_training) == execution["snapshot_sha256"]
+        and execution["preparation_protocol_sha256"] == digest(RUN / "protocol.json"),
+        "Published training provenance differs",
+    )
+    require(protocol["head_is_nohelmet"] is False, "Incorrect head semantics")
+    require(set(operating["thresholds"]) == set(MODELS), "Missing dev-selected threshold")
+    for model, threshold in operating["thresholds"].items():
+        require(threshold in evaluation["confidence_grid"], f"Invalid {model} threshold")
+    training = RUN / "training/results.csv"
+    training_rows = table(training)
+    require(
+        len(training_rows) == protocol["epochs"] == 20 and int(training_rows[-1]["epoch"]) == 20,
+        "Training epochs incomplete",
+    )
+
+    require(
+        {p.name for p in COMPARISON.iterdir()} == {"uncertainty.json", "per_group_counts.csv"},
+        "Comparison inventory differs",
+    )
+    uncertainty = document(COMPARISON / "uncertainty.json")
+    groups = table(COMPARISON / "per_group_counts.csv")
+    metrics = table(RUN / "test_metrics.csv")
+    require(
+        uncertainty["completed_sha256"] == digest(RUN / "completed.json"),
+        "Comparison used another Q3 run",
+    )
+    require(
+        uncertainty["samples_sha256"] == protocol["samples_sha256"],
+        "Comparison used another source audit",
+    )
+    require(
+        uncertainty["thresholds_selected_on_dev"] == operating["thresholds"],
+        "Comparison thresholds differ",
+    )
+    check_counts(metrics, groups, uncertainty, protocol["split_summary"]["partitions"]["test"])
+    for row in metrics:
+        require(
+            float(row["confidence"]) == operating["thresholds"][row["model"]],
+            "Metric threshold differs",
+        )
+
+    sources = {
+        "ppe_test_metrics.csv": RUN / "test_metrics.csv",
+        "ppe_training_results.csv": training,
+        "ppe_selection.json": RUN / "selection.json",
+        "ppe_operating_selection.json": RUN / "operating_selection.json",
+        "ppe_evaluation_protocol.json": RUN / "evaluation_protocol.json",
+        "ppe_completed.json": RUN / "completed.json",
+        "ppe_uncertainty.json": COMPARISON / "uncertainty.json",
+        "ppe_per_group_counts.csv": COMPARISON / "per_group_counts.csv",
+        "ppe_evaluation_snapshot.py.txt": evaluator,
+        "ppe_comparison_snapshot.py.txt": comparator,
+        "ppe_training_execution.json": RUN / "training_execution.json",
+    }
+    payloads = {name: path.read_bytes() for name, path in sources.items()}
+    require(
+        all(len(data) <= 500_000 for data in payloads.values()),
+        "Public evidence file unexpectedly large",
+    )
+    manifest = {
+        "schema": "ppe-q3-public-export-v1",
+        "paths": "file names relative to this manifest; private inputs retained locally",
+        "source_sha256": {
+            "completed": digest(RUN / "completed.json"),
+            "comparison_code": digest(comparator),
+            "evaluator_code": digest(evaluator),
+            "training_snapshot": digest(RUN / "training_snapshot.py"),
+        },
+        "files": {
+            name: {"sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data)}
+            for name, data in payloads.items()
+        },
+    }
+    payloads["ppe_export_manifest.json"] = (
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n"
+    ).encode("utf-8")
+    require(
+        not any((PUBLIC / name).exists() or (PUBLIC / name).is_symlink() for name in payloads),
+        "Public Q3 export already exists",
+    )
+    for name, data in payloads.items():
+        with (PUBLIC / name).open("xb") as stream:
+            stream.write(data)
+    print(f"Exported {len(payloads)} sealed Q3 evidence files")
+
+
+if __name__ == "__main__":
+    if sys.argv[1:] == ["--self-check"]:
+        self_check()
+    elif len(sys.argv) == 1:
+        export()
+    else:
+        raise SystemExit("Usage: python .tmp/accuracy-upgrade/export_q3.py [--self-check]")

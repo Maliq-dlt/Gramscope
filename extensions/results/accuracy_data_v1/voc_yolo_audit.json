@@ -1,0 +1,55 @@
+{
+  "checked_boxes": 75994,
+  "checked_images": 8099,
+  "raw_mismatch_images": [
+    "pexels-photo-258626.xml",
+    "pexels-photo-259265.xml"
+  ],
+  "cause": "two VOC coordinates exceed source canvas; official YOLO labels already clipped then rounded to 6 decimals",
+  "affected_boxes": 2,
+  "changed_dataset": false,
+  "cases": [
+    {
+      "image": "pexels-photo-258626",
+      "class": "person",
+      "canvas": [
+        3456,
+        4608
+      ],
+      "raw_xyxy": [
+        1725,
+        4430,
+        1874,
+        4664
+      ],
+      "clipped_xyxy": [
+        1725,
+        4430,
+        1874,
+        4608
+      ]
+    },
+    {
+      "image": "pexels-photo-259265",
+      "class": "tool",
+      "canvas": [
+        3504,
+        2336
+      ],
+      "raw_xyxy": [
+        1559,
+        123,
+        3509,
+        1358
+      ],
+      "clipped_xyxy": [
+        1559,
+        123,
+        3504,
+        1358
+      ]
+    }
+  ],
+  "independent_spotcheck": "112/112 objects in affected images match after clipping; class aliases tools=tool, face-mask-medical=face-mask",
+  "scope": "geometric/class correspondence, not independent human annotation-quality truth"
+}

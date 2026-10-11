@@ -1,0 +1,8 @@
+{
+  "checkpoint_sha256": "28be8609427011034833fa61894fe8f84575cee9ff6c6710bdb7cab73021be82",
+  "objective": "helmet F1 on dev; one common threshold per model",
+  "thresholds": {
+    "baseline_helmet": 0.5,
+    "candidate": 0.25
+  }
+}

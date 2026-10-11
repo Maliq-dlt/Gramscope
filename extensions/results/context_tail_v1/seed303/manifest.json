@@ -1,0 +1,16 @@
+{
+  "config_sha256": "a4d338a1c202612832eab57c029410a3238337b60aa4c0e214f1fa822db75acf",
+  "files_sha256": {
+    "calibration.json": "5cb07cca21ff23bd59377ff3bdadfcc08562b1c006efc270fe38552028a0740b",
+    "cases.json": "00e019413ba063d0387fdd4fb709738db461759db91128cdacb1333ce4ed01fc",
+    "protocol.json": "54935a47ab9975b128a1e41246b55cea7cc662352a3b6f70d1e04391bf46a7b1",
+    "review.csv": "58b56a57e9b600960ba2d412234018e7546635d1f6d9aa5e6995d431d1ae2c76",
+    "scores.csv": "3fee1724cb499fb7c107b889c5dcc85bfd2233589d60e56e045466587b701dcb",
+    "selection.json": "0075197dd576b5e88c84567db49e5ef46d8bed7e06012626d3e0f5979adc0090",
+    "sources.csv": "4d02cbe923e8c65476a1ca9b7ec9b8d69f41503d8ed097e521edcb50cb436602",
+    "stress.csv": "45ae46ca7e8ea250ee8b48502ed87c96a0138c0f1a06ff88e26c71014ab193c8",
+    "summary.json": "53c88211ea56e3955b4f83a4d9ae85787461c45af59ab32a29b5ec214ec5fe15"
+  },
+  "run_id": "context-tail-v1-seed303",
+  "test_claim_sha256": "f90267d667ed722ee7b016b64de8182dc6609b6fb0467dd1d60d7876dd0cbadb"
+}

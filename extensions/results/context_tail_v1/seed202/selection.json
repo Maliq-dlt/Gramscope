@@ -1,0 +1,34 @@
+{
+  "trials": [
+    {
+      "dev_ce": 0.6868451411656131,
+      "dev_targets": 3154,
+      "epsilon": 1e-08,
+      "method": "witten_bell"
+    },
+    {
+      "dev_ce": 0.6868451411656519,
+      "dev_targets": 3154,
+      "epsilon": 0.0001,
+      "method": "witten_bell"
+    },
+    {
+      "dev_ce": 0.6873885797797978,
+      "dev_targets": 3154,
+      "epsilon": 1e-08,
+      "method": "modified_kneser_ney"
+    },
+    {
+      "dev_ce": 0.6873885852565018,
+      "dev_targets": 3154,
+      "epsilon": 0.0001,
+      "method": "modified_kneser_ney"
+    }
+  ],
+  "winner": {
+    "dev_ce": 0.6868451411656131,
+    "dev_targets": 3154,
+    "epsilon": 1e-08,
+    "method": "witten_bell"
+  }
+}

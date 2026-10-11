@@ -1,0 +1,6 @@
+{
+  "criterion": "Ultralytics best validation fitness across 20 frozen epochs",
+  "protocol_sha256": "9d18d01d514ed2db4734e7e9127282a27538be15c6a3f676da278a06d4fd15c9",
+  "sha256": "28be8609427011034833fa61894fe8f84575cee9ff6c6710bdb7cab73021be82",
+  "winner": "training/weights/best.pt"
+}

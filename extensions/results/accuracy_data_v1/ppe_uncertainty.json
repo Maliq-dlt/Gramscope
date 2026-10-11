@@ -1,0 +1,70 @@
+{
+  "bootstrap_draws": 2000,
+  "comparison": {
+    "difference": {
+      "f1": {
+        "candidate_minus_baseline": 0.1970599281077311,
+        "defined_draws": 2000,
+        "percentile_95": [
+          -0.0024783817221367154,
+          0.27795702557657465
+        ]
+      },
+      "precision": {
+        "candidate_minus_baseline": 0.40731056272811467,
+        "defined_draws": 2000,
+        "percentile_95": [
+          0.04840763403263405,
+          0.5310879907949682
+        ]
+      },
+      "recall": {
+        "candidate_minus_baseline": -0.007633587786259555,
+        "defined_draws": 2000,
+        "percentile_95": [
+          -0.095260989010989,
+          0.05555555555555558
+        ]
+      }
+    },
+    "observed": {
+      "baseline_helmet": {
+        "counts": {
+          "fn": 69,
+          "fp": 149,
+          "tp": 62
+        },
+        "metrics": {
+          "f1": 0.36257309941520466,
+          "precision": 0.2938388625592417,
+          "recall": 0.4732824427480916
+        }
+      },
+      "candidate": {
+        "counts": {
+          "fn": 70,
+          "fp": 26,
+          "tp": 61
+        },
+        "metrics": {
+          "f1": 0.5596330275229358,
+          "precision": 0.7011494252873564,
+          "recall": 0.46564885496183206
+        }
+      }
+    }
+  },
+  "completed_sha256": "2b3bc0580ce03235d82121acfac6e719214fb7c8dc1ea82f85cb0f594b3a9066",
+  "groups": 93,
+  "images": 1177,
+  "iou": 0.5,
+  "label": "descriptive post-hoc small public photograph benchmark; not pre-registered confirmatory or factory evidence",
+  "resampling_unit": "audited photographer + pHash visual_group, not independent frames",
+  "samples_sha256": "13c1c960e73c30ce88348b697fea0e6494319181816e3287fdf08e47fe92e0f6",
+  "seed": 20261011,
+  "thresholds_selected_on_dev": {
+    "baseline_helmet": 0.5,
+    "candidate": 0.25
+  },
+  "undefined_metrics": "null when denominator is zero; paired draws require both models defined"
+}

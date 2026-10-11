@@ -1,0 +1,23 @@
+{
+  "scope": "read-only source and official documentation review of pose/crop/TensorRT recommendation",
+  "model": "gpt-6-sol",
+  "reasoning_effort": "medium",
+  "verified_current_features": [
+    "YOLO26n body and vehicle detector plus ByteTrack",
+    "35percent head association heuristic",
+    "continuous2second nohelmet candidate",
+    "review ledger worn/not_worn/unknown"
+  ],
+  "recommendation": "offline pose/crop ablation only after independent CCTV head status and interval labels; preserve current detector and frozen Q3 test",
+  "unsupported_claims": [
+    "neck keypoint in COCO17",
+    "128pixel crop recovers15pixel source detail",
+    "30meter exclusion without calibration",
+    "5ms/150FPS/1GB/4-5camera full-pipeline on this laptop",
+    "asserted private vendor implementations without direct sources"
+  ],
+  "sources": [
+    "https://docs.ultralytics.com/tasks/pose/",
+    "https://docs.ultralytics.com/integrations/tensorrt/"
+  ]
+}

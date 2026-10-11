@@ -1,0 +1,17 @@
+{
+  "phase": "Q3",
+  "status": "completed",
+  "training_epochs": 20,
+  "training_device": "CUDA RTX4060",
+  "test_images": 1177,
+  "helmet_targets": 131,
+  "checkpoint_sha256": "28be8609427011034833fa61894fe8f84575cee9ff6c6710bdb7cab73021be82",
+  "completed_sha256": "2b3bc0580ce03235d82121acfac6e719214fb7c8dc1ea82f85cb0f594b3a9066",
+  "export_manifest_sha256": "807e676845c005f2b0814032b97dc2c0a279abc6af9dd7362bed86033c9cc860",
+  "limits": [
+    "SH17 photographs; not siteCCTV",
+    "head is not nohelmet",
+    "no automatic deployment",
+    "offline posthoc grouped uncertainty; F1differenceCIincludeszero"
+  ]
+}

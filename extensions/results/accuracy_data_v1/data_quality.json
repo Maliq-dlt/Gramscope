@@ -1,0 +1,96 @@
+{
+  "MEVA": {
+    "clips": 64,
+    "evaluated_exposure_seconds": 0,
+    "qa_totals": {
+      "activities": 122,
+      "geometry_rows": 66357,
+      "labels": {
+        "Abandon_Package": 1,
+        "Close_Trunk": 3,
+        "Close_Vehicle_Door": 3,
+        "Embrace_Interaction": 3,
+        "Enter_Facility": 3,
+        "Enter_Vehicle": 3,
+        "Exit_Facility": 4,
+        "Exit_Vehicle": 4,
+        "Hand_Interaction": 3,
+        "Heavy_Carry": 4,
+        "Laptop_Interaction": 3,
+        "Load_Vehicle": 3,
+        "Object_Transfer": 3,
+        "Open_Facility_Door": 4,
+        "Open_Trunk": 4,
+        "Open_Vehicle_Door": 3,
+        "People_Talking": 4,
+        "Pick_Up_Object": 3,
+        "Purchasing": 3,
+        "Read_Document": 3,
+        "Riding": 3,
+        "Set_Down_Object": 3,
+        "Sit_Down": 5,
+        "Stand_Up": 5,
+        "Talk_on_Phone": 3,
+        "Text_On_Phone": 3,
+        "Theft": 1,
+        "Unload_Vehicle": 3,
+        "Vehicle_DropsOff_Person": 4,
+        "Vehicle_PicksUp_Person": 4,
+        "Vehicle_Reversing": 4,
+        "Vehicle_Starting": 4,
+        "Vehicle_Stopping": 4,
+        "Vehicle_Turning_Left": 4,
+        "Vehicle_Turning_Right": 4,
+        "Vehicle_UTurn": 4
+      },
+      "overlapping_activity_segments": 0,
+      "typed_actors": 195
+    },
+    "raw_duration_seconds": 4803.467,
+    "source_dates": 6,
+    "sparse_labels": true,
+    "video_clips": 16
+  },
+  "SH17": {
+    "data_kind": "real public labeled photographs",
+    "groups": 922,
+    "images": 8099,
+    "input_sha256": "4747f51cac891a59a55c354a7b0f3c3addb4478ab214e74c16f26a6a205abf73",
+    "labels": {
+      "ear": 7730,
+      "ear-mufs": 318,
+      "face": 8950,
+      "face-guard": 134,
+      "face-mask": 670,
+      "foot": 759,
+      "glasses": 1945,
+      "gloves": 2790,
+      "hands": 15850,
+      "head": 11985,
+      "helmet": 927,
+      "medical-suit": 157,
+      "person": 13802,
+      "safety-suit": 240,
+      "safety-vest": 530,
+      "shoes": 4560,
+      "tool": 4647
+    },
+    "limitations": [
+      "Photographer and visual groups isolated; unknown cross-photographer session links can remain",
+      "Head labels do not imply missing helmet",
+      "Not a surveillance-site/incident benchmark"
+    ],
+    "partitions": {
+      "dev": 707,
+      "test": 1177,
+      "train": 6215
+    },
+    "phash_distance": 6,
+    "samples_sha256": "13c1c960e73c30ce88348b697fea0e6494319181816e3287fdf08e47fe92e0f6",
+    "seed": 20261011
+  },
+  "licenses": {
+    "MEVA": "CC-BY-4.0",
+    "SH17": "CC-BY-NC-SA-4.0 + Pexels source restrictions"
+  }
+}

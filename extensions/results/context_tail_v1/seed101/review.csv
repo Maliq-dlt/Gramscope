@@ -1,0 +1,9 @@
+metric,budget_sessions,reviewed,novel_found,novel_total,recall,precision,rare_valid_reviewed
+tail,40,40,15,80,0.1875,0.375,25
+tail,80,80,47,80,0.5875,0.5875,33
+ce,40,40,7,80,0.0875,0.175,33
+ce,80,80,26,80,0.325,0.325,52
+pairfrequency,40,40,0,80,0.0,0.0,40
+pairfrequency,80,80,0,80,0.0,0.0,80
+allowed_pairs,40,40,7,80,0.0875,0.175,15
+allowed_pairs,80,80,21,80,0.2625,0.2625,26

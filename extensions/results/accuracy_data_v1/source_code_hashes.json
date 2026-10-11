@@ -1,0 +1,15 @@
+{
+  "industrial_ai/prepare_sh17.py": "6db0bf188b244fffcf8e468dc75b9bc6f28a44f0082e537cc5b64f4f5119b344",
+  "industrial_ai/sh17_quality.py": "72b94866862d97dac0c15bb700c2989a9b66ab7b2e16575596d85fc63ae82857",
+  "industrial_ai/prepare_meva_reference.py": "52875f046ac539489c9f3dfa7f568413d0a4347b5d22b5916c22cdeca98a8492",
+  "industrial_ai/meva_diagnostics.py": "9ebccff1dd3798ade7b91186bc5f1c43e8d55f4eb0e2d0c13086614b71f3ca65",
+  "industrial_ai/ppe_accuracy_study.py": "dc89dc631a523c82efc18afb510ec59d748fa0321794b752ff114878f0c8cf7f",
+  "industrial_ai/ppe_comparison.py": "eaa15068fabde502cbbdf43c818b673746075924511db84a6733f961eaf13880",
+  "extensions/experiments/context_tail_study.py": "0133b993115c120a20e3e091a82db82757c46b6caa78f52b47300620edf4a4e9",
+  "extensions/experiments/meva_sequence_study.py": "33bed7ac51d9fd726c1caaa31f3fb39f7e6264bdf22d230611239445fdfaa3ed",
+  "extensions/tests/test_context_tail_study.py": "a885558787630b14b244e205ec4ea3dcbf6ad7745e12a2d65eb766c03b1e04eb",
+  "extensions/tests/test_meva_sequence_study.py": "f9bbb28aac1ccede8a14b6efc76553903e8fcc4003d2704570998da14d0c451e",
+  "industrial_ai/tests/test_sh17_reference.py": "829e97ad3c45102d304f625958f7daca826e72405e0cd875957028eda002dd02",
+  "industrial_ai/tests/test_meva_reference.py": "314746f09315cdd91f6902df924542cd2941a2230f20d29784d6a1970628ea16",
+  "industrial_ai/tests/test_meva_diagnostics.py": "53de4370456b628edacd1cbc53acb8a59f9e733b303500e470508425bc3bb01f"
+}

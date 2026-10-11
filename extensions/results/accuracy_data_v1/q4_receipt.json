@@ -1,0 +1,249 @@
+{
+  "phase": "Q4",
+  "status": "completed",
+  "verification": {
+    "status": "pass",
+    "seeds": {
+      "101": {
+        "winner": {
+          "dev_ce": 0.6757699303028943,
+          "dev_targets": 3352,
+          "epsilon": 1e-08,
+          "method": "witten_bell"
+        },
+        "clean": {
+          "tail": {
+            "normal_source_alerts": 0,
+            "hard_replacement_source_alerts": 0,
+            "rare_valid_case_alarms": 0,
+            "source_groups": 80
+          },
+          "ce": {
+            "normal_source_alerts": 4,
+            "hard_replacement_source_alerts": 4,
+            "rare_valid_case_alarms": 4,
+            "source_groups": 80
+          },
+          "pairfrequency": {
+            "normal_source_alerts": 2,
+            "hard_replacement_source_alerts": 2,
+            "rare_valid_case_alarms": 2,
+            "source_groups": 80
+          },
+          "allowed_pairs": {
+            "normal_source_alerts": 0,
+            "hard_replacement_source_alerts": 0,
+            "rare_valid_case_alarms": 0,
+            "source_groups": 80
+          }
+        },
+        "paired_recall_difference": {
+          "bootstrap_95_percentile": [
+            -0.1,
+            -0.0125
+          ],
+          "resample_unit": "synthetic source group",
+          "resamples": 5000,
+          "tail_minus_ce": -0.05
+        }
+      },
+      "202": {
+        "winner": {
+          "dev_ce": 0.6868451411656131,
+          "dev_targets": 3154,
+          "epsilon": 1e-08,
+          "method": "witten_bell"
+        },
+        "clean": {
+          "tail": {
+            "normal_source_alerts": 0,
+            "hard_replacement_source_alerts": 0,
+            "rare_valid_case_alarms": 0,
+            "source_groups": 80
+          },
+          "ce": {
+            "normal_source_alerts": 10,
+            "hard_replacement_source_alerts": 10,
+            "rare_valid_case_alarms": 10,
+            "source_groups": 80
+          },
+          "pairfrequency": {
+            "normal_source_alerts": 8,
+            "hard_replacement_source_alerts": 8,
+            "rare_valid_case_alarms": 8,
+            "source_groups": 80
+          },
+          "allowed_pairs": {
+            "normal_source_alerts": 0,
+            "hard_replacement_source_alerts": 0,
+            "rare_valid_case_alarms": 0,
+            "source_groups": 80
+          }
+        },
+        "paired_recall_difference": {
+          "bootstrap_95_percentile": [
+            -0.2,
+            -0.05
+          ],
+          "resample_unit": "synthetic source group",
+          "resamples": 5000,
+          "tail_minus_ce": -0.125
+        }
+      },
+      "303": {
+        "winner": {
+          "dev_ce": 0.6778905682867764,
+          "dev_targets": 3260,
+          "epsilon": 1e-08,
+          "method": "witten_bell"
+        },
+        "clean": {
+          "tail": {
+            "normal_source_alerts": 0,
+            "hard_replacement_source_alerts": 0,
+            "rare_valid_case_alarms": 0,
+            "source_groups": 80
+          },
+          "ce": {
+            "normal_source_alerts": 5,
+            "hard_replacement_source_alerts": 5,
+            "rare_valid_case_alarms": 5,
+            "source_groups": 80
+          },
+          "pairfrequency": {
+            "normal_source_alerts": 5,
+            "hard_replacement_source_alerts": 5,
+            "rare_valid_case_alarms": 5,
+            "source_groups": 80
+          },
+          "allowed_pairs": {
+            "normal_source_alerts": 0,
+            "hard_replacement_source_alerts": 0,
+            "rare_valid_case_alarms": 0,
+            "source_groups": 80
+          }
+        },
+        "paired_recall_difference": {
+          "bootstrap_95_percentile": [
+            -0.125,
+            -0.0125
+          ],
+          "resample_unit": "synthetic source group",
+          "resamples": 5000,
+          "tail_minus_ce": -0.0625
+        }
+      }
+    },
+    "meva": {
+      "winner": "bigram_kn",
+      "clips": {
+        "train": 29,
+        "dev": 13,
+        "test": 22
+      },
+      "singleton_actor_sequences": 195,
+      "date_cross_entropy": [
+        {
+          "model": "unigram_wb",
+          "date": "2018-03-13",
+          "cross_entropy": 4.086770720201325,
+          "predicted_tokens": 24,
+          "loss_numerator": 98.08249728483179
+        },
+        {
+          "model": "unigram_wb",
+          "date": "2018-03-15",
+          "cross_entropy": 7.101061592736347,
+          "predicted_tokens": 33,
+          "loss_numerator": 234.33503256029945
+        },
+        {
+          "model": "bigram_wb",
+          "date": "2018-03-13",
+          "cross_entropy": 4.410881672650907,
+          "predicted_tokens": 24,
+          "loss_numerator": 105.86116014362177
+        },
+        {
+          "model": "bigram_wb",
+          "date": "2018-03-15",
+          "cross_entropy": 7.165861475046276,
+          "predicted_tokens": 33,
+          "loss_numerator": 236.4734286765271
+        },
+        {
+          "model": "bigram_kn",
+          "date": "2018-03-13",
+          "cross_entropy": 4.220119821963644,
+          "predicted_tokens": 24,
+          "loss_numerator": 101.28287572712746
+        },
+        {
+          "model": "bigram_kn",
+          "date": "2018-03-15",
+          "cross_entropy": 7.099247596594901,
+          "predicted_tokens": 33,
+          "loss_numerator": 234.27517068763171
+        },
+        {
+          "model": "bigram_mkn",
+          "date": "2018-03-13",
+          "cross_entropy": 4.220119821963644,
+          "predicted_tokens": 24,
+          "loss_numerator": 101.28287572712746
+        },
+        {
+          "model": "bigram_mkn",
+          "date": "2018-03-15",
+          "cross_entropy": 7.099247596594901,
+          "predicted_tokens": 33,
+          "loss_numerator": 234.27517068763171
+        },
+        {
+          "model": "trigram_wb",
+          "date": "2018-03-13",
+          "cross_entropy": 4.594914005065626,
+          "predicted_tokens": 24,
+          "loss_numerator": 110.27793612157502
+        },
+        {
+          "model": "trigram_wb",
+          "date": "2018-03-15",
+          "cross_entropy": 7.410412744306447,
+          "predicted_tokens": 33,
+          "loss_numerator": 244.54362056211275
+        },
+        {
+          "model": "trigram_kn",
+          "date": "2018-03-13",
+          "cross_entropy": 4.283040718418258,
+          "predicted_tokens": 24,
+          "loss_numerator": 102.79297724203819
+        },
+        {
+          "model": "trigram_kn",
+          "date": "2018-03-15",
+          "cross_entropy": 7.14030989020764,
+          "predicted_tokens": 33,
+          "loss_numerator": 235.63022637685214
+        },
+        {
+          "model": "trigram_mkn",
+          "date": "2018-03-13",
+          "cross_entropy": 4.283040718418258,
+          "predicted_tokens": 24,
+          "loss_numerator": 102.79297724203819
+        },
+        {
+          "model": "trigram_mkn",
+          "date": "2018-03-15",
+          "cross_entropy": 7.14030989020764,
+          "predicted_tokens": 33,
+          "loss_numerator": 235.63022637685214
+        }
+      ]
+    },
+    "errors": []
+  },
+  "interpretation": "no hard-only clean source alarms; ranking improvement on synthetic grammar only; sparse MEVA predictive states not incidenttruth"
+}

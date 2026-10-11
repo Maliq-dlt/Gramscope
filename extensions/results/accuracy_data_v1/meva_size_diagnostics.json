@@ -1,0 +1,64 @@
+{
+  "ledger_sha256": {
+    "industrial_ai/.tmp/accuracy-meva-q2/dev-640.jsonl": "953fa8a0b936b2026519289e25e9ff39f883a6d2c9aa3d4e0dd8da2b5c956dc8",
+    "industrial_ai/.tmp/accuracy-meva-q2/dev-960.jsonl": "d369687f617b082f20ebed097c5f10dc0090483d4d24080b7bc9c4dd62359923",
+    "industrial_ai/.tmp/accuracy-meva-q2/test-960.jsonl": "9af4a7a3d038034954b6f892a512585d9447d66b733369553b139135df1ac7ce"
+  },
+  "source_manifest_sha256": {
+    "industrial_ai/data/public/meva-examples-video12-20261011-q1/manifest.json": "81f4ff8b457876f49a4ec9c9dc6c118f5be9bb495cbe327738ab520dbe689b92",
+    "industrial_ai/data/public/meva-examples-extra-dates-20261011-q1/manifest.json": "bae72f0c34aa2a90baeec48dd6a8494700ace6a9ba7c34c24043afb5212fc90c"
+  },
+  "source_video_probe_resolution_px": {
+    "1920x1072": [
+      "2018-03-07.16-50-00.16-55-00.admin.G329",
+      "2018-03-07.16-50-01.16-55-01.admin.G326",
+      "2018-03-07.16-50-01.16-55-01.school.G328",
+      "2018-03-07.17-30-01.17-35-01.bus.G505",
+      "2018-03-07.17-35-00.17-40-00.school.G421",
+      "2018-03-09.10-10-00.10-15-01.school.G328",
+      "2018-03-11.11-30-01.11-35-01.school.G421",
+      "2018-03-13.17-05-00.17-10-00.school.G328"
+    ],
+    "1920x1080": [
+      "2018-03-07.16-50-00.16-55-00.bus.G331",
+      "2018-03-07.16-50-07.16-55-07.hospital.G301",
+      "2018-03-07.16-55-00.17-00-00.bus.G340",
+      "2018-03-07.17-05-00.17-10-00.school.G299",
+      "2018-03-12.10-00-00.10-05-00.hospital.G436",
+      "2018-03-15.14-50-00.14-55-00.school.G424"
+    ]
+  },
+  "sampled_frame_counts": [
+    {
+      "split": "dev",
+      "resolution": 640,
+      "clips": 10,
+      "sampled_gt_frames": 1730,
+      "raw_empty_frames": 43,
+      "track_empty_frames": 60
+    },
+    {
+      "split": "dev",
+      "resolution": 960,
+      "clips": 10,
+      "sampled_gt_frames": 1730,
+      "raw_empty_frames": 37,
+      "track_empty_frames": 147
+    },
+    {
+      "split": "test",
+      "resolution": 960,
+      "clips": 4,
+      "sampled_gt_frames": 319,
+      "raw_empty_frames": 21,
+      "track_empty_frames": 73
+    }
+  ],
+  "method": "GT box height y2-y1 in original source pixels; full-frame meva_diagnostics.matches at IoU >= 0.5, then assign matched GT to bucket. Empty means no prediction on a sampled GT frame.",
+  "limits": [
+    "Sparse, GT-conditioned, partial MEVA examples sampled at 5 Hz; unlabeled frames are not negatives.",
+    "No false-positive rate, precision, whole-video IDF1, or incident exposure estimate.",
+    "Probe dimensions come from saved ffprobe metadata; annotation/source coordinate identity remains an assumption.",
+    "Tracker skipped unlabeled gaps in the saved evaluation."
+  ]
+}

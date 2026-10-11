@@ -1,0 +1,13 @@
+seed,method,hard_replacement_source_alerts,normal_source_alerts,rare_valid_case_alarms,source_groups
+101,allowed_pairs,0,0,0,80
+101,ce,4,4,4,80
+101,pairfrequency,2,2,2,80
+101,tail,0,0,0,80
+202,allowed_pairs,0,0,0,80
+202,ce,10,10,10,80
+202,pairfrequency,8,8,8,80
+202,tail,0,0,0,80
+303,allowed_pairs,0,0,0,80
+303,ce,5,5,5,80
+303,pairfrequency,5,5,5,80
+303,tail,0,0,0,80

@@ -1,0 +1,35 @@
+{
+  "baseline_helmet_sha256": "05ed3a517485292d42d6eb6c9be3987ea51cd162e04807d2741eadcac8a19e6c",
+  "code_sha256": "dc89dc631a523c82efc18afb510ec59d748fa0321794b752ff114878f0c8cf7f",
+  "confidence_grid": [
+    0.1,
+    0.25,
+    0.5
+  ],
+  "derived_sha256": "da626ff5bbad97e1fb810e34a62fc3adcc44304a4f279d719f17f5d4d25971d0",
+  "inference": {
+    "conf": 0.001,
+    "imgsz": 640,
+    "iou": 0.7,
+    "max_det": 300
+  },
+  "limits": [
+    "head is not nohelmet",
+    "Pexels photos not factory CCTV",
+    "pretraining overlap unknown"
+  ],
+  "matching_code_sha256": "d79f109fd154edf73bdf11af3eb55ebed271d607472feed3b3c302b3840a7697",
+  "metrics": "class-aware native IoU0.50:0.95; operating counts at IoU0.50, AP uses all conf>=0.001",
+  "native_code": {
+    "metrics.py": "f9b4061aa893ee502c986585ff0a6a4e6175b04f7b0d0c6cb5f2859d6477e25b",
+    "validator.py": "086a61141f91ea8e8750805627c9f636152159ae1ac88848d1583f858542a78a"
+  },
+  "test_receipt": "exclusive global corpus claim before predict, no repeated evaluation",
+  "versions": {
+    "Pillow": "12.3.0",
+    "numpy": "2.4.6",
+    "torch": "2.14.1+cu130",
+    "torchvision": "0.29.1+cu130",
+    "ultralytics": "8.4.174"
+  }
+}
