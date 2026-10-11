@@ -1,0 +1,50 @@
+{
+  "academic": {
+    "pytest": {
+      "command": "uv run --locked pytest -q",
+      "passed": 199,
+      "exit_code": 0
+    },
+    "ruff": {
+      "command": "uv run --locked ruff check core extensions jalankan_notebook.py",
+      "exit_code": 0
+    },
+    "format": {
+      "command": "uv run --locked ruff format --check core extensions jalankan_notebook.py",
+      "files": 93,
+      "exit_code": 0
+    },
+    "ty": {
+      "command": "uv run --locked ty check core/src extensions/src extensions/experiments jalankan_notebook.py",
+      "exit_code": 0
+    },
+    "build": {
+      "command": "uv build --out-dir .tmp/academic_upgrade_v2/packages-final",
+      "wheel_sdist": true,
+      "exit_code": 0
+    }
+  },
+  "independent_review": {
+    "stored_test_losses": true,
+    "no_test_rescore": true,
+    "dev_only_reproduction_rows": 20295,
+    "dev_numeric_difference_max": 4e-14,
+    "corpora": 3
+  },
+  "package": {
+    "academic_new_sources_wheel_equal": true,
+    "studio_sdist_contains_MOT": true,
+    "bundled_media_weights": false
+  },
+  "links": {
+    "local_checked": 117,
+    "missing": 0
+  },
+  "studio_scope": "new MOT offline collector/evaluator only; no UI/live model changes",
+  "limitations": [
+    "MKN arithmetic corroboration is conditional, not full KenLM equivalence",
+    "oneSE dev heuristic",
+    "pointwise conditional CI; Reuters token-weighted effective test groups20.2",
+    "site PPE reviewed person-head relation still absent"
+  ]
+}

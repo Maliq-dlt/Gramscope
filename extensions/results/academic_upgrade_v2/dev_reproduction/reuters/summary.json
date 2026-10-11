@@ -1,0 +1,178 @@
+{
+  "status": "dev-only reproduced; no test model loaded or scored",
+  "source_run": "academic-v2-reuters-20261011",
+  "corpus": "reuters",
+  "source_run_manifest_sha256": "e8fefc0f3aece5d7d10ec07114b070d5866542cfbaa3a1a107ff9e0f93ffa20f",
+  "source_protocol_sha256": "32694583434a0e764feb11fb31c53c79655b0e9c40d77b8497a8a2c563746ede",
+  "source_selection_sha256": "cd1a68527216cd6084ce9214a3f67dc7750b932f732df4a58b880873ed45c7d9",
+  "source_corpus_sha256": "56dcd4e6cce1798d096155e69d244c54ccfdd5a514dd3082426b0c81db616455",
+  "source_provenance": {
+    "archive": "data\\nltk_data\\corpora\\reuters.zip",
+    "archive_sha256": "9a59a43823f02a6e2777075c989a3dc454e4b6f68e0332ee3c0e8264075b62f5",
+    "exposure": "previous project corpus; expanded exploratory study",
+    "split": "grouped rerandomization; not official Reuters train/test"
+  },
+  "source_tuning_sha256": {
+    "tuning/42-1-kneser_ney.json": "6c82b3ba73220a6c6738cbfc9baed970c2a8edc1e8f6707bc843faa08300a1b3",
+    "tuning/42-2-kneser_ney.json": "70a22fdb9afc1ca5d6ebfaaa8d05b9455bc067b64798a2b88593ad43ee734718",
+    "tuning/42-3-kneser_ney.json": "60f039563610f858fd7f6ba9f11c571a3f47468707200d2ad042ef38bdf3831e",
+    "tuning/42-2-modified_kneser_ney.json": "f43473a24dc72217f379ff2a3be04e401ee89ad9a5737c384eb768e772f0d694",
+    "tuning/42-3-modified_kneser_ney.json": "985106152be4daea8f394e92ffa8e2ebd3f6d70630d1041a786bcf3a13183404",
+    "tuning/43-1-kneser_ney.json": "ab37ab8a4a0e173f29378ed43c86662ff15edd912bbdf16ad79316b49f605d6d",
+    "tuning/43-2-kneser_ney.json": "4fba7d8e99aa7cc9b973ee001303fe59e9231f97cd8a8aaf3cc805186a69ab6d",
+    "tuning/43-3-kneser_ney.json": "d417dc69aaa318b7f8e381833358d91722dfba4febf96a1a6ea6b00d651d9c86",
+    "tuning/43-2-modified_kneser_ney.json": "3267ce38e989fbbd7ff55a077fffee3ef0c88cc0457936de2a4d14cc89cd7c71",
+    "tuning/43-3-modified_kneser_ney.json": "e31179bee6a788d4166985c5e350d6db17bae11ac48c2f1a0d6054508246e0a1",
+    "tuning/44-1-kneser_ney.json": "f8d6301859496e6eec15ac71c0bdc1ae8e9191da3b30bd46fb43ca8add66b68a",
+    "tuning/44-2-kneser_ney.json": "71bc5db0f3d696f23c8405211f853637e5c0f5baea2a76ea151697a17a64a19a",
+    "tuning/44-3-kneser_ney.json": "5fed9f3a0fdfdfaf4cf41d066fdce16fcd4472258a7db458146427be5613a7d6",
+    "tuning/44-2-modified_kneser_ney.json": "b54588e576f837195e4d7b410b02ba2d56fdc8fea7c3936ff8a7b1d2078f7d62",
+    "tuning/44-3-modified_kneser_ney.json": "683f7ea10af289bda7e62f09e016f4fbfd9570dec87a05f330aba6ff3ec45e44"
+  },
+  "audit_code_sha256": "3203c58993d84e69fdb2251757f5c78df027f61dd6fdd33d575fa1be6edc3eb4",
+  "max_abs_statistic_difference": 8.881784197001252e-16,
+  "development": [
+    {
+      "seed": 42,
+      "train_documents": 8442,
+      "dev_documents": 1116,
+      "dev_groups": 985,
+      "vocabulary_size": 16337,
+      "minimum_dev": "3-modified_kneser_ney",
+      "one_se": "3-kneser_ney",
+      "best_se_nats": 0.03455003698885532,
+      "ceiling_nats": 4.6551929242750285,
+      "eligible": [
+        "3-kneser_ney",
+        "3-modified_kneser_ney"
+      ],
+      "models": [
+        {
+          "model": "1-kneser_ney",
+          "n": 1,
+          "method": "kneser_ney",
+          "dev_ce_nats": 6.620668646432261
+        },
+        {
+          "model": "2-kneser_ney",
+          "n": 2,
+          "method": "kneser_ney",
+          "dev_ce_nats": 5.020352677436403
+        },
+        {
+          "model": "3-kneser_ney",
+          "n": 3,
+          "method": "kneser_ney",
+          "dev_ce_nats": 4.640366274546748
+        },
+        {
+          "model": "2-modified_kneser_ney",
+          "n": 2,
+          "method": "modified_kneser_ney",
+          "dev_ce_nats": 5.0159630603679455
+        },
+        {
+          "model": "3-modified_kneser_ney",
+          "n": 3,
+          "method": "modified_kneser_ney",
+          "dev_ce_nats": 4.620642887286174
+        }
+      ]
+    },
+    {
+      "seed": 43,
+      "train_documents": 8519,
+      "dev_documents": 1039,
+      "dev_groups": 985,
+      "vocabulary_size": 16478,
+      "minimum_dev": "3-modified_kneser_ney",
+      "one_se": "3-kneser_ney",
+      "best_se_nats": 0.0435931673896138,
+      "ceiling_nats": 4.641599077030503,
+      "eligible": [
+        "3-kneser_ney",
+        "3-modified_kneser_ney"
+      ],
+      "models": [
+        {
+          "model": "1-kneser_ney",
+          "n": 1,
+          "method": "kneser_ney",
+          "dev_ce_nats": 6.630624523274421
+        },
+        {
+          "model": "2-kneser_ney",
+          "n": 2,
+          "method": "kneser_ney",
+          "dev_ce_nats": 5.004129375764775
+        },
+        {
+          "model": "3-kneser_ney",
+          "n": 3,
+          "method": "kneser_ney",
+          "dev_ce_nats": 4.618346177131784
+        },
+        {
+          "model": "2-modified_kneser_ney",
+          "n": 2,
+          "method": "modified_kneser_ney",
+          "dev_ce_nats": 4.998742634072324
+        },
+        {
+          "model": "3-modified_kneser_ney",
+          "n": 3,
+          "method": "modified_kneser_ney",
+          "dev_ce_nats": 4.598005909640889
+        }
+      ]
+    },
+    {
+      "seed": 44,
+      "train_documents": 8530,
+      "dev_documents": 1028,
+      "dev_groups": 985,
+      "vocabulary_size": 16428,
+      "minimum_dev": "3-modified_kneser_ney",
+      "one_se": "3-kneser_ney",
+      "best_se_nats": 0.033144579344508054,
+      "ceiling_nats": 4.748770133930505,
+      "eligible": [
+        "3-kneser_ney",
+        "3-modified_kneser_ney"
+      ],
+      "models": [
+        {
+          "model": "1-kneser_ney",
+          "n": 1,
+          "method": "kneser_ney",
+          "dev_ce_nats": 6.654422045829477
+        },
+        {
+          "model": "2-kneser_ney",
+          "n": 2,
+          "method": "kneser_ney",
+          "dev_ce_nats": 5.087660380586505
+        },
+        {
+          "model": "3-kneser_ney",
+          "n": 3,
+          "method": "kneser_ney",
+          "dev_ce_nats": 4.73391082271073
+        },
+        {
+          "model": "2-modified_kneser_ney",
+          "n": 2,
+          "method": "modified_kneser_ney",
+          "dev_ce_nats": 5.082055784013385
+        },
+        {
+          "model": "3-modified_kneser_ney",
+          "n": 3,
+          "method": "modified_kneser_ney",
+          "dev_ce_nats": 4.715625554585997
+        }
+      ]
+    }
+  ],
+  "loss_rows": 15915
+}

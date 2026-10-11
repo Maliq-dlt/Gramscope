@@ -1,0 +1,35 @@
+{
+  "counts": {
+    "frames": 300,
+    "raw_sliced": 2632,
+    "raw_standard": 2632,
+    "tracked_sliced+bot": 1828,
+    "tracked_sliced+byte": 1783,
+    "tracked_standard+bot": 1828,
+    "tracked_standard+byte": 1783
+  },
+  "detector_ms": {
+    "sliced": {
+      "p50": 9.333799996966263,
+      "p95": 10.111694999432075
+    },
+    "standard": {
+      "p50": 9.378400001878617,
+      "p95": 10.08321499939484
+    }
+  },
+  "device": "cuda:0",
+  "device_reason": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "elapsed_seconds": 18.965517500000715,
+  "files": {
+    "detections.jsonl": "a6be593555e2b2b9fe58b014979d3f965103936f089ff42347d27a188903d2b5",
+    "gt/MOT17-05-FRCNN/gt/gt.txt": "2e044d4014afd7230a668966c7ad9036806d29b4ddb4b82b3f399ed67d98e722",
+    "trackers/sliced+bot/data/MOT17-05-FRCNN.txt": "07342741d990e4e786831849058e46a54491559bb03fb601238b2b8dc0fcd851",
+    "trackers/sliced+byte/data/MOT17-05-FRCNN.txt": "ada5bacd11d8aca057c32c69b4475577e226451907185effcb791b8ce151727b",
+    "trackers/standard+bot/data/MOT17-05-FRCNN.txt": "36036e45cdfea26ec17710f3118b9e6dc1fec91e3517459b9034089a342f58a1",
+    "trackers/standard+byte/data/MOT17-05-FRCNN.txt": "53993168753e8423a5e6c0d5af08531a3ad9722f94550d513fb1c8991a030925",
+    "tracks.jsonl": "7680cdcbc3da050eb7ea16b557223a5f4601a428903d0d4e76249820e199c1de"
+  },
+  "frames": 300,
+  "peak_cuda_allocated_bytes": 72339456
+}

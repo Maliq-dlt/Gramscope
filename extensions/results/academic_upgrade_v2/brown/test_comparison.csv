@@ -1,0 +1,3 @@
+model,predicted_tokens,nll,cross_entropy,perplexity,zero_probability,probabilistic,test_documents,test_groups
+3-kneser_ney,68118,408337.5069595086,5.994561011179257,401.2405052272703,False,True,33,31
+3-modified_kneser_ney,68118,407288.6491379845,5.979163350920234,395.10966169712214,False,True,33,31

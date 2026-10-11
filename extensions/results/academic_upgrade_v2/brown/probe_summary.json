@@ -1,0 +1,370 @@
+{
+  "budget_audit": [
+    {
+      "arm": "strict",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 0,
+      "predicted_tokens": 161577,
+      "seed": 42,
+      "sentences": 9026,
+      "train_sha256": "fcac907bd345d23d0741890a7a2b827f9a6768476f2b76585fd4472dc01ce51e"
+    },
+    {
+      "arm": "strict_resample",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 1,
+      "predicted_tokens": 161576,
+      "seed": 42,
+      "sentences": 9009,
+      "train_sha256": "2be3553a25dac302de5fd765148f743db83e2d1db8faf5ff427c50ded5034d7f"
+    },
+    {
+      "arm": "sibling_exposure",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 1,
+      "predicted_tokens": 161576,
+      "seed": 42,
+      "sentences": 8826,
+      "train_sha256": "04fb3acb6ad52f170d5067551937c4eea0a5dd274a0787248653e28a4665fcec"
+    },
+    {
+      "arm": "strict",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 1,
+      "predicted_tokens": 161576,
+      "seed": 43,
+      "sentences": 9073,
+      "train_sha256": "bdbcda5692cc1a69a437491dc43818fcd11447d97a34ee4c89e76c300ed42b12"
+    },
+    {
+      "arm": "strict_resample",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 0,
+      "predicted_tokens": 161577,
+      "seed": 43,
+      "sentences": 9044,
+      "train_sha256": "9e2d879b3aeceea73706bf0246d6720c440536d16e26a6fb43f0ab52f19e5c44"
+    },
+    {
+      "arm": "sibling_exposure",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 0,
+      "predicted_tokens": 161577,
+      "seed": 43,
+      "sentences": 8796,
+      "train_sha256": "cd615e6362412618bd2a505efc70b99fe89525fa1ab43bc4ad37aee51dc37c67"
+    },
+    {
+      "arm": "strict",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 0,
+      "predicted_tokens": 161577,
+      "seed": 44,
+      "sentences": 9016,
+      "train_sha256": "1c3757b32739022282deff2f6ad193e2010bd2551941ecd9c8417463fc03dfc8"
+    },
+    {
+      "arm": "strict_resample",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 0,
+      "predicted_tokens": 161577,
+      "seed": 44,
+      "sentences": 8980,
+      "train_sha256": "03221b89479423e4c9364156f0a41530ce3fc9c090f6270b158f8b8cb2a9a51b"
+    },
+    {
+      "arm": "sibling_exposure",
+      "base_event_budget": 107718,
+      "base_residual": 0,
+      "exact_probe_matches": 0,
+      "fill_event_budget": 53859,
+      "fill_residual": 0,
+      "predicted_tokens": 161577,
+      "seed": 44,
+      "sentences": 8822,
+      "train_sha256": "b0667058210f04cb6c1a546016a38e1c2a2ef7bde70d831baac79dfd7db9f524"
+    }
+  ],
+  "metrics": [
+    {
+      "arm": "strict",
+      "cross_entropy": 7.167773873945976,
+      "model": "3-kneser_ney",
+      "nll": 5461.843691946834,
+      "perplexity": 1296.9542032580584,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 42,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict",
+      "cross_entropy": 7.0760908280758,
+      "model": "3-modified_kneser_ney",
+      "nll": 5391.981210993759,
+      "perplexity": 1183.333610558129,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 42,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict_resample",
+      "cross_entropy": 7.103147334779937,
+      "model": "3-kneser_ney",
+      "nll": 5412.598269102312,
+      "perplexity": 1215.787549621679,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 42,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict_resample",
+      "cross_entropy": 7.014935405383622,
+      "model": "3-modified_kneser_ney",
+      "nll": 5345.38077890232,
+      "perplexity": 1113.134741377624,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 42,
+      "zero_probability": false
+    },
+    {
+      "arm": "sibling_exposure",
+      "cross_entropy": 6.667424277732588,
+      "model": "3-kneser_ney",
+      "nll": 5080.577299632232,
+      "perplexity": 786.3675293490487,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 42,
+      "zero_probability": false
+    },
+    {
+      "arm": "sibling_exposure",
+      "cross_entropy": 6.606773209366,
+      "model": "3-modified_kneser_ney",
+      "nll": 5034.361185536892,
+      "perplexity": 740.0910427442288,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 42,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict",
+      "cross_entropy": 7.112674226526354,
+      "model": "3-kneser_ney",
+      "nll": 5419.857760613082,
+      "perplexity": 1227.425575074132,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 43,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict",
+      "cross_entropy": 7.025230878967771,
+      "model": "3-modified_kneser_ney",
+      "nll": 5353.225929773442,
+      "perplexity": 1124.654188030598,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 43,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict_resample",
+      "cross_entropy": 7.1178527694831075,
+      "model": "3-kneser_ney",
+      "nll": 5423.803810346128,
+      "perplexity": 1233.7983377117187,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 43,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict_resample",
+      "cross_entropy": 7.025102799694549,
+      "model": "3-modified_kneser_ney",
+      "nll": 5353.128333367246,
+      "perplexity": 1124.5101523637577,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 43,
+      "zero_probability": false
+    },
+    {
+      "arm": "sibling_exposure",
+      "cross_entropy": 6.629641056483896,
+      "model": "3-kneser_ney",
+      "nll": 5051.786485040729,
+      "perplexity": 757.2103261194263,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 43,
+      "zero_probability": false
+    },
+    {
+      "arm": "sibling_exposure",
+      "cross_entropy": 6.581699993766336,
+      "model": "3-modified_kneser_ney",
+      "nll": 5015.255395249948,
+      "perplexity": 721.7652833792248,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 43,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict",
+      "cross_entropy": 7.117830720163222,
+      "model": "3-kneser_ney",
+      "nll": 5423.787008764375,
+      "perplexity": 1233.7711335974136,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 44,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict",
+      "cross_entropy": 7.0271125714069,
+      "model": "3-modified_kneser_ney",
+      "nll": 5354.659779412058,
+      "perplexity": 1126.7724336311978,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 44,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict_resample",
+      "cross_entropy": 7.191665675945683,
+      "model": "3-kneser_ney",
+      "nll": 5480.049245070611,
+      "perplexity": 1328.3139044611119,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 44,
+      "zero_probability": false
+    },
+    {
+      "arm": "strict_resample",
+      "cross_entropy": 7.093123834303038,
+      "model": "3-modified_kneser_ney",
+      "nll": 5404.960361738915,
+      "perplexity": 1203.6619744144502,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 44,
+      "zero_probability": false
+    },
+    {
+      "arm": "sibling_exposure",
+      "cross_entropy": 6.662972936961179,
+      "model": "3-kneser_ney",
+      "nll": 5077.185377964418,
+      "perplexity": 782.8749186715061,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 44,
+      "zero_probability": false
+    },
+    {
+      "arm": "sibling_exposure",
+      "cross_entropy": 6.609240718571542,
+      "model": "3-modified_kneser_ney",
+      "nll": 5036.241427551515,
+      "perplexity": 741.9194791192147,
+      "predicted_tokens": 762,
+      "probabilistic": true,
+      "seed": 44,
+      "zero_probability": false
+    }
+  ],
+  "paired_bootstrap": {
+    "3-kneser_ney:sibling_exposure_minus_strict": {
+      "ci95": [
+        -0.7068155013172968,
+        -0.27463048936259304
+      ],
+      "difference": -0.47941351648596353,
+      "documents": 33,
+      "independent_groups": 31,
+      "metric": "paired token-weighted CE difference (A minus B)",
+      "resamples": 1000,
+      "seed": 42,
+      "unit": "duplicate/source group; paired resampling"
+    },
+    "3-kneser_ney:strict_resample_minus_strict": {
+      "ci95": [
+        -0.11693285922224814,
+        0.12488489520246802
+      ],
+      "difference": 0.004795653191058179,
+      "documents": 33,
+      "independent_groups": 31,
+      "metric": "paired token-weighted CE difference (A minus B)",
+      "resamples": 1000,
+      "seed": 42,
+      "unit": "duplicate/source group; paired resampling"
+    },
+    "3-modified_kneser_ney:sibling_exposure_minus_strict": {
+      "ci95": [
+        -0.6598728888682872,
+        -0.2418477130284065
+      ],
+      "difference": -0.4435734522488643,
+      "documents": 33,
+      "independent_groups": 31,
+      "metric": "paired token-weighted CE difference (A minus B)",
+      "resamples": 1000,
+      "seed": 42,
+      "unit": "duplicate/source group; paired resampling"
+    },
+    "3-modified_kneser_ney:strict_resample_minus_strict": {
+      "ci95": [
+        -0.11784709253989961,
+        0.11868496820832537
+      ],
+      "difference": 0.0015759203102459203,
+      "documents": 33,
+      "independent_groups": 31,
+      "metric": "paired token-weighted CE difference (A minus B)",
+      "resamples": 1000,
+      "seed": 42,
+      "unit": "duplicate/source group; paired resampling"
+    }
+  },
+  "probe_documents": 33,
+  "probe_groups": 31,
+  "vocabulary_sha256": "080c26e3fc89952016dd7c8a861dfd65c367a717422b85371cd2308a813fefef",
+  "vocabulary_size": 23079
+}

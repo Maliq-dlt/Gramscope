@@ -1,5 +1,7 @@
 # N-gram Academic Lab
 
+**Pembenahan terbaru (11 Oktober):** [data korpus penuh, KenLM, one-SE dan split study](reports/ACADEMIC_UPGRADE_20261011.md). Hasil historis di bawah tetap snapshot tersendiri.
+
 Implementasi statistik berada di `extensions/`; core dan hasil historis tetap dibekukan. [Verifikasi publik](reports/VERIFICATION.md), [panduan root](../README.md), [blueprint dan status](../tasks/ngram_academic/plan.md), serta [checklist](../tasks/ngram_academic/todo.md) menjelaskan cakupannya.
 
 ## Metode dan kontrak

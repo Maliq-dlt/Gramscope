@@ -23,7 +23,7 @@
 
 ## Pengembangan N-gram akademik
 
-**Fokus aktif:** N-gram untuk kejadian CCTV dari video yang direview. [Rencana aktif](tasks/plan.md) · [Checklist aktif](tasks/todo.md#pekerjaan-aktif--n-gram-dan-cctv). Chatbot umum, RAG dokumen, corpus besar dan biometrik tidak masuk milestone aktif.
+**Fokus aktif:** N-gram untuk kejadian CCTV dari video yang direview. [Rencana aktif](tasks/plan.md) · [Checklist aktif](tasks/todo.md#pekerjaan-aktif--n-gram-dan-cctv). Chatbot umum, RAG dokumen dan biometrik tidak masuk milestone aktif. Pembenahan bukti akademik kini memakai korpus lebih besar dan validasi eksternal: [hasil/data terbaru](extensions/results/academic_upgrade_v2/README.md).
 
 [Status dan hubungan ke CCTV/absensi](tasks/ngram_academic/plan.md) · [Checklist berfase](tasks/ngram_academic/todo.md) · [Metode dan pilot](extensions/README.md) · [Verifikasi](extensions/reports/VERIFICATION.md).
 

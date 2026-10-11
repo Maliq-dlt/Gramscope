@@ -1,0 +1,19 @@
+{
+  "format": "evidence-package-v2",
+  "files": {
+    "dev_complete.json": "2aebb397223317db906428298db2cdd811cfc565204bb8ef5a4eef79acfc6a45",
+    "dev_metrics.json": "5026d63222901aa6a97ae337912a2027d3d0d08d65a355504a48686207faaa14",
+    "dev_receipt.json": "3c4f42fbe16cc7e03cab1438cc655435f4ae547fb34788d99a28153fa1c5f6c7",
+    "metrics.csv": "fc4b34c423223f57eaf4407fc71ada5036dc9a8ad8bf97c0f17ae46f5ce2cdbc",
+    "protocol.json": "7dc77bbc7b8fdf9d920bcb7c634d3328c09449e52f5c86ca2f1fa0def79c2b74",
+    "README.md": "37127e6de2e96baf82b7c9dc37b752e12c1794794ea8b70b112976e8ea5f9027",
+    "runner_frozen.py.txt": "68587336b7774d1feee38cd38db4834eeae51b4e8a20e9531f330edd585838ef",
+    "selection.json": "edf24bc6c13fd6858c10ec32e038ff33523fbe08585e92e5e86aaa31ba51b8c7",
+    "source_manifest.json": "92e786b2f4be34dd6fc4bdc4df9f42c895da8018735da16e9e8772c90be77360",
+    "test_complete.json": "b899828d6fb5b98f704d757d585be01771f6a8ca0d4af741a03f5f27fae8e1f9",
+    "test_metrics.json": "f97321bd65de8dc5ff73000c1553feefe4b8ac59235ab005a8254e8f6983e6d0",
+    "test_receipt.json": "ecdc6e928492f66c2c57adb1aed6a60ea7ad4ecd20e3f203e7f1a060045948d5",
+    "verification_local.json": "5504813d7a0064d45479b76e3760814b0d7787d168738ced9a5d99726c48eb38"
+  },
+  "no_private_media": true
+}

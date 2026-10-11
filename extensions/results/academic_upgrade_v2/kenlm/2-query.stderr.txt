@@ -1,0 +1,5 @@
+Loading the LM will be faster if you build a binary file.
+Reading D:\Dokumen\Semester 5\Pemrosesan Bahasa Alami\N gram\.tmp\academic_upgrade_v2\evidence_order_2\model.arpa
+----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
+****************************************************************************************************
+real:0

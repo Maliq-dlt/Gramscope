@@ -1,0 +1,1875 @@
+{
+  "code_sha256": {
+    "core/src/ngram.py": "eb6b887412a0e30353e9193e5d84816b6c5d79b80ad177d9a4885e2bc048d1bf",
+    "core/src/preprocess.py": "c61964dd1fe7e5b65bad89cebbd047e1905e2b8c0fdcb7c562b2a4a395c4ac31",
+    "extensions/experiments/academic_upgrade.py": "3cb2639754c7fcc3cf3a88c592f2934d9fa8617e1e114dcf34f1a5296a6dafe1",
+    "extensions/experiments/registry.py": "1bb456dab232ef9588e311f6856ee203c5b415663da9e4be2203f51f9325d166",
+    "extensions/src/analytics.py": "c3b928fae7c241871a3fd7948e32b12f53f6231a5042e33c6163ac2d9b68edfe",
+    "extensions/src/datasets.py": "92461771c0464a0ef90ef0e232a7b8eaf251628b1d7a9a660b6f7ced6a856e10",
+    "extensions/src/models.py": "2a42b52a57fc52eca41ef62ecd42350adc0b84feb994a13565fa83f3f943fab2",
+    "extensions/src/pipeline.py": "cf52d5ae58ca209abdb425bf7681b9d55e7f2c838f69ca63c74cd3fc1f921f0c"
+  },
+  "corpus": "brown",
+  "corpus_sha256": "2ca46d52c34389ee0051b38ccb7c02662cd7f527c6fbb8e48bed0dd08a4f2b33",
+  "experiment": "academic-evidence-upgrade-v2",
+  "interpretation": "established methods; no journal-rank guarantee; conditional corpus evidence",
+  "min_count": 2,
+  "models": [
+    [
+      1,
+      "kneser_ney"
+    ],
+    [
+      2,
+      "kneser_ney"
+    ],
+    [
+      3,
+      "kneser_ney"
+    ],
+    [
+      2,
+      "modified_kneser_ney"
+    ],
+    [
+      3,
+      "modified_kneser_ney"
+    ]
+  ],
+  "one_se_bootstrap": {
+    "resamples": 1000,
+    "seed": 42,
+    "unit": "split_group"
+  },
+  "probe": {
+    "base_seed": 161803,
+    "budget": [
+      {
+        "arm": "strict",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 0,
+        "predicted_tokens": 161577,
+        "seed": 42,
+        "sentences": 9026,
+        "train_sha256": "fcac907bd345d23d0741890a7a2b827f9a6768476f2b76585fd4472dc01ce51e"
+      },
+      {
+        "arm": "strict_resample",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 1,
+        "predicted_tokens": 161576,
+        "seed": 42,
+        "sentences": 9009,
+        "train_sha256": "2be3553a25dac302de5fd765148f743db83e2d1db8faf5ff427c50ded5034d7f"
+      },
+      {
+        "arm": "sibling_exposure",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 1,
+        "predicted_tokens": 161576,
+        "seed": 42,
+        "sentences": 8826,
+        "train_sha256": "04fb3acb6ad52f170d5067551937c4eea0a5dd274a0787248653e28a4665fcec"
+      },
+      {
+        "arm": "strict",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 1,
+        "predicted_tokens": 161576,
+        "seed": 43,
+        "sentences": 9073,
+        "train_sha256": "bdbcda5692cc1a69a437491dc43818fcd11447d97a34ee4c89e76c300ed42b12"
+      },
+      {
+        "arm": "strict_resample",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 0,
+        "predicted_tokens": 161577,
+        "seed": 43,
+        "sentences": 9044,
+        "train_sha256": "9e2d879b3aeceea73706bf0246d6720c440536d16e26a6fb43f0ab52f19e5c44"
+      },
+      {
+        "arm": "sibling_exposure",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 0,
+        "predicted_tokens": 161577,
+        "seed": 43,
+        "sentences": 8796,
+        "train_sha256": "cd615e6362412618bd2a505efc70b99fe89525fa1ab43bc4ad37aee51dc37c67"
+      },
+      {
+        "arm": "strict",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 0,
+        "predicted_tokens": 161577,
+        "seed": 44,
+        "sentences": 9016,
+        "train_sha256": "1c3757b32739022282deff2f6ad193e2010bd2551941ecd9c8417463fc03dfc8"
+      },
+      {
+        "arm": "strict_resample",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 0,
+        "predicted_tokens": 161577,
+        "seed": 44,
+        "sentences": 8980,
+        "train_sha256": "03221b89479423e4c9364156f0a41530ce3fc9c090f6270b158f8b8cb2a9a51b"
+      },
+      {
+        "arm": "sibling_exposure",
+        "base_event_budget": 107718,
+        "base_residual": 0,
+        "exact_probe_matches": 0,
+        "fill_event_budget": 53859,
+        "fill_residual": 0,
+        "predicted_tokens": 161577,
+        "seed": 44,
+        "sentences": 8822,
+        "train_sha256": "b0667058210f04cb6c1a546016a38e1c2a2ef7bde70d831baac79dfd7db9f524"
+      }
+    ],
+    "design": "same base + matched whole-sentence fills, sibling vs strict/control",
+    "documents": 33,
+    "estimand": "token-weighted probe CE with seed-averaged losses; group bootstrap",
+    "limitations": "exposure diagnostic, not causal random-split bias estimate",
+    "models": [
+      "3-kneser_ney D=.75",
+      "3-modified_kneser_ney"
+    ],
+    "seed": 314159,
+    "sha256": "d33ddded6f95e6d836f3758143e5274fbeec53b3fef96ebf545cb12b5053c835",
+    "vocabulary": "primary strict full train only, identical across all arms"
+  },
+  "provenance": {
+    "archive": "data\\nltk_data\\corpora\\brown.zip",
+    "archive_sha256": "9b275f9b3b95d7bd66ccfb7cd259f445a13bbe5d1f4107aba09fd3e8364bafa6",
+    "exposure": "previous project corpus; expanded exploratory study",
+    "split": "grouped rerandomization; not official Reuters train/test"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "selection": "minimum dev CE + bootstrap one-SE simplest order then ordinary KN",
+  "sentence_split_diagnostic": [
+    {
+      "common_train_sha256": "bddad0fd44dd9139baf995a3fb0a4736651d3e4d3cfe7b73fe81e1b15e6f9345",
+      "comparison": "descriptive; targets differ, no paired causal delta",
+      "dev_usage": "unused; fixed KN3 D=.75 and MKN3",
+      "random_test_sentences": 5677,
+      "random_test_sha256": "f6c317098b96d13d3efe0bc3645863f5650ddae9d3592f5e3631005c55026c5a",
+      "random_test_with_train_siblings": 5677,
+      "random_train_sha256": "818a92b8bf5a29a01ddea1aff7fc99c63b47902f23cbaab26ff98169ffbb6490",
+      "seed": 42,
+      "vocabulary_policy": "min_count2 fitted on intersection of train occurrences",
+      "vocabulary_sha256": "b45517ccb036e8896166199115183f12f87cab3f63fd2ed4cf972db79f66b138",
+      "vocabulary_size": 20669
+    },
+    {
+      "common_train_sha256": "37525f37aa81353234f5035c8694c21b5c00b6a363d32f5db5d53732fc79470f",
+      "comparison": "descriptive; targets differ, no paired causal delta",
+      "dev_usage": "unused; fixed KN3 D=.75 and MKN3",
+      "random_test_sentences": 5677,
+      "random_test_sha256": "17132025b2d587644d2cede7c20a9ffd8ee90f9454ea76d009e42c2b4cbd8a35",
+      "random_test_with_train_siblings": 5677,
+      "random_train_sha256": "c7690ee046b233db968d77a9af3379f7030ae998629523f32bf3fcd92e6218fa",
+      "seed": 43,
+      "vocabulary_policy": "min_count2 fitted on intersection of train occurrences",
+      "vocabulary_sha256": "fe6f53cf885ab8ea1446d55fc5339842911f74ce8fbb1515a03dd35f000372ec",
+      "vocabulary_size": 20682
+    },
+    {
+      "common_train_sha256": "4ade9a5a27847155dede938a4ad88d623cd391e9759a61042e77e0ff9f4f861d",
+      "comparison": "descriptive; targets differ, no paired causal delta",
+      "dev_usage": "unused; fixed KN3 D=.75 and MKN3",
+      "random_test_sentences": 5677,
+      "random_test_sha256": "c816a518441a6d055a7e4bc356b388b358394e85310c449d32a89ec509028396",
+      "random_test_with_train_siblings": 5677,
+      "random_train_sha256": "41345e44e3d41e55b7da8bace4db2ddbbb795d1742fba44a816868cb8ff18344",
+      "seed": 44,
+      "vocabulary_policy": "min_count2 fitted on intersection of train occurrences",
+      "vocabulary_sha256": "3c43b5e5c4e10e650de0f2162d378c0249c8921502779a3a0d9215e10452b3d4",
+      "vocabulary_size": 20653
+    }
+  ],
+  "split": {
+    "corpus_sha256": "2ca46d52c34389ee0051b38ccb7c02662cd7f527c6fbb8e48bed0dd08a4f2b33",
+    "groups": [
+      [
+        "brown/cj46"
+      ],
+      [
+        "brown/cd12"
+      ],
+      [
+        "brown/cg51"
+      ],
+      [
+        "brown/ca32"
+      ],
+      [
+        "brown/cj56"
+      ],
+      [
+        "brown/ce36"
+      ],
+      [
+        "brown/cb07"
+      ],
+      [
+        "brown/cb01"
+      ],
+      [
+        "brown/cg35"
+      ],
+      [
+        "brown/cg50"
+      ],
+      [
+        "brown/cf45"
+      ],
+      [
+        "brown/cg01"
+      ],
+      [
+        "brown/cg74"
+      ],
+      [
+        "brown/cf18"
+      ],
+      [
+        "brown/cj08"
+      ],
+      [
+        "brown/cn08",
+        "brown/cp05"
+      ],
+      [
+        "brown/cg34"
+      ],
+      [
+        "brown/cj79"
+      ],
+      [
+        "brown/ck09"
+      ],
+      [
+        "brown/ca10"
+      ],
+      [
+        "brown/cj69"
+      ],
+      [
+        "brown/cf21"
+      ],
+      [
+        "brown/ch30"
+      ],
+      [
+        "brown/cj77"
+      ],
+      [
+        "brown/cj47"
+      ],
+      [
+        "brown/ca02",
+        "brown/ca03",
+        "brown/ca04",
+        "brown/ca06",
+        "brown/ca08",
+        "brown/ca11",
+        "brown/ca12",
+        "brown/ca14",
+        "brown/ca16",
+        "brown/ca23",
+        "brown/ca27",
+        "brown/ca28",
+        "brown/ca31",
+        "brown/cb08",
+        "brown/cb09",
+        "brown/cb10",
+        "brown/cb12",
+        "brown/cb13",
+        "brown/cb16",
+        "brown/cb17",
+        "brown/cb18",
+        "brown/cb19",
+        "brown/cb23",
+        "brown/cb27",
+        "brown/cc10",
+        "brown/cd06",
+        "brown/cd07",
+        "brown/cd09",
+        "brown/cd16",
+        "brown/ce09",
+        "brown/ce10",
+        "brown/ce20",
+        "brown/ce28",
+        "brown/cf05",
+        "brown/cf06",
+        "brown/cf07",
+        "brown/cf25",
+        "brown/cf33",
+        "brown/cf38",
+        "brown/cg04",
+        "brown/cg12",
+        "brown/cg30",
+        "brown/cg36",
+        "brown/cg37",
+        "brown/cg40",
+        "brown/cg47",
+        "brown/cg62",
+        "brown/cg75",
+        "brown/ch01",
+        "brown/ch02",
+        "brown/ch06",
+        "brown/ch09",
+        "brown/ch10",
+        "brown/ch12",
+        "brown/ch16",
+        "brown/ch17",
+        "brown/ch20",
+        "brown/ch22",
+        "brown/ch24",
+        "brown/cj01",
+        "brown/cj02",
+        "brown/cj04",
+        "brown/cj06",
+        "brown/cj09",
+        "brown/cj12",
+        "brown/cj14",
+        "brown/cj15",
+        "brown/cj16",
+        "brown/cj18",
+        "brown/cj19",
+        "brown/cj20",
+        "brown/cj21",
+        "brown/cj27",
+        "brown/cj28",
+        "brown/cj29",
+        "brown/cj30",
+        "brown/cj35",
+        "brown/cj41",
+        "brown/cj45",
+        "brown/cj51",
+        "brown/cj78",
+        "brown/ck01",
+        "brown/ck03",
+        "brown/ck04",
+        "brown/ck06",
+        "brown/ck07",
+        "brown/ck08",
+        "brown/ck10",
+        "brown/ck11",
+        "brown/ck12",
+        "brown/ck13",
+        "brown/ck16",
+        "brown/ck17",
+        "brown/ck19",
+        "brown/ck20",
+        "brown/ck21",
+        "brown/ck22",
+        "brown/ck23",
+        "brown/ck24",
+        "brown/ck26",
+        "brown/ck27",
+        "brown/ck28",
+        "brown/cl01",
+        "brown/cl02",
+        "brown/cl03",
+        "brown/cl04",
+        "brown/cl05",
+        "brown/cl07",
+        "brown/cl08",
+        "brown/cl09",
+        "brown/cl10",
+        "brown/cl11",
+        "brown/cl12",
+        "brown/cl13",
+        "brown/cl14",
+        "brown/cl15",
+        "brown/cl16",
+        "brown/cl17",
+        "brown/cl18",
+        "brown/cl19",
+        "brown/cl20",
+        "brown/cl21",
+        "brown/cl22",
+        "brown/cl23",
+        "brown/cl24",
+        "brown/cm01",
+        "brown/cm02",
+        "brown/cm03",
+        "brown/cm04",
+        "brown/cm05",
+        "brown/cn01",
+        "brown/cn02",
+        "brown/cn03",
+        "brown/cn04",
+        "brown/cn05",
+        "brown/cn07",
+        "brown/cn09",
+        "brown/cn10",
+        "brown/cn12",
+        "brown/cn13",
+        "brown/cn14",
+        "brown/cn15",
+        "brown/cn16",
+        "brown/cn17",
+        "brown/cn18",
+        "brown/cn19",
+        "brown/cn20",
+        "brown/cn22",
+        "brown/cn23",
+        "brown/cn24",
+        "brown/cn25",
+        "brown/cn26",
+        "brown/cn27",
+        "brown/cn29",
+        "brown/cp01",
+        "brown/cp02",
+        "brown/cp03",
+        "brown/cp04",
+        "brown/cp06",
+        "brown/cp07",
+        "brown/cp08",
+        "brown/cp10",
+        "brown/cp11",
+        "brown/cp12",
+        "brown/cp13",
+        "brown/cp14",
+        "brown/cp15",
+        "brown/cp16",
+        "brown/cp18",
+        "brown/cp19",
+        "brown/cp20",
+        "brown/cp21",
+        "brown/cp22",
+        "brown/cp23",
+        "brown/cp24",
+        "brown/cp25",
+        "brown/cp26",
+        "brown/cp27",
+        "brown/cp28",
+        "brown/cp29",
+        "brown/cr02",
+        "brown/cr03",
+        "brown/cr05",
+        "brown/cr06",
+        "brown/cr07"
+      ],
+      [
+        "brown/cc01"
+      ],
+      [
+        "brown/cj36"
+      ],
+      [
+        "brown/cg07"
+      ],
+      [
+        "brown/cb06"
+      ],
+      [
+        "brown/cf19"
+      ],
+      [
+        "brown/cj80"
+      ],
+      [
+        "brown/cg65"
+      ],
+      [
+        "brown/ch19"
+      ],
+      [
+        "brown/cc08"
+      ],
+      [
+        "brown/ca29"
+      ],
+      [
+        "brown/ca20"
+      ],
+      [
+        "brown/cj25"
+      ],
+      [
+        "brown/cj68"
+      ],
+      [
+        "brown/cj10"
+      ],
+      [
+        "brown/cb03"
+      ],
+      [
+        "brown/cd13"
+      ],
+      [
+        "brown/ch18"
+      ],
+      [
+        "brown/ce34"
+      ],
+      [
+        "brown/cj63"
+      ],
+      [
+        "brown/cf10"
+      ],
+      [
+        "brown/cj53"
+      ],
+      [
+        "brown/ce32"
+      ],
+      [
+        "brown/cj23"
+      ],
+      [
+        "brown/cg44"
+      ],
+      [
+        "brown/ce29"
+      ],
+      [
+        "brown/cr01"
+      ],
+      [
+        "brown/ce16"
+      ],
+      [
+        "brown/cj74"
+      ],
+      [
+        "brown/cb25"
+      ],
+      [
+        "brown/cf30"
+      ],
+      [
+        "brown/ca39"
+      ],
+      [
+        "brown/cj40"
+      ],
+      [
+        "brown/cj59"
+      ],
+      [
+        "brown/cf01"
+      ],
+      [
+        "brown/cg21"
+      ],
+      [
+        "brown/ce13"
+      ],
+      [
+        "brown/ca13"
+      ],
+      [
+        "brown/ca37"
+      ],
+      [
+        "brown/cj66"
+      ],
+      [
+        "brown/cg08"
+      ],
+      [
+        "brown/cf31",
+        "brown/cg27",
+        "brown/cg52"
+      ],
+      [
+        "brown/cf12"
+      ],
+      [
+        "brown/cj64"
+      ],
+      [
+        "brown/cj22"
+      ],
+      [
+        "brown/cf22"
+      ],
+      [
+        "brown/cg39"
+      ],
+      [
+        "brown/ca43"
+      ],
+      [
+        "brown/cd02"
+      ],
+      [
+        "brown/ck02"
+      ],
+      [
+        "brown/cb20"
+      ],
+      [
+        "brown/cf34"
+      ],
+      [
+        "brown/cj24"
+      ],
+      [
+        "brown/ce27"
+      ],
+      [
+        "brown/ca15"
+      ],
+      [
+        "brown/cg63"
+      ],
+      [
+        "brown/ca18"
+      ],
+      [
+        "brown/cg14"
+      ],
+      [
+        "brown/cg64"
+      ],
+      [
+        "brown/cg11"
+      ],
+      [
+        "brown/cg29"
+      ],
+      [
+        "brown/cp09"
+      ],
+      [
+        "brown/cj07"
+      ],
+      [
+        "brown/cg16"
+      ],
+      [
+        "brown/cj03"
+      ],
+      [
+        "brown/cf20"
+      ],
+      [
+        "brown/cf32"
+      ],
+      [
+        "brown/ca44"
+      ],
+      [
+        "brown/cl06"
+      ],
+      [
+        "brown/cr08"
+      ],
+      [
+        "brown/cd03"
+      ],
+      [
+        "brown/cg41"
+      ],
+      [
+        "brown/cj65"
+      ],
+      [
+        "brown/ch08"
+      ],
+      [
+        "brown/ce11"
+      ],
+      [
+        "brown/cc04"
+      ],
+      [
+        "brown/cj42"
+      ],
+      [
+        "brown/ce18"
+      ],
+      [
+        "brown/cj38"
+      ],
+      [
+        "brown/ce15",
+        "brown/cf13",
+        "brown/ch07"
+      ],
+      [
+        "brown/cf40"
+      ],
+      [
+        "brown/ce24"
+      ],
+      [
+        "brown/cj39"
+      ],
+      [
+        "brown/cf47"
+      ],
+      [
+        "brown/cg61"
+      ],
+      [
+        "brown/ce01"
+      ],
+      [
+        "brown/cj54"
+      ],
+      [
+        "brown/cb02"
+      ],
+      [
+        "brown/ca34"
+      ],
+      [
+        "brown/cd10"
+      ],
+      [
+        "brown/cc14"
+      ],
+      [
+        "brown/ce08"
+      ],
+      [
+        "brown/ch25"
+      ],
+      [
+        "brown/cg24"
+      ],
+      [
+        "brown/cg23"
+      ],
+      [
+        "brown/cg13"
+      ],
+      [
+        "brown/cj32"
+      ],
+      [
+        "brown/cg72"
+      ],
+      [
+        "brown/ce33"
+      ],
+      [
+        "brown/ch27"
+      ],
+      [
+        "brown/cj31"
+      ],
+      [
+        "brown/ca19"
+      ],
+      [
+        "brown/cj43"
+      ],
+      [
+        "brown/cj13"
+      ],
+      [
+        "brown/ch03"
+      ],
+      [
+        "brown/cc15",
+        "brown/ce12"
+      ],
+      [
+        "brown/ce02"
+      ],
+      [
+        "brown/cg42"
+      ],
+      [
+        "brown/cg10"
+      ],
+      [
+        "brown/ca09"
+      ],
+      [
+        "brown/cp17"
+      ],
+      [
+        "brown/ce06"
+      ],
+      [
+        "brown/cg05"
+      ],
+      [
+        "brown/cg57"
+      ],
+      [
+        "brown/cf39"
+      ],
+      [
+        "brown/ch26"
+      ],
+      [
+        "brown/ce23"
+      ],
+      [
+        "brown/cj11"
+      ],
+      [
+        "brown/cc03"
+      ],
+      [
+        "brown/cf48"
+      ],
+      [
+        "brown/cd17"
+      ],
+      [
+        "brown/ca40"
+      ],
+      [
+        "brown/cf28"
+      ],
+      [
+        "brown/cb24"
+      ],
+      [
+        "brown/cf27"
+      ],
+      [
+        "brown/cg48"
+      ],
+      [
+        "brown/ca01"
+      ],
+      [
+        "brown/cj34"
+      ],
+      [
+        "brown/cj67"
+      ],
+      [
+        "brown/ck25"
+      ],
+      [
+        "brown/cd15"
+      ],
+      [
+        "brown/cj72"
+      ],
+      [
+        "brown/ce14"
+      ],
+      [
+        "brown/cg68"
+      ],
+      [
+        "brown/cg49"
+      ],
+      [
+        "brown/ca42"
+      ],
+      [
+        "brown/ca05"
+      ],
+      [
+        "brown/cf42"
+      ],
+      [
+        "brown/cd01"
+      ],
+      [
+        "brown/cj60"
+      ],
+      [
+        "brown/ck18"
+      ],
+      [
+        "brown/cg25"
+      ],
+      [
+        "brown/ch23"
+      ],
+      [
+        "brown/ck15"
+      ],
+      [
+        "brown/cg67"
+      ],
+      [
+        "brown/cg06"
+      ],
+      [
+        "brown/cf02"
+      ],
+      [
+        "brown/cj55"
+      ],
+      [
+        "brown/cg15"
+      ],
+      [
+        "brown/cb11"
+      ],
+      [
+        "brown/ca41"
+      ],
+      [
+        "brown/cr04"
+      ],
+      [
+        "brown/cj49"
+      ],
+      [
+        "brown/cf24"
+      ],
+      [
+        "brown/cf29"
+      ],
+      [
+        "brown/cg53"
+      ],
+      [
+        "brown/ch13"
+      ],
+      [
+        "brown/ce19",
+        "brown/ck14"
+      ],
+      [
+        "brown/cg71"
+      ],
+      [
+        "brown/ch29"
+      ],
+      [
+        "brown/cf03"
+      ],
+      [
+        "brown/cg02"
+      ],
+      [
+        "brown/cg54"
+      ],
+      [
+        "brown/cf37"
+      ],
+      [
+        "brown/cf44"
+      ],
+      [
+        "brown/cj57"
+      ],
+      [
+        "brown/cj50"
+      ],
+      [
+        "brown/cd04"
+      ],
+      [
+        "brown/cb05"
+      ],
+      [
+        "brown/cf15"
+      ],
+      [
+        "brown/cg19"
+      ],
+      [
+        "brown/ck05"
+      ],
+      [
+        "brown/cf26"
+      ],
+      [
+        "brown/cg22"
+      ],
+      [
+        "brown/cg66"
+      ],
+      [
+        "brown/cg70"
+      ],
+      [
+        "brown/cj62"
+      ],
+      [
+        "brown/cf46"
+      ],
+      [
+        "brown/cc07"
+      ],
+      [
+        "brown/cm06"
+      ],
+      [
+        "brown/cj58"
+      ],
+      [
+        "brown/ce31"
+      ],
+      [
+        "brown/ce04"
+      ],
+      [
+        "brown/cg69"
+      ],
+      [
+        "brown/ca17"
+      ],
+      [
+        "brown/cg73"
+      ],
+      [
+        "brown/cc12"
+      ],
+      [
+        "brown/ca24"
+      ],
+      [
+        "brown/cg60"
+      ],
+      [
+        "brown/cg58"
+      ],
+      [
+        "brown/ce07",
+        "brown/ch15"
+      ],
+      [
+        "brown/cg32"
+      ],
+      [
+        "brown/cc09"
+      ],
+      [
+        "brown/cj70"
+      ],
+      [
+        "brown/cj61"
+      ],
+      [
+        "brown/cg18"
+      ],
+      [
+        "brown/cd08"
+      ],
+      [
+        "brown/cj37"
+      ],
+      [
+        "brown/cf16"
+      ],
+      [
+        "brown/cj26"
+      ],
+      [
+        "brown/cc16"
+      ],
+      [
+        "brown/cg46"
+      ],
+      [
+        "brown/cf36"
+      ],
+      [
+        "brown/cb21"
+      ],
+      [
+        "brown/cj33"
+      ],
+      [
+        "brown/cg09"
+      ],
+      [
+        "brown/ca30"
+      ],
+      [
+        "brown/cg20"
+      ],
+      [
+        "brown/cj71"
+      ],
+      [
+        "brown/cg38"
+      ],
+      [
+        "brown/cd05"
+      ],
+      [
+        "brown/cg26"
+      ],
+      [
+        "brown/cc06"
+      ],
+      [
+        "brown/ce17"
+      ],
+      [
+        "brown/ce22"
+      ],
+      [
+        "brown/cb15",
+        "brown/ce35",
+        "brown/ch28"
+      ],
+      [
+        "brown/ce21"
+      ],
+      [
+        "brown/ch04"
+      ],
+      [
+        "brown/cg17"
+      ],
+      [
+        "brown/cj48"
+      ],
+      [
+        "brown/cn28"
+      ],
+      [
+        "brown/ce25"
+      ],
+      [
+        "brown/ca38"
+      ],
+      [
+        "brown/ch21"
+      ],
+      [
+        "brown/cc13"
+      ],
+      [
+        "brown/ch14"
+      ],
+      [
+        "brown/ca33"
+      ],
+      [
+        "brown/cj44"
+      ],
+      [
+        "brown/cd14"
+      ],
+      [
+        "brown/cg59"
+      ],
+      [
+        "brown/cf14"
+      ],
+      [
+        "brown/ca36"
+      ],
+      [
+        "brown/cb04"
+      ],
+      [
+        "brown/ce26"
+      ],
+      [
+        "brown/cg45"
+      ],
+      [
+        "brown/cg03"
+      ],
+      [
+        "brown/cb14"
+      ],
+      [
+        "brown/cg55"
+      ],
+      [
+        "brown/cc17"
+      ],
+      [
+        "brown/cj17"
+      ],
+      [
+        "brown/ca35"
+      ],
+      [
+        "brown/cf35"
+      ],
+      [
+        "brown/cg33"
+      ],
+      [
+        "brown/cg43"
+      ],
+      [
+        "brown/cc02"
+      ],
+      [
+        "brown/cg56"
+      ],
+      [
+        "brown/ck29"
+      ],
+      [
+        "brown/cn21"
+      ],
+      [
+        "brown/cg28"
+      ],
+      [
+        "brown/cf04"
+      ],
+      [
+        "brown/ce03"
+      ],
+      [
+        "brown/cj75"
+      ],
+      [
+        "brown/cg31"
+      ],
+      [
+        "brown/cn06",
+        "brown/cr09"
+      ],
+      [
+        "brown/ce05"
+      ],
+      [
+        "brown/ca07"
+      ],
+      [
+        "brown/cf43"
+      ],
+      [
+        "brown/cj05"
+      ],
+      [
+        "brown/cf09"
+      ],
+      [
+        "brown/ch05"
+      ],
+      [
+        "brown/cn11"
+      ],
+      [
+        "brown/ce30"
+      ],
+      [
+        "brown/ca22"
+      ],
+      [
+        "brown/cj52"
+      ],
+      [
+        "brown/cf17"
+      ],
+      [
+        "brown/cf08"
+      ],
+      [
+        "brown/cb26"
+      ],
+      [
+        "brown/ca25"
+      ],
+      [
+        "brown/ca26"
+      ],
+      [
+        "brown/ch11"
+      ],
+      [
+        "brown/cb22"
+      ],
+      [
+        "brown/cj73",
+        "brown/cj76"
+      ],
+      [
+        "brown/cc05"
+      ],
+      [
+        "brown/cd11"
+      ],
+      [
+        "brown/cf11"
+      ],
+      [
+        "brown/cf23"
+      ],
+      [
+        "brown/cf41"
+      ],
+      [
+        "brown/ca21"
+      ],
+      [
+        "brown/cc11"
+      ]
+    ],
+    "ids": {
+      "dev": [
+        "brown/cg17",
+        "brown/cj48",
+        "brown/cn28",
+        "brown/ce25",
+        "brown/ca38",
+        "brown/ch21",
+        "brown/cc13",
+        "brown/ch14",
+        "brown/ca33",
+        "brown/cj44",
+        "brown/cd14",
+        "brown/cg59",
+        "brown/cf14",
+        "brown/ca36",
+        "brown/cb04",
+        "brown/ce26",
+        "brown/cg45",
+        "brown/cg03",
+        "brown/cb14",
+        "brown/cg55",
+        "brown/cc17",
+        "brown/cj17",
+        "brown/ca35",
+        "brown/cf35",
+        "brown/cg33",
+        "brown/cg43",
+        "brown/cc02",
+        "brown/cg56",
+        "brown/ck29",
+        "brown/cn21"
+      ],
+      "test": [
+        "brown/cg28",
+        "brown/cf04",
+        "brown/ce03",
+        "brown/cj75",
+        "brown/cg31",
+        "brown/cn06",
+        "brown/cr09",
+        "brown/ce05",
+        "brown/ca07",
+        "brown/cf43",
+        "brown/cj05",
+        "brown/cf09",
+        "brown/ch05",
+        "brown/cn11",
+        "brown/ce30",
+        "brown/ca22",
+        "brown/cj52",
+        "brown/cf17",
+        "brown/cf08",
+        "brown/cb26",
+        "brown/ca25",
+        "brown/ca26",
+        "brown/ch11",
+        "brown/cb22",
+        "brown/cj73",
+        "brown/cj76",
+        "brown/cc05",
+        "brown/cd11",
+        "brown/cf11",
+        "brown/cf23",
+        "brown/cf41",
+        "brown/ca21",
+        "brown/cc11"
+      ],
+      "train": [
+        "brown/cj46",
+        "brown/cd12",
+        "brown/cg51",
+        "brown/ca32",
+        "brown/cj56",
+        "brown/ce36",
+        "brown/cb07",
+        "brown/cb01",
+        "brown/cg35",
+        "brown/cg50",
+        "brown/cf45",
+        "brown/cg01",
+        "brown/cg74",
+        "brown/cf18",
+        "brown/cj08",
+        "brown/cn08",
+        "brown/cp05",
+        "brown/cg34",
+        "brown/cj79",
+        "brown/ck09",
+        "brown/ca10",
+        "brown/cj69",
+        "brown/cf21",
+        "brown/ch30",
+        "brown/cj77",
+        "brown/cj47",
+        "brown/ca02",
+        "brown/ca03",
+        "brown/ca04",
+        "brown/ca06",
+        "brown/ca08",
+        "brown/ca11",
+        "brown/ca12",
+        "brown/ca14",
+        "brown/ca16",
+        "brown/ca23",
+        "brown/ca27",
+        "brown/ca28",
+        "brown/ca31",
+        "brown/cb08",
+        "brown/cb09",
+        "brown/cb10",
+        "brown/cb12",
+        "brown/cb13",
+        "brown/cb16",
+        "brown/cb17",
+        "brown/cb18",
+        "brown/cb19",
+        "brown/cb23",
+        "brown/cb27",
+        "brown/cc10",
+        "brown/cd06",
+        "brown/cd07",
+        "brown/cd09",
+        "brown/cd16",
+        "brown/ce09",
+        "brown/ce10",
+        "brown/ce20",
+        "brown/ce28",
+        "brown/cf05",
+        "brown/cf06",
+        "brown/cf07",
+        "brown/cf25",
+        "brown/cf33",
+        "brown/cf38",
+        "brown/cg04",
+        "brown/cg12",
+        "brown/cg30",
+        "brown/cg36",
+        "brown/cg37",
+        "brown/cg40",
+        "brown/cg47",
+        "brown/cg62",
+        "brown/cg75",
+        "brown/ch01",
+        "brown/ch02",
+        "brown/ch06",
+        "brown/ch09",
+        "brown/ch10",
+        "brown/ch12",
+        "brown/ch16",
+        "brown/ch17",
+        "brown/ch20",
+        "brown/ch22",
+        "brown/ch24",
+        "brown/cj01",
+        "brown/cj02",
+        "brown/cj04",
+        "brown/cj06",
+        "brown/cj09",
+        "brown/cj12",
+        "brown/cj14",
+        "brown/cj15",
+        "brown/cj16",
+        "brown/cj18",
+        "brown/cj19",
+        "brown/cj20",
+        "brown/cj21",
+        "brown/cj27",
+        "brown/cj28",
+        "brown/cj29",
+        "brown/cj30",
+        "brown/cj35",
+        "brown/cj41",
+        "brown/cj45",
+        "brown/cj51",
+        "brown/cj78",
+        "brown/ck01",
+        "brown/ck03",
+        "brown/ck04",
+        "brown/ck06",
+        "brown/ck07",
+        "brown/ck08",
+        "brown/ck10",
+        "brown/ck11",
+        "brown/ck12",
+        "brown/ck13",
+        "brown/ck16",
+        "brown/ck17",
+        "brown/ck19",
+        "brown/ck20",
+        "brown/ck21",
+        "brown/ck22",
+        "brown/ck23",
+        "brown/ck24",
+        "brown/ck26",
+        "brown/ck27",
+        "brown/ck28",
+        "brown/cl01",
+        "brown/cl02",
+        "brown/cl03",
+        "brown/cl04",
+        "brown/cl05",
+        "brown/cl07",
+        "brown/cl08",
+        "brown/cl09",
+        "brown/cl10",
+        "brown/cl11",
+        "brown/cl12",
+        "brown/cl13",
+        "brown/cl14",
+        "brown/cl15",
+        "brown/cl16",
+        "brown/cl17",
+        "brown/cl18",
+        "brown/cl19",
+        "brown/cl20",
+        "brown/cl21",
+        "brown/cl22",
+        "brown/cl23",
+        "brown/cl24",
+        "brown/cm01",
+        "brown/cm02",
+        "brown/cm03",
+        "brown/cm04",
+        "brown/cm05",
+        "brown/cn01",
+        "brown/cn02",
+        "brown/cn03",
+        "brown/cn04",
+        "brown/cn05",
+        "brown/cn07",
+        "brown/cn09",
+        "brown/cn10",
+        "brown/cn12",
+        "brown/cn13",
+        "brown/cn14",
+        "brown/cn15",
+        "brown/cn16",
+        "brown/cn17",
+        "brown/cn18",
+        "brown/cn19",
+        "brown/cn20",
+        "brown/cn22",
+        "brown/cn23",
+        "brown/cn24",
+        "brown/cn25",
+        "brown/cn26",
+        "brown/cn27",
+        "brown/cn29",
+        "brown/cp01",
+        "brown/cp02",
+        "brown/cp03",
+        "brown/cp04",
+        "brown/cp06",
+        "brown/cp07",
+        "brown/cp08",
+        "brown/cp10",
+        "brown/cp11",
+        "brown/cp12",
+        "brown/cp13",
+        "brown/cp14",
+        "brown/cp15",
+        "brown/cp16",
+        "brown/cp18",
+        "brown/cp19",
+        "brown/cp20",
+        "brown/cp21",
+        "brown/cp22",
+        "brown/cp23",
+        "brown/cp24",
+        "brown/cp25",
+        "brown/cp26",
+        "brown/cp27",
+        "brown/cp28",
+        "brown/cp29",
+        "brown/cr02",
+        "brown/cr03",
+        "brown/cr05",
+        "brown/cr06",
+        "brown/cr07",
+        "brown/cc01",
+        "brown/cj36",
+        "brown/cg07",
+        "brown/cb06",
+        "brown/cf19",
+        "brown/cj80",
+        "brown/cg65",
+        "brown/ch19",
+        "brown/cc08",
+        "brown/ca29",
+        "brown/ca20",
+        "brown/cj25",
+        "brown/cj68",
+        "brown/cj10",
+        "brown/cb03",
+        "brown/cd13",
+        "brown/ch18",
+        "brown/ce34",
+        "brown/cj63",
+        "brown/cf10",
+        "brown/cj53",
+        "brown/ce32",
+        "brown/cj23",
+        "brown/cg44",
+        "brown/ce29",
+        "brown/cr01",
+        "brown/ce16",
+        "brown/cj74",
+        "brown/cb25",
+        "brown/cf30",
+        "brown/ca39",
+        "brown/cj40",
+        "brown/cj59",
+        "brown/cf01",
+        "brown/cg21",
+        "brown/ce13",
+        "brown/ca13",
+        "brown/ca37",
+        "brown/cj66",
+        "brown/cg08",
+        "brown/cf31",
+        "brown/cg27",
+        "brown/cg52",
+        "brown/cf12",
+        "brown/cj64",
+        "brown/cj22",
+        "brown/cf22",
+        "brown/cg39",
+        "brown/ca43",
+        "brown/cd02",
+        "brown/ck02",
+        "brown/cb20",
+        "brown/cf34",
+        "brown/cj24",
+        "brown/ce27",
+        "brown/ca15",
+        "brown/cg63",
+        "brown/ca18",
+        "brown/cg14",
+        "brown/cg64",
+        "brown/cg11",
+        "brown/cg29",
+        "brown/cp09",
+        "brown/cj07",
+        "brown/cg16",
+        "brown/cj03",
+        "brown/cf20",
+        "brown/cf32",
+        "brown/ca44",
+        "brown/cl06",
+        "brown/cr08",
+        "brown/cd03",
+        "brown/cg41",
+        "brown/cj65",
+        "brown/ch08",
+        "brown/ce11",
+        "brown/cc04",
+        "brown/cj42",
+        "brown/ce18",
+        "brown/cj38",
+        "brown/ce15",
+        "brown/cf13",
+        "brown/ch07",
+        "brown/cf40",
+        "brown/ce24",
+        "brown/cj39",
+        "brown/cf47",
+        "brown/cg61",
+        "brown/ce01",
+        "brown/cj54",
+        "brown/cb02",
+        "brown/ca34",
+        "brown/cd10",
+        "brown/cc14",
+        "brown/ce08",
+        "brown/ch25",
+        "brown/cg24",
+        "brown/cg23",
+        "brown/cg13",
+        "brown/cj32",
+        "brown/cg72",
+        "brown/ce33",
+        "brown/ch27",
+        "brown/cj31",
+        "brown/ca19",
+        "brown/cj43",
+        "brown/cj13",
+        "brown/ch03",
+        "brown/cc15",
+        "brown/ce12",
+        "brown/ce02",
+        "brown/cg42",
+        "brown/cg10",
+        "brown/ca09",
+        "brown/cp17",
+        "brown/ce06",
+        "brown/cg05",
+        "brown/cg57",
+        "brown/cf39",
+        "brown/ch26",
+        "brown/ce23",
+        "brown/cj11",
+        "brown/cc03",
+        "brown/cf48",
+        "brown/cd17",
+        "brown/ca40",
+        "brown/cf28",
+        "brown/cb24",
+        "brown/cf27",
+        "brown/cg48",
+        "brown/ca01",
+        "brown/cj34",
+        "brown/cj67",
+        "brown/ck25",
+        "brown/cd15",
+        "brown/cj72",
+        "brown/ce14",
+        "brown/cg68",
+        "brown/cg49",
+        "brown/ca42",
+        "brown/ca05",
+        "brown/cf42",
+        "brown/cd01",
+        "brown/cj60",
+        "brown/ck18",
+        "brown/cg25",
+        "brown/ch23",
+        "brown/ck15",
+        "brown/cg67",
+        "brown/cg06",
+        "brown/cf02",
+        "brown/cj55",
+        "brown/cg15",
+        "brown/cb11",
+        "brown/ca41",
+        "brown/cr04",
+        "brown/cj49",
+        "brown/cf24",
+        "brown/cf29",
+        "brown/cg53",
+        "brown/ch13",
+        "brown/ce19",
+        "brown/ck14",
+        "brown/cg71",
+        "brown/ch29",
+        "brown/cf03",
+        "brown/cg02",
+        "brown/cg54",
+        "brown/cf37",
+        "brown/cf44",
+        "brown/cj57",
+        "brown/cj50",
+        "brown/cd04",
+        "brown/cb05",
+        "brown/cf15",
+        "brown/cg19",
+        "brown/ck05",
+        "brown/cf26",
+        "brown/cg22",
+        "brown/cg66",
+        "brown/cg70",
+        "brown/cj62",
+        "brown/cf46",
+        "brown/cc07",
+        "brown/cm06",
+        "brown/cj58",
+        "brown/ce31",
+        "brown/ce04",
+        "brown/cg69",
+        "brown/ca17",
+        "brown/cg73",
+        "brown/cc12",
+        "brown/ca24",
+        "brown/cg60",
+        "brown/cg58",
+        "brown/ce07",
+        "brown/ch15",
+        "brown/cg32",
+        "brown/cc09",
+        "brown/cj70",
+        "brown/cj61",
+        "brown/cg18",
+        "brown/cd08",
+        "brown/cj37",
+        "brown/cf16",
+        "brown/cj26",
+        "brown/cc16",
+        "brown/cg46",
+        "brown/cf36",
+        "brown/cb21",
+        "brown/cj33",
+        "brown/cg09",
+        "brown/ca30",
+        "brown/cg20",
+        "brown/cj71",
+        "brown/cg38",
+        "brown/cd05",
+        "brown/cg26",
+        "brown/cc06",
+        "brown/ce17",
+        "brown/ce22",
+        "brown/cb15",
+        "brown/ce35",
+        "brown/ch28",
+        "brown/ce21",
+        "brown/ch04"
+      ]
+    },
+    "policy": "document-exact-sentence-and-5gram-jaccard-0.9-v1",
+    "seed": 42
+  },
+  "split_audit": {
+    "dev": {
+      "documents": 30,
+      "effective_groups_by_token_weight": 29.989464381983986,
+      "groups": 30,
+      "largest_group_token_fraction": 0.03445659018616892,
+      "predicted_tokens": 61933,
+      "sentences": 2849
+    },
+    "test": {
+      "documents": 33,
+      "effective_groups_by_token_weight": 29.33432976844219,
+      "groups": 31,
+      "largest_group_token_fraction": 0.06156962917290584,
+      "predicted_tokens": 68118,
+      "sentences": 3474
+    },
+    "train": {
+      "documents": 437,
+      "effective_groups_by_token_weight": 5.458621621596039,
+      "groups": 243,
+      "largest_group_token_fraction": 0.42632186704328673,
+      "predicted_tokens": 908431,
+      "sentences": 50443
+    }
+  },
+  "test_contrasts": "one-SE/minimum-dev/same-order KN + prespecified KN3/MKN3, deduplicated",
+  "versions": {
+    "nltk": "3.10.3",
+    "numpy": "2.4.6"
+  }
+}
