@@ -1,0 +1,25 @@
+{
+  "reviewer_roles": [
+    "independent cross-review of runner/source API",
+    "independent cross-review of CVAT importer",
+    "independent data validation"
+  ],
+  "findings_fixed": [
+    "unknown label exclusion and typoâ†’negative gate",
+    "bind reviewer declaration to XML SHA256 consumed bytes",
+    "video post-probe integrity",
+    "clone preparation documents historical SDD manifest, model weights and native environment gates",
+    "collector rejects aggregate declared bytes before output creation or download"
+  ],
+  "runner_findings": [],
+  "data_check": "600frame per phase; dev winner valid; test TP0/HOTA0/IDF1=0; CSV and hashes match",
+  "limits": [
+    "source identity declared not verified human",
+    "CVAT timestamp nominal, no PTS VFR mapping",
+    "SDD source labels may be generated/interpolated",
+    "test negative cannot prove benefit",
+    "metrics script cold start includes first call but detector excludes decode/conversion"
+  ],
+  "collector_snapshot": "Historical acquisition source preserved; current collector hardened after acquisition without new inference.",
+  "scope_review": "Independent final scope and publish-package source equality review passed; no remaining actionable P1/P2; model/core/runtime unchanged."
+}

@@ -6,6 +6,21 @@ Tanggal: **11 Oktober 2026**. Target tetap **demonstrasi/portofolio lokal dari v
 
 > Arahan terbaru pengguna: fokus hanya pada N-gram dan CCTV; fitur baru harus membantu memahami model statistik atau meninjau rekaman. Bagian ini menjadi acuan pekerjaan berikutnya. Rencana lama di bawah dipertahankan sebagai riwayat; task lama yang di luar scope tidak otomatis menjadi pekerjaan aktif. Penyempitan scope tidak menghapus fitur/data yang sudah ada.
 
+## Prioritas lanjutan — data, objek kecil dan tracking (11 Oktober 2026)
+
+Scope yang diotorisasi: kualitas label CCTV, inferensi objek kecil, dan tracking berurutan. N-gram tetap fondasi analisis simbol; tidak menambah metode urutan atau fitur absensi dalam siklus ini.
+
+| Fase | Implementasi | Gate |
+| --- | --- | --- |
+| P1 Referensi | Import CVAT video dengan review/coverage eksplisit; empat scene SDD baru berlabel track; hash/decode/partisi | Draft tidak menjadi ground truth. SDD aerial akademik NC-SA, bukan label helm pabrik. Bookstore+nexus dev, little+deathCircle test; 300 frame pertama per klip dipilih sebelum inferensi. Scene coupa/hyang serta MEVA/SH17 test lama dikecualikan. |
+| P2 Detektor | SAHI dependency dev terkunci; deteksi biasa640 versus tile640 overlap0.2+full image; model YOLO26n tetap | Prediksi raw disimpan sebelum asosiasi; evaluasi objek kecil/FP/FN serta latency; hasil negatif tetap tersimpan. |
+| P3 Tracking | ByteTrack dan BoT-SORT tanpa Re-ID memakai deteksi yang sama, semua frame berurutan | IDF1/CLEAR/HOTA native, empty frame ikut, selector dev dibekukan sebelum satu test baru per sumber. Re-ID tidak ditambahkan tanpa uji terpisah. |
+| P4 Verifikasi | Tests/lint/type/build, pemeriksaan independen, export CSV/JSON dan laporan | Core/hasil/bobot/perubahan pengguna identik; jangan memasang kandidat ke studio hanya dari hasil aerial. Label worn/not_worn/unknown lokasi target tetap gate terbuka. |
+
+Hasil fase: [P1–P4](../extensions/reports/PRIORITY_TRACKING_20261011.md) dan [data](../extensions/results/continuous_tracking_v1/README.md). Generalisasi pada test gagal; status selesai berarti implementasi/evaluasi tersedia, bukan akurasi operasional tercapai.
+
+Tidak menjalankan fine-tuning baru pada siklus ini: selesaikan diagnosis deteksi dan identitas sebelum menambah model. Frame diperoleh dari video sumber asli; resize tile tidak memulihkan detail yang tidak terekam.
+
 ## Siklus kualitas data dan akurasi — 11 Oktober 2026
 
 Target: memperkuat data nyata, memisahkan error deteksi/tracking, dan menguji hipotesis skor urutan N-gram. Hasil historis termasuk hard alarm **0/30**, IDF1=0 pada aerial SDD, dan recall NO-Hardhat=15% tetap baseline beku. Tidak menyesuaikan parameter terhadap test lama.

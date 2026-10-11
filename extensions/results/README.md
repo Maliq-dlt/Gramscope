@@ -10,6 +10,7 @@
 | [event_stress_v1/](event_stress_v1/README.md) | Noise, duration, calibration, review budgets + agregat eksplisit | A3 konstruksi; tidak mengukur derau kamera nyata |
 | [idwiki_holdout_v1/](idwiki_holdout_v1/README.md) | 300 artikel baru,24testdokumen22groups,dev-only selection/pairedCI | A4 bounded holdout; CI belum mendukung keunggulan MKN |
 | [cctv_detector_v1/](cctv_detector_v1/README.md) | 284 gambar val/test, TP/FP/FN/P/R/AP | C2 benchmark label publik; recall tanpa helm test15% |
+| [continuous_tracking_v1/](continuous_tracking_v1/README.md) | 4 scene baru,1.200 frame kontinu,SAHI/ByteTrack/BoT-SORT,HOTA/IDF1 | P1–P3 reference aerial; generalisasi test gagal, kandidat tidak dipasang |
 | [cctv_tracking_v1/](cctv_tracking_v1/summary.md) | 6 klip, 12.115 sampel frame, Identity/CLEAR | C3 aerial reference; IDF1 nol, bukan validasi pabrik |
 | [nltk_comparison.json](nltk_comparison.json) | Kesetaraan ordinary KN dengan NLTK pada subset uji | Validasi implementasi; bukan validasi eksternal MKN |
 

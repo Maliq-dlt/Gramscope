@@ -1,0 +1,5 @@
+phase,mode,tp,fp,fn,precision,recall,small_gt,small_tp,small_recall
+dev,sliced,215,1291,6692,0.14276228419654716,0.031127841320399596,4437,214,0.048230786567500565
+dev,standard,0,132,6907,0.0,0.0,4437,0,0.0
+test,sliced,0,237,8526,0.0,0.0,6916,0,0.0
+test,standard,0,2,8526,0.0,0.0,6916,0,0.0

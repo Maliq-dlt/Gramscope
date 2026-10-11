@@ -1,0 +1,37 @@
+{
+  "claimed_unix_seconds": 1791732376.9846241,
+  "native": {
+    "sources": {
+      "benchmark": "4a12a5ea7d49a18f02ddf653da01255cff52e9f41027dd237b60d4c03a52401d",
+      "bot_sort": "b157cbc33f75f1132df530f04361824bc39a30d4051ce6df1cd5c388e49b3117",
+      "bot_yaml": "8cd88930d3be5557be0777f384eecff0a36a7011850fe613fc0a68178bfd5b01",
+      "byte_tracker.py": "7efb1474decb1a244b4f94cd5bdf363288f6994c965d4130a2ce67164cb36590",
+      "byte_yaml": "395701d947a749179dee3e327b1181b730c4ca98e7cac5a2ab05280aae573b8b",
+      "bytetrack.yaml": "395701d947a749179dee3e327b1181b730c4ca98e7cac5a2ab05280aae573b8b",
+      "clear.py": "35789c3cfc39825fb0905ee51b0dd0fb8f4b66fca9fdfc7fc875faac1af56c40",
+      "default.yaml": "1299e8ad7adaa983f45e2f12835bf4f2f4cc149c5178adf524a8478a19a53477",
+      "hota": "eec3a9e822435477c04ee5b82b27c7d70977ffb94baf838afe54b5db960362bb",
+      "identity.py": "6e0d4832aa021a326a6bb51b4c403e50bd4b409f59c18271a6c2bc9bd0dee47c",
+      "model.py": "19c8dbb3e6b982fd8a17a087dfc3c6abcbad1d153c180a6d9a90df5b4a665ad8",
+      "predictor.py": "94464add6678fbfdd41fc9c90959f3e738fc5f6e5385c1c56523907e642d86cd",
+      "runner": "67858619073e350405e12bf23b63675fe5543b7e9babb8ad1aac1e04ad2f304f",
+      "sahi_predict": "1e431b102c70af84545b3701531df1b56deba72b08989718d92631fe99f711aa",
+      "sahi_ultralytics": "daac4f8a29545687216e4da86cfc59b478b76cb3d9ba8847c3b5c0e85cea631b",
+      "track.py": "b502cb5e7db83549d8089925294cf989ea07bb6192b0f08ae1953fd80e784e28"
+    },
+    "versions": {
+      "numpy": "2.4.6",
+      "opencv-python": "5.0.0.93",
+      "sahi": "0.12.8",
+      "scipy": "1.17.1",
+      "torch": "2.14.1+cu130",
+      "trackeval": "1.3.0",
+      "ultralytics": "8.4.174"
+    }
+  },
+  "phase": "dev",
+  "protocol_sha256": "72d1d1f05faab2ac87b480440b754c2dbc6720191dd0acb0ccb45a4810f3f5ec",
+  "selected": null,
+  "selection_path": null,
+  "selection_sha256": null
+}

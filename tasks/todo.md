@@ -1,3 +1,13 @@
+## Prioritas data, objek kecil dan tracking (implementasi dan verifikasi lokal selesai)
+
+- [x] P1 Import referensi CVAT reviewed/coverage dan audit empat scene SDD baru, partisi/snapshot.
+- [x] P2 SAHI terkunci dan deteksi biasa/sliced pada dev, prediksi raw terpisah.
+- [x] P3 Tracking frame berurutan ByteTrack/BoT-SORT, HOTA/IDF1, seleksi dev dan satu test baru.
+- [x] P4 Test/lint/type/build, review, preservasi, CSV/JSON dan dokumentasi hasil.
+- [ ] Gate lapangan: label independen lokasi target untuk helm dipakai/tidak dipakai, track dan insiden. Referensi aerial tidak menutup gate ini.
+
+Hasil P1–P4: [laporan](../extensions/reports/PRIORITY_TRACKING_20261011.md), [CSV/JSON](../extensions/results/continuous_tracking_v1/README.md). Test generalisasi gagal; kandidat offline tidak dipasang ke studio. Publikasi/CI dicatat setelah run selesai.
+
 ## Siklus kualitas data dan akurasi (selesai)
 
 - [x] Q1: sumber resmi/lisensi, akuisisi, audit label/decode/dedup dan protokol beku.

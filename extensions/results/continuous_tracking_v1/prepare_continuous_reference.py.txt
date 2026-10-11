@@ -1,0 +1,90 @@
+"""Acquire four fresh SDD scenes for the bounded continuous tracking study."""
+
+import argparse
+import subprocess
+from pathlib import Path
+
+import prepare_tracking_reference as source
+import runtime
+
+CLIPS = ("bookstore/video0", "nexus/video0", "little/video0", "deathCircle/video0")
+
+
+def collect(output):
+    output = Path(output).resolve()
+    if not output.is_relative_to(runtime.ROOT / "data/public") or output.exists():
+        raise ValueError("Use a fresh directory below industrial_ai/data/public")
+    listing = source.metadata(f"{source.API}/list/{source.REF}?pageSize=200")
+    if listing.get("nextPageToken"):
+        raise ValueError("Expected complete fixed-size public listing")
+    lookup = {row["name"]: row["totalBytes"] for row in listing["datasetFiles"]}
+    output.mkdir(parents=True)
+    source.save(
+        output / "protocol.json",
+        {
+            "dataset_ref": source.REF,
+            "original_url": source.ORIGINAL,
+            "license": source.LICENSE,
+            "clips": CLIPS,
+            "dev_scenes": ["bookstore", "nexus"],
+            "test_scenes": ["little", "deathCircle"],
+            "selection": "Fixed fresh scenes, first300frames selected before inference",
+            "collector_sha256": source.sha(Path(__file__)),
+            "mirror_license_discrepancy": "Original Stanford NC-SA overrides mirror CC0",
+        },
+    )
+    source.save(output / "file_listing.json", listing)
+    downloads, clips = {}, []
+    for name in CLIPS:
+        folder = output / name
+        folder.mkdir(parents=True)
+        for path in (
+            f"video/{name}/video.mp4",
+            f"annotations/{name}/annotations.txt",
+            f"annotations/{name}/reference.jpg",
+        ):
+            declared = lookup[path]
+            if type(declared) is not int or declared < 1:
+                raise ValueError("Positive declared byte size required")
+            downloads[path] = source.download(path, folder / Path(path).name, declared)
+            print(f"Downloaded {path}", flush=True)
+        clip = source.inspect(folder)
+        clip.update(clip=name, source_group=name.split("/")[0])
+        subprocess.run(
+            ["ffmpeg", "-v", "error", "-i", str(folder / "video.mp4"), "-f", "null", "-"],
+            check=True,
+            timeout=600,
+        )
+        clips.append(clip)
+    result = {
+        "status": "completed",
+        "dataset_ref": source.REF,
+        "clips": clips,
+        "downloads": downloads,
+        "files": {
+            p.relative_to(output).as_posix(): source.sha(p)
+            for p in output.rglob("*")
+            if p.is_file()
+        },
+        "raw_exposure_seconds": sum(c["duration_seconds"] for c in clips),
+        "evaluated_exposure_seconds": 0,
+        "limitations": [
+            "Aerial campus not factory/PPE reference",
+            "Generated/occluded SDD annotations retained",
+            "Original reference canvas scaled to decoded video dimensions",
+        ],
+    }
+    source.save(output / "manifest.json", result)
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    result = collect(args.output)
+    print(f"Acquired {len(result['clips'])} fresh reference clips; no inference")
+
+
+if __name__ == "__main__":
+    main()

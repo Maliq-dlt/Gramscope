@@ -1,0 +1,19 @@
+{
+  "files": 2987,
+  "changed": [
+    "extensions/results/README.md"
+  ],
+  "missing": [],
+  "frozen_core": 15,
+  "frozen_core_mismatches": [],
+  "user_changes_preserved": true,
+  "intentional_changes": [
+    {
+      "path": "extensions/results/README.md",
+      "backup": ".tmp/priority_upgrade_v1/results_index_before.md",
+      "original_sha256": "081bdcfb2032ea6eb92382ca813cb12a04823ed2c56b47ff320a7cfc0cb831f9",
+      "current_sha256": "4a5e9f61db15b8a695f98d2ff47e3aa08b1be0c62cca06e1e9bf1a094b0ad0e9",
+      "backup_matches_original": true
+    }
+  ]
+}
