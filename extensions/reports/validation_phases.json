@@ -1,0 +1,422 @@
+{
+  "academic": {
+    "A1": {
+      "date": "2026-10-11",
+      "evidence": "Protocol frozen before model scores; baseline explicit rules, disjoint calibration and bounded corpus defined.",
+      "protected_files": 3681,
+      "protocol_sha256": "11e62e5fb66e7bfee2f8e30812464fada75572026fc941920f60c6af8ec4ebd1",
+      "status": "completed"
+    },
+    "A2": {
+      "checks": "source receipts, package fingerprints, table grain/counts, finite CE, pair-invariance, pretest claim tests verified",
+      "data_kind": "constructed synthetic; no expert/site labels",
+      "runs": [
+        {
+          "config_sha256": "3ff5f95656b3b1c0053de237bb6df528940c03663385604f853fcef2ab47c13c",
+          "hard_alert_sources": 0,
+          "hard_delta_ce": 0.7672646507396131,
+          "normal_alert_sources": 0,
+          "rows": {
+            "A2_models.csv": 11,
+            "A2_review.csv": 42,
+            "A2_sessions.csv": 1980,
+            "A2_sources.csv": 270
+          },
+          "seed": 42,
+          "winner": "3-witten_bell"
+        },
+        {
+          "config_sha256": "d4753f3821d7fa181f5f2c3f03888346fc12f56c3285ce395dc34ef1ff4f5f2e",
+          "hard_alert_sources": 0,
+          "hard_delta_ce": 0.7672646507396131,
+          "normal_alert_sources": 0,
+          "rows": {
+            "A2_models.csv": 11,
+            "A2_review.csv": 42,
+            "A2_sessions.csv": 1980,
+            "A2_sources.csv": 270
+          },
+          "seed": 43,
+          "winner": "3-witten_bell"
+        },
+        {
+          "config_sha256": "2892ea669ed26c16404692bb0324ef08264e2b2b417c93f1f221ff6fdff48718",
+          "hard_alert_sources": 0,
+          "hard_delta_ce": 0.7672646507396131,
+          "normal_alert_sources": 0,
+          "rows": {
+            "A2_models.csv": 11,
+            "A2_review.csv": 42,
+            "A2_sessions.csv": 1980,
+            "A2_sources.csv": 270
+          },
+          "seed": 44,
+          "winner": "3-witten_bell"
+        }
+      ],
+      "status": "completed"
+    },
+    "A3": {
+      "checks": "A2 checkpoints preserved, paired labels/CE/EOS units, frozen clean calibration, train-only duration bins, all package hashes verified",
+      "limits": "Constructed observation stress; no clean exchangeability guarantee under noise, no real detector accuracy claim",
+      "runs": [
+        {
+          "duration": [
+            {
+              "condition": "duration_base",
+              "dev_ce_nats": "1.5202802664137829",
+              "mean_ce_nats": "3.2609623387489957",
+              "model": "3-modified_kneser_ney",
+              "normal_source_alerts": "0",
+              "normal_source_groups": "30",
+              "oov_targets": "60",
+              "seed": "42",
+              "symbol_targets": "930"
+            },
+            {
+              "condition": "duration_slow",
+              "dev_ce_nats": "1.5202802664137829",
+              "mean_ce_nats": "3.167902252587821",
+              "model": "3-modified_kneser_ney",
+              "normal_source_alerts": "0",
+              "normal_source_groups": "30",
+              "oov_targets": "60",
+              "seed": "42",
+              "symbol_targets": "930"
+            }
+          ],
+          "normal_source_alerts": {
+            "drop10pct": 18,
+            "duplicate10pct": 12,
+            "helmet-flip10pct": 17,
+            "track-fragment": 30
+          },
+          "rows": {
+            "A3_duration.csv": 360,
+            "A3_duration_sources.csv": 60,
+            "A3_duration_summary.csv": 2,
+            "A3_models.csv": 44,
+            "A3_review.csv": 168,
+            "A3_sessions.csv": 7920,
+            "A3_sources.csv": 1080
+          },
+          "seed": 42,
+          "selected": "3-witten_bell",
+          "source_config_sha256": "17dd2ac8e7f71800999ba6de232a6e80b29f20a0813ee0cd4402be822fa6e6b7"
+        },
+        {
+          "duration": [
+            {
+              "condition": "duration_base",
+              "dev_ce_nats": "1.5343710279683185",
+              "mean_ce_nats": "3.3181395671010177",
+              "model": "3-modified_kneser_ney",
+              "normal_source_alerts": "1",
+              "normal_source_groups": "30",
+              "oov_targets": "60",
+              "seed": "43",
+              "symbol_targets": "930"
+            },
+            {
+              "condition": "duration_slow",
+              "dev_ce_nats": "1.5343710279683185",
+              "mean_ce_nats": "3.3191394734051256",
+              "model": "3-modified_kneser_ney",
+              "normal_source_alerts": "4",
+              "normal_source_groups": "30",
+              "oov_targets": "60",
+              "seed": "43",
+              "symbol_targets": "930"
+            }
+          ],
+          "normal_source_alerts": {
+            "drop10pct": 16,
+            "duplicate10pct": 14,
+            "helmet-flip10pct": 15,
+            "track-fragment": 30
+          },
+          "rows": {
+            "A3_duration.csv": 360,
+            "A3_duration_sources.csv": 60,
+            "A3_duration_summary.csv": 2,
+            "A3_models.csv": 44,
+            "A3_review.csv": 168,
+            "A3_sessions.csv": 7920,
+            "A3_sources.csv": 1080
+          },
+          "seed": 43,
+          "selected": "3-witten_bell",
+          "source_config_sha256": "9b2c541d5f772aece7cdf2f5c14c72065ae061304907ee0958c15748e3e62885"
+        },
+        {
+          "duration": [
+            {
+              "condition": "duration_base",
+              "dev_ce_nats": "1.571004717826745",
+              "mean_ce_nats": "3.2977008415212254",
+              "model": "2-modified_kneser_ney",
+              "normal_source_alerts": "0",
+              "normal_source_groups": "30",
+              "oov_targets": "60",
+              "seed": "44",
+              "symbol_targets": "930"
+            },
+            {
+              "condition": "duration_slow",
+              "dev_ce_nats": "1.571004717826745",
+              "mean_ce_nats": "3.3174657331649087",
+              "model": "2-modified_kneser_ney",
+              "normal_source_alerts": "0",
+              "normal_source_groups": "30",
+              "oov_targets": "60",
+              "seed": "44",
+              "symbol_targets": "930"
+            }
+          ],
+          "normal_source_alerts": {
+            "drop10pct": 17,
+            "duplicate10pct": 18,
+            "helmet-flip10pct": 12,
+            "track-fragment": 30
+          },
+          "rows": {
+            "A3_duration.csv": 360,
+            "A3_duration_sources.csv": 60,
+            "A3_duration_summary.csv": 2,
+            "A3_models.csv": 44,
+            "A3_review.csv": 168,
+            "A3_sessions.csv": 7920,
+            "A3_sources.csv": 1080
+          },
+          "seed": 44,
+          "selected": "3-witten_bell",
+          "source_config_sha256": "0fa7930c8d230c356aadd1b4885fb9fa838a1cd26c8132a0de422f6a0301ed82"
+        }
+      ],
+      "status": "completed"
+    },
+    "A4": {
+      "checks": "snapshot provenance/pilot/code hashes, group isolation, pretest selection/claim, package hashes and stored metrics recomputation verified",
+      "corpus": "300 introductions,217duplicate-aware groups;24test documents/22groups;historical pilot excluded",
+      "source_config_sha256": "006ac5aaf491a2d545260480148b3e7599dd34d8ebe37ee9d47122d07146e4fa",
+      "status": "completed",
+      "summary": {
+        "baseline": "3-kneser_ney",
+        "interpretation": "encyclopedic introductions, bounded lexical selection; not population-general confirmation",
+        "metrics": [
+          {
+            "cross_entropy": 3.8649672649186106,
+            "mean_document_oov": 0.28148167445438077,
+            "model": "3-modified_kneser_ney",
+            "nll": 5364.574563707031,
+            "perplexity": 47.701710887741875,
+            "predicted_tokens": 1388,
+            "probabilistic": true,
+            "role": "dev winner",
+            "test_documents": 24,
+            "test_groups": 22,
+            "zero_probability": false
+          },
+          {
+            "cross_entropy": 3.8726190747297466,
+            "mean_document_oov": 0.28148167445438077,
+            "model": "3-kneser_ney",
+            "nll": 5375.195275724888,
+            "perplexity": 48.068115347989966,
+            "predicted_tokens": 1388,
+            "probabilistic": true,
+            "role": "same-order KN baseline",
+            "test_documents": 24,
+            "test_groups": 22,
+            "zero_probability": false
+          }
+        ],
+        "paired_bootstrap": {
+          "ci95": [
+            -0.02010198622534854,
+            0.0044772048560927065
+          ],
+          "difference": -0.007651809811136415,
+          "documents": 24,
+          "independent_groups": 22,
+          "metric": "paired token-weighted CE difference (A minus B)",
+          "resamples": 1000,
+          "seed": 42,
+          "unit": "duplicate/source group; paired resampling"
+        },
+        "selected": "3-modified_kneser_ney",
+        "selection_stability": [
+          "3-modified_kneser_ney",
+          "3-kneser_ney",
+          "3-modified_kneser_ney"
+        ]
+      }
+    },
+    "A5": {
+      "commands": [
+        "uv run --locked pytest -q",
+        "uv run --locked ruff check core extensions jalankan_notebook.py",
+        "uv run --locked ruff format --check core extensions jalankan_notebook.py",
+        "uv run --locked ty check core/src extensions/src extensions/experiments jalankan_notebook.py",
+        "uv build --out-dir .tmp/academic-validation/packages",
+        "git diff --check"
+      ],
+      "independent_review": "GPT-6.1 agents audited source/receipts/public bytes/splits/metric arithmetic/A2-A3 lineage/A4 bootstrap without refit or test rescore",
+      "preservation": {
+        "changed": [],
+        "files": 3681,
+        "missing": []
+      },
+      "pytest_passed": 185,
+      "scope": "implemented academic validation; constructed synthetic + bounded article holdout, not expert-label or factory validation",
+      "status": "completed"
+    }
+  },
+  "cctv": {
+    "C1": {
+      "checks": [
+        "source_group_check.py passed",
+        "video_finetune_check.py passed",
+        "Ruff/format/Ty/diff--check passed",
+        "HTTP/SQLite omitted/unapproved/failed bridge identity universe and pre-compute leak regression passed"
+      ],
+      "data_preserved": true,
+      "fix": "transitive grouping original SHA or attributed URL; min2 groups, dedup/source split/signature v2",
+      "status": "completed"
+    },
+    "C2": {
+      "check": "native cache metric parity, original cache preserved; no threshold tuning",
+      "device": {
+        "compiled_cuda": "13.0",
+        "cuda_available": true,
+        "fallback": false,
+        "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "requested": "auto",
+        "selected": "cuda:0"
+      },
+      "limits": "supplied image labels; no operational worn/association claim; pretraining/site overlap unknown",
+      "recovery": "29 original cached + index29 one diagnostic repeat +111 newly inferred; device diagnostic limitation documented",
+      "status": "completed",
+      "test_images": 141,
+      "test_per_class": [
+        {
+          "ap50": 0.7751138870634495,
+          "ap50_95": 0.32626173579433476,
+          "class": "person",
+          "confidence": 0.35,
+          "fn": 48,
+          "fp": 67,
+          "precision": 0.7372549019607844,
+          "recall": 0.7966101694915254,
+          "support": 236,
+          "tp": 188
+        },
+        {
+          "ap50": 0.6827323267109278,
+          "ap50_95": 0.26531570840920404,
+          "class": "Hardhat",
+          "confidence": 0.45,
+          "fn": 81,
+          "fp": 50,
+          "precision": 0.6894409937888198,
+          "recall": 0.578125,
+          "support": 192,
+          "tp": 111
+        },
+        {
+          "ap50": 0.09947803899392588,
+          "ap50_95": 0.01762044508918929,
+          "class": "NO-Hardhat",
+          "confidence": 0.45,
+          "fn": 34,
+          "fp": 22,
+          "precision": 0.21428571428571427,
+          "recall": 0.15,
+          "support": 40,
+          "tp": 6
+        }
+      ],
+      "validation_images": 143
+    },
+    "C3": {
+      "frames": 12115,
+      "incident_gate": "rules vs novelty/review-budget A2; independent real hazard/onset/exposure labels unavailable",
+      "interpretation": "negative public aerial reference; no factory labels; no incident metrics",
+      "native_combined": {
+        "CLEAR": {
+          "CLR_F1": 0.0,
+          "CLR_FN": 105743,
+          "CLR_FP": 2,
+          "CLR_Frames": 3990,
+          "CLR_Pr": 0.0,
+          "CLR_Re": 0.0,
+          "CLR_TP": 0,
+          "FP_per_frame": 0.0005012531328320802,
+          "Frag": 0,
+          "IDSW": 0,
+          "ML": 552,
+          "MLR": 1.0,
+          "MODA": -1.8913781526909584e-05,
+          "MOTA": -1.8913781526909584e-05,
+          "MOTAL": -1.8913781526909584e-05,
+          "MOTP": 0.0,
+          "MOTP_sum": 0.0,
+          "MT": 0,
+          "MTR": 0.0,
+          "PT": 0,
+          "PTR": 0.0,
+          "sMOTA": -1.8913781526909584e-05
+        },
+        "Identity": {
+          "IDF1": 0.0,
+          "IDFN": 105743,
+          "IDFP": 2,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDTP": 0
+        }
+      },
+      "source_scenes": 2,
+      "status": "completed",
+      "timeline_minutes": 40.41263488333333,
+      "verification": "raw/canonical count2,GT105743,metricreplayexact,scaledGT/hashverified"
+    },
+    "C4": {
+      "checks": "audit_read_check real SQLite/JPEG/range/privacy and DB/key/anchor/media restoration passed; independent review closed alternate annotation/job/training read paths; first-match routing and privacy regression passed",
+      "controls": "sensitive GET audit normalized routes/resource; denial/range/500; no query/body/token; unsafe behavior unchanged",
+      "limits": "read status not full delivery; hostadmin can control key; fullstudio recovery/deletion unverified",
+      "policy": "docs/DATA_POLICY.md; default preservation; no automatic deletion or operational retention configuration",
+      "status": "completed"
+    },
+    "C5": {
+      "academic_tests": 185,
+      "format_limit": "unrelated user tests/e2e.py intentionally untouched; published source format checked",
+      "http_checks": 36,
+      "learning": "RTX objects9/9 235tensorchanged;helmets9/9 83tensorchanged;baseweightsunchanged",
+      "quality": "root/studioRuff+Ty,UItypecheck/build,audits,packageequalitypassed",
+      "remaining": "exact-commit publication CI recorded in GitHub Actions; target-site incident labels remain a separate gate",
+      "security_assertions": 108,
+      "status": "completed_local",
+      "studio_backend_suites": 21,
+      "ui_suites": 10,
+      "preservation": {
+        "files": 3681,
+        "missing": [],
+        "intentional_changed": [
+          "extensions/results/README.md"
+        ],
+        "original_index_backup": ".tmp/academic-validation/original-results-index.md"
+      },
+      "publication_checks": {
+        "numeric_manifests": 9,
+        "numeric_file_hashes": 83,
+        "checkout_source_hashes": 54,
+        "core_manifest_files": 15,
+        "user_changes_excluded": true
+      },
+      "independent_review": "A2-A4 and C1-C4 source/data/CI reviews; C4 findings fixed and reviewed, no remaining blocker"
+    },
+    "status": "completed_local"
+  },
+  "schema_version": 1
+}

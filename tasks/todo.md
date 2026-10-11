@@ -5,21 +5,21 @@ Tanggal: **11 Oktober 2026**. [Rencana aktif](plan.md) · [Bukti implementasi se
 ## Siklus validasi baru
 
 - [x] A1 Bekukan protokol/grid/rubrik/budget sebelum run dan snapshot berkas terlindungi.
-- [ ] A2 Run skenario bertingkat dengan rules/pair/LM dan tiga seed; cek hard pair invariance.
-- [ ] A3 Uji derau/durasi, calibration source terpisah dan reviewer-budget; export unit benar.
-- [ ] A4 Corpus ID baru/dedup, selection dev, primary holdout sekali dan robustness development.
-- [ ] A5 Validasi data/tes/source/build/preservasi dan review; finalkan hasil akademik.
-- [ ] C1 Setelah A5, buat protokol CCTV berdasarkan inventaris label/sumber aktual.
-- [ ] C2 Evaluator detector berlabel publik/site; batas generalisasi jelas.
-- [ ] C3 Verifikasi rules vs novelty, reviewer budget dan gate ground truth/exposure.
-- [ ] C4 Read/download audit, retensi/backup/deletion dan lisensi dalam scope lokal.
-- [ ] C5 Regresi, biaya dan hasil; data operasional yang belum ada tetap gate terbuka.
+- [x] A2 Run skenario bertingkat dengan rules/pair/LM dan tiga seed; cek hard pair invariance.
+- [x] A3 Uji derau/durasi, calibration source terpisah dan reviewer-budget; export unit benar.
+- [x] A4 Corpus ID baru/dedup, selection dev, primary holdout sekali dan robustness development.
+- [x] A5 Validasi data/tes/source/build/preservasi dan review; finalkan hasil akademik.
+- [x] C1 Setelah A5, buat protokol CCTV berdasarkan inventaris label/sumber aktual.
+- [x] C2 Evaluator detector berlabel publik/site; batas generalisasi jelas.
+- [x] C3 Verifikasi rules vs novelty, reviewer budget dan gate ground truth/exposure.
+- [x] C4 Read/download audit, retensi/backup/deletion dan lisensi dalam scope lokal.
+- [x] C5 Regresi, biaya, hasil dan preservasi lokal terverifikasi; status publikasi mengikuti CI. Data lokasi target tetap gate terbuka.
 
 Centang berarti hasil dan verifikasi ada; runner tidak berarti akurasi lapangan terbukti.
 
 ## Pekerjaan aktif — N-gram dan CCTV
 
-Status: **implementasi fungsional fase 0–4 terverifikasi lokal; 172 tes akademik lulus (termasuk tes paket data). Kualitas kamera independen masih belum dapat diukur**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
+Status: **implementasi fungsional fase 0–4 terverifikasi lokal; 185 tes akademik lulus. Referensi publik detector/tracking sudah diukur; kualitas kamera lokasi nyata tetap belum terbukti**. Centang menandakan pekerjaan dan bukti selesai, bukan fitur yang sekadar disebut dalam rencana. Riwayat centang lama tetap disimpan di bawah. Fitur lama di luar fokus tidak dihapus.
 
 ### Fase 0 — Kontrak dan baseline
 
@@ -158,8 +158,8 @@ Dependency: checkpoint akhir. Scope: M, 2–4 file CLI/docs/tests. Verifikasi: b
 
 ### Evaluasi mutu yang masih memerlukan data
 
-- [ ] Tambah sumber asli independen ketiga dengan provenance/lisensi dan reference labels tracking/helm/novelty menurut rubrik frozen.
-- [ ] Jalankan evaluasi mutu pada holdout baru (IDF1, precision/recall, exposure untuk false alerts/hour/onset); hasil smoke tidak menjadi nilai kualitas kamera.
+- [ ] Tambah rekaman lokasi target independen dengan label tracking/helm/kejadian menurut rubrik dan dasar pemrosesan data. Referensi publik kini tersedia: Construction-PPE dan SDD; belum menggantikan data pabrik.
+- [ ] Evaluasi lokasi target: tracking/helm, incident precision/recall, onset/delay dan exposure untuk false alerts/hour. C2/C3 publik selesai dengan hasil negatif; tidak ada klaim keselamatan otomatis.
 
 Ini gerbang data/evaluasi, bukan fitur runtime yang diam-diam dianggap selesai. Laporan dan batas lengkap: [Verifikasi CCTV/N-gram](../industrial_ai/reports/VERIFIKASI_CCTV_NGRAM.md).
 

@@ -81,3 +81,7 @@ uv run ngram-lm repl --model PATH_CHECKPOINT.json.gz
 `/model <path>` mengganti checkpoint, `/topk <context>` memperlihatkan prediksi, `/score <teks>` menghitung skor/perplexity, `/info` membaca metadata dan `/quit` keluar. Path gagal mempertahankan model aktif; tidak melatih atau mengubah checkpoint. REPL memakai tokenizer kata baku. Simbol CCTV memakai runner event tersendiri.
 
 Ledger versi 2 mendukung kendaraan, helm per frame/interval, offset/revisi, bundle simultan, provenance sumber dan EOS. Interval dipertahankan sebagai bukti; scoring belum memodelkan durasi. [Panduan studio](../industrial_ai/README.md#kejadian-cctv-dan-penjelasan-n-gram).
+
+## Validasi tambahan, 11 Oktober 2026
+
+[Data per fase](results/README.md) mencakup A2 hard pair-matched/rules, A3 noise/duration/calibration/review-budget dan A4 holdout Wikipedia baru. [Receipt](reports/validation_phases.json) memisahkan fase selesai dari gate lapangan. MKN holdout PP47,70 vsKN48,07 mempunyai CI selisih mencakup nol; hard novelty source alerts0/30. Hasil negatif tersedia untuk analisis, tanpa mengubah hasil/core pilot historis.

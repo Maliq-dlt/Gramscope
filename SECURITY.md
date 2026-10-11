@@ -3,9 +3,8 @@
 ## Lingkup dukungan
 
 Perbaikan ditujukan ke versi terbaru `main`. Video Insight memakai autentikasi,
-workspace/role dan SQLite lokal, dengan satu worker. Default tetap loopback. Konfigurasi
-container/HTTPS tersedia, tetapi runtime container dan deployment publik belum tervalidasi.
-[Hardening dan batas implementasi](industrial_ai/docs/HARDENING.md) menjelaskan setup,
+workspace/role dan SQLite lokal, dengan satu worker. Default tetap loopback. CI container/HTTPS lokal telah lulus pada commit terdahulu; domain/deployment publik belum divalidasi.
+[Hardening dan batas implementasi](industrial_ai/docs/HARDENING.md) serta [data policy](industrial_ai/docs/DATA_POLICY.md) menjelaskan setup,
 backup, audit, serta fitur yang masih direncanakan.
 
 ## Melaporkan celah secara privat

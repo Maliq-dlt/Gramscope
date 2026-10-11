@@ -20,6 +20,20 @@ Arahan terbaru: kerjakan akademik dahulu, fase berurutan dengan hasil/cek per fa
 
 Sesudah A5, rencana CCTV disusun berdasarkan data aktual: C1 inventaris/kontrak label; C2 benchmark detector berlabel; C3 ledger/rules/novelty dan review; C4 privasi/akses/lisensi; C5 regressions/biaya/hasil. Bukti lokasi nyata/IDF1/false-alert-hour/delay tidak diganti oleh gambar publik atau simulasi. Jika input acuan belum ada, siapkan evaluator dan catat gate belum terpenuhi, jangan centang akurasi operasional.
 
+## Fase CCTV setelah gate akademik
+
+A5 selesai:185tes/format/type/build dan audit3.681berkas identik. Protokol CCTV: industrial_ai/reports/validation_protocol_20261011.json.
+
+| Fase | Hasil konkret | Batas |
+| --- | --- | --- |
+| C1 | Encoding/segmen satu asal: eligibility,dedup,split,signature dan regression | Draft tidak disahkan |
+| C2 | RTX inference143val/141test PPE,AP dan frozen TP/FP/FN,cached predictions | Public supplied labels bukan factory/identity truth |
+| C3 | Evaluator tracking/incident/reviewbudget; Kaggle jika rights/GT sesuai | Missing GT/exposure dicatat |
+| C4 | Sensitive GET audit,retention/backup/license docs | Access bukan byte delivery; no automatic purge |
+| C5 | Regression,type/build,preservation,review dan scoped publication | Operational gates tetap terbuka tanpa data |
+
+Kaggle diizinkan untuk CCTV dan akademik; license uploader diperiksa terhadap sumber asli. Holdout akademik selesai tidak ditimpa atau dituning ulang.
+
 ## Data akademik, 11 Oktober 2026
 
 Permintaan tambahan pengguna dibatasi pada data untuk makalah; makalah ditulis pengguna. [Paket numerik](../extensions/results/README.md) mencakup CSV pilot bahasa lama serta run simbol terkontrol baru. Eksperimen ini bukan pemenuhan gerbang kualitas kamera nyata/label independen pada rencana berikut.

@@ -36,6 +36,11 @@ uv run --frozen python tests/tracking_check.py
 uv run --frozen python tests/corrections_check.py
 uv run --frozen python tests/workflow_check.py
 uv run --frozen python tests/video_finetune_check.py
+uv run --frozen python tests/source_group_check.py
+uv run --frozen python tests/detector_benchmark_check.py
+uv run --frozen python tests/tracking_reference_check.py
+uv run --frozen python tests/tracking_benchmark_check.py
+uv run --frozen python tests/audit_read_check.py
 ```
 
 FFmpeg/FFprobe diperlukan untuk tes media. Setelah model diunduh, jalankan
