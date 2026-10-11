@@ -88,7 +88,7 @@ Bukti run tersimpan di `industrial_ai/.tmp/accuracy-ppe-q3-final/`, `industrial_
 
 ## Verifikasi program
 
-Sebanyak 187 tes akademik lulus, begitu juga Ruff check/format dan Ty. Wheel/sdist akademik serta studio berhasil dibangun. Sebelumnya, 24 suite backend studio dan 10 suite UI lulus; self-check akuisisi/hash dijalankan ulang setelah perbaikan. UI tidak diubah dalam siklus kualitas ini. Pemeriksaan paket dan `git diff --check` lulus. Ini verifikasi program, bukan ukuran akurasi model. Q3 dan Q4 memiliki receipt penyelesaian; Q5 masih menunggu publikasi dan CI pada commit yang tepat.
+Sebanyak 187 tes akademik lulus, begitu juga Ruff check/format dan Ty. Wheel/sdist akademik serta studio berhasil dibangun. Sebelumnya, 24 suite backend studio dan 10 suite UI lulus; self-check akuisisi/hash dijalankan ulang setelah perbaikan. UI tidak diubah dalam siklus kualitas ini. Pemeriksaan paket dan `git diff --check` lulus. Ini verifikasi program, bukan ukuran akurasi model. Q3–Q5 memiliki receipt penyelesaian; seluruh job CI commit implementasi lulus.
 
 ## Penilaian saran pose, crop dan TensorRT
 
@@ -103,3 +103,12 @@ TensorRT FP16 dapat mempercepat inferensi, tetapi engine terikat pada GPU dan ve
 Sumber resmi diperiksa: [COCO-Pose](https://docs.ultralytics.com/tasks/pose/), [TensorRT export](https://docs.ultralytics.com/integrations/tensorrt/). Review source dilakukan terpisah oleh GPT-6 Sol; semua inference/training tetap pada runner lokal Codex.
 
 Collector dan runner riset dijalankan dari checkout source. Wheel studio memuat aplikasi yang sudah terdaftar, tetapi tidak memuat seluruh skrip akuisisi dan eksperimen. Reproduksi memerlukan sumber resmi, environment lock, dan ruang penyimpanan dataset. Foto, video, bobot, serta prediksi mentah tidak diterbitkan ke GitHub.
+
+
+## Q5 — verifikasi dan publikasi (selesai)
+
+Commit implementasi `1c7c839c065dfc347cbfb3087a2ea2d6feaedc7c` sudah dipush ke main. [CI exact commit](https://github.com/Maliq-dlt/Gramscope/actions/runs/38149557004) lulus pada seluruh job academic, studio dan container, termasuk smoke training CPU nyata dan deployment HTTPS. Verifikasi lokal: 187 tes akademik, 24 suite backend, 10 suite UI, lint/format/type-check, wheel/sdist dan pemeriksaan isi paket lulus. Review data independen memeriksa angka, interval, sumber serta pembatasan klaim; snapshot verifier tersedia sebagai teks.
+
+Audit 3.780 berkas terlindungi: tidak ada yang hilang; hanya indeks hasil yang sengaja diperbarui. Seluruh 15 hash core cocok. Perubahan pengguna pada tests/e2e.py dan delapan konsep brand tidak diterbitkan. Foto/video/bobot/prediksi mentah/DB tetap lokal. [Manifest data](../results/accuracy_data_v1/data_manifest.json) merekam berkas ringkas yang diterbitkan.
+
+Siklus kualitas selesai berarti data, program, verifikasi dan publikasi tersedia. Deteksi tanpa helm lokasi pabrik, tracking penuh, label onset/exposure, akurasi novelty nyata dan deployment komersial tetap membutuhkan data serta izin yang sesuai. Hasil historis 0/30 tetap tersimpan; kandidat baru belum dipasang otomatis pada studio.

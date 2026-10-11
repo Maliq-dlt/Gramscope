@@ -22,7 +22,7 @@ MEVA adalah rekaman kamera nyata dengan aktor/skenario terkontrol; bukan label i
 
 Candidate sequence experiment memakai data stokastik baru dengan empat partisi sebelum scoring. Kalibrasi maksimum satu grup normal memerlukan peluang observasi sebanding; conformal hanya di bawah exchangeability grup normal. Noise dan pergeseran kamera dilaporkan sebagai stress, tanpa guarantee. Hipotesis tail tidak dijanjikan memperbaiki 0/30.
 
-Hasil Q1–Q4 tersedia pada [laporan kualitas](../extensions/reports/ACCURACY_UPGRADE_20261011.md): kandidat PPE mengurangi false-positive kotak helm, recall belum naik; tail berguna untuk ranking konstruksi sintetik tetapi tidak menghasilkan hard-only alarm. MEVA masih diagnostik parsial. Kandidat tidak otomatis dipasang pada studio. Q5 menunggu publikasi dan CI exact commit.
+Hasil Q1–Q4 tersedia pada [laporan kualitas](../extensions/reports/ACCURACY_UPGRADE_20261011.md): kandidat PPE mengurangi false-positive kotak helm, recall belum naik; tail berguna untuk ranking konstruksi sintetik tetapi tidak menghasilkan hard-only alarm. MEVA masih diagnostik parsial. Kandidat tidak otomatis dipasang pada studio. Q5 selesai: [CI commit implementasi lulus](https://github.com/Maliq-dlt/Gramscope/actions/runs/38149557004); perubahan dan hasil dipublikasikan ke main.
 
 Subagent: sesuai pilihan terbaru pengguna, tugas kecil memakai gpt-6-sol dengan reasoning rendah/sedang; tugas kompleks dibatasi sesuai kebutuhan. Council tetap dihentikan. Sumber/hasil baru terisolasi; core dan eksperimen historis tidak diedit.
 

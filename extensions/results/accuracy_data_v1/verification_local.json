@@ -21,7 +21,7 @@
       "logs": "industrial_ai/.tmp/accuracy-upgrade/ui-*.txt"
     }
   },
-  "state": "Q1-Q4complete; Q5localverification complete, publication pending",
+  "state": "Q1-Q5complete; implementationCIalljobs passed",
   "core_sha256": {
     "files": 15,
     "status": "all original hashes match"

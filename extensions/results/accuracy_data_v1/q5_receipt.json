@@ -1,0 +1,19 @@
+{
+  "phase": "Q5",
+  "status": "completed",
+  "implementation_commit": "1c7c839c065dfc347cbfb3087a2ea2d6feaedc7c",
+  "ci_url": "https://github.com/Maliq-dlt/Gramscope/actions/runs/38149557004",
+  "ci_jobs": {
+    "academic": "success",
+    "studio": "success",
+    "container": "success"
+  },
+  "local_checks": "verification_local.json",
+  "preservation": "preservation_receipt.json",
+  "publication_policy": "main; only scoped code and compact evidence, no media/weights/DB or user changes",
+  "limits": [
+    "not factory accuracy",
+    "no helmetabsence truth from head",
+    "synthetic ranking not operational alarm improvement"
+  ]
+}

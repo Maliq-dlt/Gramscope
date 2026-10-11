@@ -1,6 +1,6 @@
 # Kualitas data dan akurasi
 
-Data ini mendukung analisis akademik N-gram dan diagnosis CCTV. [Laporan per fase](../../reports/ACCURACY_UPGRADE_20261011.md) membedakan hasil pada data nyata, eksperimen sintetik, dan gerbang validasi lokasi yang belum terpenuhi. Q1–Q4 selesai; Q5 menunggu receipt publikasi final. Foto, video, bobot, dan prediksi mentah tetap lokal.
+Data ini mendukung analisis akademik N-gram dan diagnosis CCTV. [Laporan per fase](../../reports/ACCURACY_UPGRADE_20261011.md) membedakan hasil pada data nyata, eksperimen sintetik, dan gerbang validasi lokasi yang belum terpenuhi. Q1–Q5 selesai; receipt publikasi mencatat commit dan CI yang lulus. Foto, video, bobot, dan prediksi mentah tetap lokal.
 
 | Berkas | Isi dan batas |
 | --- | --- |

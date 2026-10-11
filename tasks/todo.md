@@ -1,10 +1,10 @@
-## Siklus kualitas data dan akurasi (aktif)
+## Siklus kualitas data dan akurasi (selesai)
 
 - [x] Q1: sumber resmi/lisensi, akuisisi, audit label/decode/dedup dan protokol beku.
 - [x] Q2: diagnosis detector sebelum tracker dan output tracker pada ground-camera GT.
 - [x] Q3: kandidat dipilih train/dev; winner dibekukan dan satu evaluasi test baru.
 - [x] Q4: hipotesis tail N-gram, CE/aturan/pasangan, data real versus konstruksi, kalibrasi/CI/budget.
-- [ ] Q5: tests/lint/type/build, review, preservasi, data/docs dan GitHub main + CI.
+- [x] Q5: tests/lint/type/build, review, preservasi, data/docs dan GitHub main + [CI commit implementasi lulus](https://github.com/Maliq-dlt/Gramscope/actions/runs/38149557004).
 
 Gate operasional lama tetap terbuka: anotasi lokasi pabrik, onset insiden/exposure dan audit produksi tidak digantikan dataset publik.
 

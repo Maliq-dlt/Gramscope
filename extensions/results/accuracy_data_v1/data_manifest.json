@@ -1,6 +1,6 @@
 {
   "schema": "accuracy-data-v1",
-  "phase_status": "Q1-Q4complete; Q5publication pending",
+  "phase_status": "Q1-Q5complete; implementationCIalljobs passed",
   "roots": "all paths relative to repository root",
   "limits": [
     "not factory readiness",
@@ -129,9 +129,13 @@
       "sha256": "bf4e7fc6e99ba0216c98b8086d68a5f72a6526a8bf61313af55b4d2ad19c478c",
       "bytes": 7511
     },
+    "extensions/results/accuracy_data_v1/q5_receipt.json": {
+      "sha256": "22718efcfcb2d77f7338205863002557d63e939a740a6153debeaa0a8b2cb8c9",
+      "bytes": 658
+    },
     "extensions/results/accuracy_data_v1/README.md": {
-      "sha256": "07b07bff33976415222ce9ce56cabaa6dace8c9b2900b754a7549b108b39f2ec",
-      "bytes": 3606
+      "sha256": "2730076e2bae2811add0eb1dc00d7732caa7c5e80e096d25596d41bae5c610a4",
+      "bytes": 3622
     },
     "extensions/results/accuracy_data_v1/sh17_quality_snapshot.py.txt": {
       "sha256": "72b94866862d97dac0c15bb700c2989a9b66ab7b2e16575596d85fc63ae82857",
@@ -154,8 +158,8 @@
       "bytes": 31744
     },
     "extensions/results/accuracy_data_v1/verification_local.json": {
-      "sha256": "479af939ad4d4006a362647038e3dee51f2d5e37e87f8de6e4982acfa6c1370b",
-      "bytes": 1869
+      "sha256": "0c6c4f1ab7538ffc7703fe566ff67c1506bf60f49239ff2120026344758bc0d5",
+      "bytes": 1850
     },
     "extensions/results/accuracy_data_v1/voc_yolo_audit.json": {
       "sha256": "9326f0ed8d1e06fc437d016343b9242234a0c8519ae6e57d3e0579274f9f8d2c",
