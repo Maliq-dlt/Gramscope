@@ -5,7 +5,7 @@
     "independent data validation"
   ],
   "findings_fixed": [
-    "unknown label exclusion and typo→negative gate",
+    "unknown label exclusion and typoâ†’negative gate",
     "bind reviewer declaration to XML SHA256 consumed bytes",
     "video post-probe integrity",
     "clone preparation documents historical SDD manifest, model weights and native environment gates",
@@ -21,5 +21,5 @@
     "metrics script cold start includes first call but detector excludes decode/conversion"
   ],
   "collector_snapshot": "Historical acquisition source preserved; current collector hardened after acquisition without new inference.",
-  "scope_review": "Independent final scope review pending; model/core/runtime unchanged."
+  "scope_review": "Independent final scope and publish-package source equality review passed; no remaining actionable P1/P2; model/core/runtime unchanged."
 }
