@@ -134,6 +134,26 @@ def prepare_v2(export, workspace_id, seed, max_gap_seconds):
     ):
         raise ValueError("Every event must belong to the explicit workspace")
     sessions = event_sequences_v2(export["events"], max_gap_seconds)
+    # The same original hash OR attributed source group connects all derived recordings.
+    parents = {}
+
+    def find(value):
+        parents.setdefault(value, value)
+        root = value
+        while parents[root] != root:
+            root = parents[root]
+        while parents[value] != value:
+            previous = parents[value]
+            parents[value] = root
+            value = previous
+        return root
+
+    for session in sessions:
+        for event in session["source_events"]:
+            a, b = find(event["original_source_sha256"]), find(event["source_group"])
+            parents[max(a, b)] = min(a, b)
+    for session in sessions:
+        session["source_group"] = find(session["source_group"])
     by_recording = {}
     for session in sessions:
         previous = by_recording.setdefault(
@@ -164,9 +184,12 @@ def prepare_v2(export, workspace_id, seed, max_gap_seconds):
     if not isinstance(supplied, list) or (
         supplied
         and (
-            provenance.get("independent") is not True
-            or not provenance.get("source")
-            or not provenance.get("rubric")
+            not isinstance(provenance, dict)
+            or provenance.get("independent") is not True
+            or any(
+                not isinstance(provenance.get(k), str) or not 1 <= len(provenance[k].strip()) <= 500
+                for k in ("source", "rubric")
+            )
         )
     ):
         raise ValueError("Novelty labels require independent source and frozen rubric provenance")
@@ -175,6 +198,11 @@ def prepare_v2(export, workspace_id, seed, max_gap_seconds):
         if (
             not isinstance(label, dict)
             or set(label) != {"recording_id", "track_id", "session_index", "novel"}
+            or not isinstance(label["recording_id"], str)
+            or type(label["track_id"]) is not int
+            or label["track_id"] < 0
+            or type(label["session_index"]) is not int
+            or label["session_index"] < 0
             or type(label["novel"]) is not bool
         ):
             raise ValueError("Invalid novelty label")
@@ -271,7 +299,10 @@ def run_novelty(run_id, export, workspace_id, seed=42, max_gap_seconds=30):
         "frequency_baseline": "alert if any adjacent symbol pair has training count < 2",
         "grid": {f"{n}-{method}": candidates(n, method) for n in (1, 2, 3) for method in methods},
         "label_provenance": export.get("label_provenance") if labels else None,
-        "test_policy": "exploratory offline evaluation; prior exposure unknown",
+        "test_policy": (
+            "parameters and thresholds fixed on dev before single test scoring; "
+            "prior export exposure unknown"
+        ),
         "limitations": [
             "Local export status is trusted input, not cryptographic proof of reviewer approval.",
             "Source hashes group copies in v2; v1 recording independence is user-declared.",

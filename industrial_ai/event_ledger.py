@@ -32,7 +32,7 @@ def digest(data) -> str:
     ).hexdigest()
 
 
-def source(job_id: str):
+def source(job_id: str, reviewed: bool = False):
     try:
         if str(UUID(job_id)) != job_id:
             raise ValueError
@@ -44,6 +44,10 @@ def source(job_id: str):
     from pathlib import Path
 
     folder = Path(row["path"])
+    import runtime
+
+    if not folder.resolve().is_relative_to(runtime.JOBS.resolve()):
+        raise HTTPException(409, "Lokasi rekaman tidak valid.")
     state = access.read_document(folder / "state.json")
     if state["status"] != "done":
         raise HTTPException(409, "Rekaman harus selesai dianalisis.")
@@ -82,6 +86,33 @@ def source(job_id: str):
         "annotations": annotations,
         "corrections": corrections,
     }
+    if reviewed:
+        from vision import crossing_review
+
+        overlays = access.read_document(folder / "overlays.json", {"frames": []})
+        if (
+            type(summary.get("fps")) not in (int, float)
+            or not math.isfinite(summary["fps"])
+            or summary["fps"] <= 0
+            or type(summary.get("frames")) is not int
+            or summary["frames"] < 1
+            or type(summary.get("duration")) not in (int, float)
+            or not math.isfinite(summary["duration"])
+            or summary["duration"] < 0
+            or type(summary.get("line")) not in (int, float)
+            or not 0.1 <= summary["line"] <= 0.9
+        ):
+            raise HTTPException(409, "Metadata rekaman tidak valid untuk review kejadian.")
+        try:
+            summary = crossing_review(summary, overlays, annotations, corrections)
+        except (KeyError, TypeError, ValueError) as error:
+            raise HTTPException(409, "Data kotak review tidak valid.") from error
+        metadata = {
+            **metadata,
+            "reviewed_crossings": summary,
+            "overlays": overlays,
+            "source": access.read_document(folder / "source.json", {}),
+        }
     return folder, summary, metadata, digest(metadata)
 
 
@@ -125,6 +156,28 @@ class ImportCrossings(BaseModel):
     @classmethod
     def valid_time(cls, value):
         return timestamp(value) if value is not None else None
+
+
+class HelmetObservation(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    expected_fingerprint: str = Field(pattern=r"^[a-f0-9]{64}$")
+    track_id: int = Field(ge=0, strict=True)
+    frame_index: int = Field(ge=0, strict=True)
+    end_frame_index: int | None = Field(default=None, gt=0, strict=True)
+    review: HelmetReview
+    end_head_bbox: tuple[float, float, float, float] | None = None
+
+    @model_validator(mode="after")
+    def interval(self):
+        if self.end_frame_index is not None and self.end_frame_index <= self.frame_index:
+            raise ValueError("Interval requires start frame < exclusive end frame.")
+        if self.end_head_bbox is not None:
+            HelmetReview(
+                status=self.review.status,
+                association=self.review.association,
+                head_bbox=self.end_head_bbox,
+            )
+        return self
 
 
 class Attendance(BaseModel):
@@ -229,6 +282,7 @@ class Ledger:
                 )
             ]
         fingerprints = {}
+        source_folders = {}
         integrity = {}
         video_integrity = {}
         for row in rows:
@@ -237,37 +291,62 @@ class Ledger:
             if row["occurred_at"].startswith("video+"):
                 row["occurred_at"] = None
             if row["job_id"] and not row["retracted"]:
-                if row["job_id"] not in fingerprints:
+                revision_key = (row["job_id"], row["payload"].get("schema_version") == 2)
+                if revision_key not in fingerprints:
                     try:
-                        fingerprints[row["job_id"]] = source(row["job_id"])[3]
-                    except (HTTPException, FileNotFoundError):
-                        fingerprints[row["job_id"]] = None
-                if fingerprints[row["job_id"]] != row["source_fingerprint"]:
+                        current_source = source(
+                            row["job_id"], row["payload"].get("schema_version") == 2
+                        )
+                        fingerprints[revision_key] = current_source[3]
+                        source_folders[row["job_id"]] = current_source[0]
+                    except (HTTPException, OSError, ValueError, KeyError, TypeError):
+                        fingerprints[revision_key] = None
+                if fingerprints[revision_key] != row["source_fingerprint"]:
                     row["status"] = "stale"
                 if row["payload"].get("schema_version") == 2 and row["status"] == "verified":
                     payload = row["payload"]
-                    key = (row["job_id"], payload["evidence_sha256"])
+                    key = (
+                        row["job_id"],
+                        payload["evidence_sha256"],
+                        payload.get("end_evidence_sha256"),
+                    )
                     if key not in integrity:
                         try:
-                            folder = source(row["job_id"])[0]
+                            folder = source_folders[row["job_id"]]
                             if row["job_id"] not in video_integrity:
+                                if (
+                                    not (folder / "original.mp4")
+                                    .resolve()
+                                    .is_relative_to(folder.resolve())
+                                ):
+                                    raise HTTPException(409, "Lokasi video bukti tidak valid.")
                                 with (folder / "original.mp4").open("rb") as stream:
                                     video_hash = hashlib.file_digest(stream, "sha256").hexdigest()
                                 video_integrity[row["job_id"]] = (
                                     video_hash,
                                     original_source(row["job_id"]),
+                                    original_group(row["job_id"]),
                                 )
-                            video_hash, original_hash = video_integrity[row["job_id"]]
+                            video_hash, original_hash, group_hash = video_integrity[row["job_id"]]
                             proof_hash = hashlib.sha256(
                                 (
                                     folder / ("ledger_" + payload["evidence_sha256"] + ".jpg")
                                 ).read_bytes()
                             ).hexdigest()
+                            end_hash = payload.get("end_evidence_sha256")
+                            end_valid = (
+                                end_hash is None
+                                or hashlib.sha256(
+                                    (folder / ("ledger_" + end_hash + ".jpg")).read_bytes()
+                                ).hexdigest()
+                                == end_hash
+                            )
                             integrity[key] = (
-                                video_hash == payload["video_sha256"]
+                                end_valid
+                                and video_hash == payload["video_sha256"]
                                 and proof_hash == payload["evidence_sha256"]
-                                and original_source(row["job_id"])
-                                == payload["original_source_sha256"]
+                                and original_hash == payload["original_source_sha256"]
+                                and group_hash == payload["source_group_sha256"]
                             )
                         except (OSError, HTTPException):
                             integrity[key] = False
@@ -280,7 +359,7 @@ class Ledger:
 
         def operation(db):
             record = db.execute(
-                "SELECT category FROM ledger_events WHERE id=? AND workspace_id=?",
+                "SELECT category,payload,job_id,track_id,source_fingerprint FROM ledger_events WHERE id=? AND workspace_id=?",
                 (event_id, user["workspace_id"]),
             ).fetchone()
             if (
@@ -289,6 +368,21 @@ class Ledger:
                 and user["role"] != "admin"
             ):
                 raise HTTPException(403, "Penarikan absensi membutuhkan administrator.")
+            if record is not None and json.loads(record["payload"]).get("schema_version") == 2:
+                payload = json.loads(record["payload"])
+                db.execute(
+                    "UPDATE ledger_events SET retracted=1,reason=? WHERE workspace_id=? "
+                    "AND job_id=? AND track_id=? AND source_fingerprint=? "
+                    "AND json_extract(payload,'$.seconds')=?",
+                    (
+                        reason,
+                        user["workspace_id"],
+                        record["job_id"],
+                        record["track_id"],
+                        record["source_fingerprint"],
+                        payload["seconds"],
+                    ),
+                )
             if not db.execute(
                 "UPDATE ledger_events SET retracted=1,reason=? WHERE id=? AND workspace_id=?",
                 (reason, event_id, user["workspace_id"]),
@@ -369,12 +463,75 @@ def original_source(job_id):
             if not path.is_file():
                 path = folder / "original.mp4"
             try:
+                if not path.resolve().is_relative_to(folder.resolve()):
+                    raise HTTPException(409, "Lokasi video sumber tidak valid.")
                 with path.open("rb") as stream:
-                    return hashlib.file_digest(stream, "sha256").hexdigest()
+                    upload_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+                metadata = (
+                    access.read_document(folder / "source.json")
+                    if access.has_document(folder / "source.json")
+                    else None
+                )
+                if metadata is not None:
+                    if (
+                        not isinstance(metadata, dict)
+                        or metadata.get("segment_sha256") != upload_hash
+                        or not isinstance(metadata.get("source_sha256"), str)
+                        or not re.fullmatch(r"[a-f0-9]{64}", metadata["source_sha256"])
+                    ):
+                        raise HTTPException(409, "Metadata sumber asli tidak cocok dengan upload.")
+                    return metadata["source_sha256"]
+                return upload_hash
             except OSError as error:
                 raise HTTPException(409, "Sumber asli tidak tersedia untuk provenance.") from error
         job_id = parent
     raise HTTPException(409, "Relasi sumber rekaman tidak valid.")
+
+
+def original_group(job_id):
+    seen = set()
+    while job_id not in seen:
+        seen.add(job_id)
+        folder, _, metadata, _ = source(job_id)
+        parent = metadata["state"].get("source_job_id")
+        if parent:
+            job_id = parent
+            continue
+        provenance = (
+            access.read_document(folder / "source.json")
+            if access.has_document(folder / "source.json")
+            else {}
+        )
+        if not isinstance(provenance, dict):
+            raise HTTPException(409, "Metadata sumber asli tidak valid.")
+        attribution = provenance.get("attribution", {})
+        url = attribution.get("source") if isinstance(attribution, dict) else None
+        if isinstance(url, str) and url.startswith("https://") and len(url) <= 2000:
+            return digest({"original_attributed_source": url})
+        return original_source(job_id)
+    raise HTTPException(409, "Relasi sumber rekaman tidak valid.")
+
+
+def check_helmet_conflict(rows, job_id, track_id, symbol, seconds, finish):
+    for row in rows:
+        if (
+            row["status"] != "verified"
+            or row["job_id"] != job_id
+            or row["track_id"] != track_id
+            or not row["symbol"].startswith("HELMET_")
+        ):
+            continue
+        old = row["payload"].get("interval_seconds", [row["payload"]["seconds"]] * 2)
+        overlaps = (
+            max(old[0], seconds) < min(old[1], finish)
+            or old[0] == seconds
+            or seconds <= old[0] < finish
+            or old[0] <= seconds < old[1]
+        )
+        if overlaps and row["symbol"] != symbol:
+            raise HTTPException(
+                409, "Status helm bertentangan pada rentang yang sama; tarik review lama dulu."
+            )
 
 
 def import_v2(job_id, request, folder, summary, metadata, fingerprint):
@@ -384,9 +541,20 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
         raise HTTPException(422, "Review helm harus terkait crossing terpilih.")
     from app import frame_image
 
+    if (
+        type(summary.get("fps")) not in (int, float)
+        or not math.isfinite(summary["fps"])
+        or summary["fps"] <= 0
+        or type(summary.get("frames")) is not int
+        or summary["frames"] < 1
+    ):
+        raise HTTPException(409, "Metadata frame rekaman tidak valid.")
+
     tracks = {t["id"]: t for t in summary.get("tracks", [])}
     entries = []
+    current_rows = Ledger(access.store()).rows()
     source_hash = original_source(job_id)
+    group_hash = original_group(job_id)
     with (folder / "original.mp4").open("rb") as stream:
         video_hash = hashlib.file_digest(stream, "sha256").hexdigest()
     for index in dict.fromkeys(request.crossing_indices):
@@ -408,6 +576,22 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
         if kind != "person" and index in request.helmet_reviews:
             raise HTTPException(422, "Review helm hanya untuk track orang.")
         review = request.helmet_reviews.get(index, HelmetReview())
+        person_box = crossing.get("bbox")
+        if review.status != "unknown":
+            if not person_box or review.head_bbox is None:
+                raise HTTPException(
+                    422, "Kotak orang pada frame crossing diperlukan untuk asosiasi kepala."
+                )
+            x1, y1, x2, y2 = person_box
+            hx1, hy1, hx2, hy2 = review.head_bbox
+            if not (
+                x1 <= hx1 < hx2 <= x2
+                and y1 <= hy1 < hy2 <= y2
+                and (hy1 + hy2) / 2 <= y1 + (y2 - y1) * 0.4
+            ):
+                raise HTTPException(
+                    422, "Kotak kepala harus berada di bagian atas orang pada track ini."
+                )
         frame_index = min(int(seconds * summary["fps"]), summary["frames"] - 1)
         image = frame_image(folder, frame_index, summary)
         image_hash = hashlib.sha256(image).hexdigest()
@@ -427,11 +611,14 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
             "line": summary["line"],
             "source_revision": fingerprint,
             "original_source_sha256": source_hash,
+            "source_group_sha256": group_hash,
             "video_sha256": video_hash,
             "annotation_revision": metadata["annotations"]["revision"],
             "correction_revision": metadata["corrections"]["revision"],
             "model_id": metadata["state"]["model_id"],
-            "result_source": "fine_tuned_candidate"
+            "result_source": "reviewer_corrected"
+            if summary.get("crossing_source") == "reviewer_corrected"
+            else "fine_tuned_candidate"
             if metadata["state"]["model_id"]
             else "original_detector",
             "review_status": "reviewer_approved_crossing",
@@ -441,6 +628,7 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
             "evidence_mode": "original_exact_frame",
             "evidence_sha256": image_hash,
             "helmet_status": review.status if kind == "person" else None,
+            "person_bbox": person_box,
             "head_association": review.model_dump() if kind == "person" else None,
         }
         when = (
@@ -457,6 +645,10 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
                 ]
             )
         for symbol in symbols:
+            if symbol.startswith("HELMET_"):
+                check_helmet_conflict(
+                    current_rows, job_id, crossing["track_id"], symbol, seconds, seconds
+                )
             entries.append(
                 {
                     "source_key": f"v2:{job_id}:{fingerprint}:{index}:{'helmet' if symbol.startswith('HELMET_') else symbol}",
@@ -469,10 +661,113 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
                 }
             )
     # Source can be edited during frame decoding. Fail closed before writing the ledger.
-    if source(job_id)[3] != fingerprint:
+    if source(job_id, True)[3] != fingerprint:
         raise HTTPException(409, "Revisi berubah selama penyiapan bukti.")
     try:
         return {"events": Ledger(access.store()).append("observation", entries)}
+    except ValueError as error:
+        raise HTTPException(409, str(error)) from error
+
+
+def import_helmet(job_id, request):
+    from app import frame_image
+
+    folder, summary, metadata, fingerprint = source(job_id, True)
+    if fingerprint != request.expected_fingerprint:
+        raise HTTPException(409, "Revisi berubah; tinjau ulang observasi helm.")
+    start, end = request.frame_index, request.end_frame_index
+    if start >= summary["frames"] or (end is not None and end > summary["frames"]):
+        raise HTTPException(422, "Frame observasi di luar video.")
+    from vision import reviewed_box_rows
+
+    rows = reviewed_box_rows(
+        metadata.get("overlays", {"frames": []}), metadata["annotations"], metadata["corrections"]
+    )
+    evidence_hashes = []
+    for index, head in (
+        (start, request.review.head_bbox),
+        (end - 1, request.end_head_bbox) if end is not None else (start, request.review.head_bbox),
+    ):
+        people = [
+            b
+            for b in rows.get(index, {}).get("boxes", [])
+            if b.get("track_id") == request.track_id and b["label"] == "person"
+        ]
+        if len(people) != 1:
+            raise HTTPException(422, "Track orang harus terlihat pada kedua batas observasi.")
+        if request.review.status != "unknown":
+            if head is None:
+                raise HTTPException(422, "Asosiasi kepala diperlukan pada kedua batas interval.")
+            x1, y1, x2, y2 = people[0]["bbox"]
+            hx1, hy1, hx2, hy2 = head
+            if not (
+                x1 <= hx1 < hx2 <= x2
+                and y1 <= hy1 < hy2 <= y2
+                and (hy1 + hy2) / 2 <= y1 + (y2 - y1) * 0.4
+            ):
+                raise HTTPException(422, "Kepala harus terkait bagian atas track orang.")
+        image = frame_image(folder, index, summary)
+        image_hash = hashlib.sha256(image).hexdigest()
+        path = folder / ("ledger_" + image_hash + ".jpg")
+        if not path.exists():
+            pending = path.with_suffix(".pending")
+            pending.write_bytes(image)
+            pending.replace(path)
+        evidence_hashes.append(image_hash)
+    seconds = start / summary["fps"]
+    finish = end / summary["fps"] if end is not None else seconds
+    with (folder / "original.mp4").open("rb") as stream:
+        video_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+    payload = {
+        "schema_version": 2,
+        "recording_id": job_id,
+        "track_id": request.track_id,
+        "seconds": seconds,
+        "interval_seconds": [seconds, finish],
+        "class_name": "person",
+        "direction": None,
+        "line": summary["line"],
+        "source_revision": fingerprint,
+        "original_source_sha256": original_source(job_id),
+        "source_group_sha256": original_group(job_id),
+        "video_sha256": video_hash,
+        "annotation_revision": metadata["annotations"]["revision"],
+        "correction_revision": metadata["corrections"]["revision"],
+        "model_id": metadata["state"]["model_id"],
+        "result_source": "reviewer_helmet_observation",
+        "frame_index": start,
+        "evidence_seconds": seconds,
+        "evidence_mode": "original_exact_frame",
+        "evidence_sha256": evidence_hashes[0],
+        "end_evidence_sha256": evidence_hashes[1],
+        "end_frame_index": end - 1 if end is not None else start,
+        "helmet_status": request.review.status,
+        "head_association": request.review.model_dump(),
+        "end_head_bbox": request.end_head_bbox,
+        "recorded_at": None,
+        "review_status": "reviewer_approved_interval"
+        if end is not None
+        else "reviewer_approved_frame",
+    }
+    symbol = {"worn": "HELMET_WORN", "not_worn": "HELMET_NOT_WORN", "unknown": "HELMET_UNKNOWN"}[
+        request.review.status
+    ]
+    entry = {
+        "source_key": f"helmet-v2:{job_id}:{fingerprint}:{request.track_id}:{start}:{end}",
+        "source_fingerprint": fingerprint,
+        "job_id": job_id,
+        "track_id": request.track_id,
+        "occurred_at": f"video+{seconds:.9f}",
+        "symbol": symbol,
+        "payload": payload,
+    }
+    check_helmet_conflict(
+        Ledger(access.store()).rows(), job_id, request.track_id, symbol, seconds, finish
+    )
+    if source(job_id, True)[3] != fingerprint:
+        raise HTTPException(409, "Revisi berubah selama penyiapan bukti helm.")
+    try:
+        return {"events": Ledger(access.store()).append("observation", [entry])}
     except ValueError as error:
         raise HTTPException(409, str(error)) from error
 
@@ -515,7 +810,13 @@ def filtered_facts(rows, filters, role=None):
         seconds = payload.get("seconds")
         if type(seconds) not in (int, float) or not math.isfinite(seconds):
             continue
-        if seconds < filters.start_seconds or (
+        interval = payload.get("interval_seconds", [seconds, seconds])
+        if interval[1] > interval[0] and row["symbol"].startswith("HELMET_"):
+            if interval[1] <= filters.start_seconds or (
+                filters.end_seconds is not None and interval[0] >= filters.end_seconds
+            ):
+                continue
+        elif seconds < filters.start_seconds or (
             filters.end_seconds is not None and seconds >= filters.end_seconds
         ):
             continue
@@ -532,10 +833,10 @@ def filtered_facts(rows, filters, role=None):
     return {
         "schema_version": 2,
         "filter": filters.model_dump(),
-        "boundary": "start <= seconds < end",
+        "boundary": "start <= instant < end; helmet intervals overlap [start,end)",
         "count_unit": "verified crossing events",
         "crossing_event_count": len(crossings),
-        "observed_track_count": len({(r["job_id"], r["track_id"]) for r in crossings}),
+        "observed_track_count": len({(r["job_id"], r["track_id"]) for r in selected}),
         "helmet_observations": helmets,
         "unique_object_count": None,
         "coverage": "reviewed events only; not exhaustive video coverage"
@@ -584,6 +885,16 @@ def novelty_detail(run_id):
             for session in sessions
             for event in session["source_events"]
         )
+        expected_ids = {event for session in sessions for event in session["event_ids"]}
+        recordings = {session["recording_id"] for session in sessions}
+        stale = stale or any(
+            row["id"] not in expected_ids
+            for row in current.values()
+            if row["job_id"] in recordings
+            and row["status"] == "verified"
+            and row["category"] == "observation"
+            and row["payload"].get("schema_version") == 2
+        )
         return {
             "run_id": run_id,
             "stale": stale,
@@ -594,7 +905,137 @@ def novelty_detail(run_id):
         raise HTTPException(409, "Run belum lengkap atau integritasnya gagal.") from error
 
 
+class ReportRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    filters: FactFilter
+    run_id: str | None = Field(default=None, max_length=80)
+    format: Literal["json", "markdown"] = "json"
+
+
+def local_report(request):
+    filters = request.filters
+    if not filters.recording_id or not filters.source_revision:
+        raise HTTPException(422, "Laporan memerlukan rekaman dan revisi yang eksplisit.")
+    _, summary, _, revision = source(filters.recording_id, True)
+    if revision != filters.source_revision:
+        raise HTTPException(409, "Revisi laporan stale; perbarui query.")
+    if filters.start_seconds > summary["duration"] or (
+        filters.end_seconds is not None and filters.end_seconds > summary["duration"]
+    ):
+        raise HTTPException(422, "Rentang laporan di luar rekaman.")
+    current = filtered_facts(Ledger(access.store()).rows(), filters)
+    novelty = []
+    if request.run_id:
+        detail = novelty_detail(request.run_id)
+        if detail["stale"]:
+            raise HTTPException(409, "Run novelty stale; tidak dapat dipakai pada laporan terkini.")
+        for session in detail["sessions"]:
+            if (
+                session["recording_id"] == filters.recording_id
+                and session["source_revision"] == revision
+            ):
+                # Full-session score applies only if its whole evidence lies inside the report filter.
+                ids = {r["event_id"] for r in current["proof"]}
+                intervals_contained = all(
+                    proof["source"].get("interval_seconds", [proof["source"]["seconds"]] * 2)[0]
+                    >= filters.start_seconds
+                    and (
+                        filters.end_seconds is None
+                        or proof["source"].get(
+                            "interval_seconds", [proof["source"]["seconds"]] * 2
+                        )[1]
+                        <= filters.end_seconds
+                    )
+                    for proof in current["proof"]
+                    if proof["event_id"] in session["event_ids"]
+                )
+                if set(session["event_ids"]).issubset(ids) and intervals_contained:
+                    novelty.append(
+                        {
+                            key: session[key]
+                            for key in (
+                                "track_id",
+                                "session_index",
+                                "model",
+                                "threshold",
+                                "session_ce",
+                                "needs_review",
+                            )
+                        }
+                    )
+    helmet = current["helmet_observations"]
+    text = (
+        f"Rekaman {filters.recording_id}: {current['crossing_event_count']} kejadian crossing terverifikasi "
+        f"dengan {current['observed_track_count']} track teramati pada rentang detik [{filters.start_seconds:g}, "
+        f"{filters.end_seconds if filters.end_seconds is not None else 'akhir rekaman'}). "
+        f"Observasi helm: dipakai {helmet['worn']}, tidak dipakai {helmet['not_worn']}, unknown {helmet['unknown']}. "
+        + (
+            f"{sum(r['needs_review'] for r in novelty)} sesi novelty perlu review. "
+            if novelty
+            else "Novelty belum tersedia untuk filter ini. "
+        )
+        + "Track bukan identitas. Novelty bukan kesimpulan bahaya; unknown bukan pelanggaran."
+    )
+    report = {
+        "schema_version": 2,
+        "status": "verified_event_summary"
+        if current["has_verified_coverage"]
+        else "draft_no_verified_coverage",
+        "narration_source": "deterministic_verified_facts",
+        "source_revision": revision,
+        "run_id": request.run_id,
+        "facts": current,
+        "novelty": novelty,
+        "narration": text,
+        "limitations": current["limitations"]
+        + [
+            "Observasi yang direview tidak membuktikan coverage seluruh video.",
+            "Laporan offline lokal; tidak dikirim ke HR/email.",
+        ],
+    }
+    report["report_sha256"] = digest(report)
+    return report
+
+
 def install(app):
+    @app.post("/api/ledger/report")
+    def report(request: ReportRequest):
+        from fastapi.responses import JSONResponse
+
+        from app import state_lock
+
+        with state_lock:
+            data = local_report(request)
+        if request.format == "markdown":
+            from fastapi.responses import Response
+
+            facts = data["facts"]
+            text = "# Ringkasan CCTV\n\n" + data["narration"] + "\n\n"
+            text += "Status: " + data["status"] + "\n\n"
+            text += "| Kejadian | Track | Offset | Bukti |\n|---|---|---|---|\n"
+            for proof in facts["proof"]:
+                payload = proof["source"]
+                text += f"| {proof['symbol']} | {payload['track_id']} | {payload['seconds']}s | [{proof['event_id']}](/api/ledger/events/{proof['event_id']}/proof) |\n"
+            text += "\nBatas hasil:\n\n" + "\n".join("- " + value for value in data["limitations"])
+            text += "\n\nRevisi sumber: `" + data["source_revision"] + "`\n"
+            text += "\nFilter: `" + json.dumps(facts["filter"], ensure_ascii=False) + "`\n"
+            text += "\nFingerprint laporan: `" + data["report_sha256"] + "`\n"
+            return Response(
+                text,
+                media_type="text/markdown",
+                headers={
+                    "Content-Disposition": 'attachment; filename="cctv-report.md"',
+                    "Cache-Control": "no-store",
+                },
+            )
+        return JSONResponse(
+            data,
+            headers={
+                "Content-Disposition": 'attachment; filename="cctv-report.json"',
+                "Cache-Control": "no-store",
+            },
+        )
+
     @app.get("/api/ledger/novelty/runs/{run_id}")
     def run_detail(run_id: str):
         return novelty_detail(run_id)
@@ -617,10 +1058,18 @@ def install(app):
             "labels": [],
         }
 
+    @app.post("/api/ledger/jobs/{job_id}/helmets")
+    def helmet_observation(job_id: str, request: HelmetObservation):
+        reviewer()
+        from app import state_lock
+
+        with state_lock:
+            return import_helmet(job_id, request)
+
     @app.post("/api/ledger/query")
     def query(request: FactFilter):
         if request.recording_id:
-            _, summary, _, fingerprint = source(request.recording_id)
+            _, summary, _, fingerprint = source(request.recording_id, bool(request.source_revision))
             if request.source_revision and request.source_revision != fingerprint:
                 raise HTTPException(409, "Revisi query sudah stale.")
             if request.start_seconds > summary["duration"] or (
@@ -631,13 +1080,14 @@ def install(app):
 
     @app.get("/api/ledger/jobs/{job_id}/preview")
     def preview(job_id: str):
-        _, summary, metadata, fingerprint = source(job_id)
+        _, summary, metadata, fingerprint = source(job_id, True)
         return {
             "schema_version": 2,
             "source_revision": fingerprint,
             "annotation_revision": metadata["annotations"]["revision"],
             "correction_revision": metadata["corrections"]["revision"],
             "model_id": metadata["state"]["model_id"],
+            "crossing_source": summary.get("crossing_source", "original_detector"),
             "crossings": summary.get("crossings", []),
             "tracks": summary.get("tracks", []),
             "duration": summary["duration"],
@@ -646,7 +1096,7 @@ def install(app):
         }
 
     @app.get("/api/ledger/events/{event_id}/proof")
-    def proof(event_id: str):
+    def proof(event_id: str, end: bool = False):
         from fastapi.responses import Response
 
         row = next(
@@ -662,12 +1112,17 @@ def install(app):
         if row["status"] != "verified" or row["payload"].get("schema_version") != 2:
             raise HTTPException(409, "Bukti stale/ditarik atau hanya snapshot legacy.")
         folder = source(row["job_id"])[0]
-        path = folder / ("ledger_" + row["payload"]["evidence_sha256"] + ".jpg")
+        evidence_hash = (
+            row["payload"].get("end_evidence_sha256") if end else row["payload"]["evidence_sha256"]
+        )
+        if evidence_hash is None:
+            raise HTTPException(404, "Bukti akhir interval tidak tersedia.")
+        path = folder / ("ledger_" + evidence_hash + ".jpg")
         try:
             data = path.read_bytes()
         except OSError as error:
             raise HTTPException(404, "Frame bukti tidak tersedia.") from error
-        if hashlib.sha256(data).hexdigest() != row["payload"]["evidence_sha256"]:
+        if hashlib.sha256(data).hexdigest() != evidence_hash:
             raise HTTPException(409, "Integritas frame bukti gagal.")
         return Response(data, media_type="image/jpeg", headers={"Cache-Control": "no-store"})
 
@@ -676,7 +1131,11 @@ def install(app):
         reviewer()
         folder, summary, metadata, fingerprint = source(job_id)
         if request.schema_version == 2:
-            return import_v2(job_id, request, folder, summary, metadata, fingerprint)
+            from app import state_lock
+
+            with state_lock:
+                folder, summary, metadata, fingerprint = source(job_id, True)
+                return import_v2(job_id, request, folder, summary, metadata, fingerprint)
         if request.recorded_at is None:
             raise HTTPException(
                 422, "Versi 1 memerlukan waktu rekaman; gunakan versi 2 untuk offset."
@@ -756,8 +1215,10 @@ def install(app):
     @app.post("/api/ledger/events/{event_id}/retract")
     def retract(event_id: str, request: Retraction):
         reviewer()
-        ledger = Ledger(access.store())
-        ledger.retract(event_id, request.reason)
+        from app import state_lock
+
+        with state_lock:
+            Ledger(access.store()).retract(event_id, request.reason)
         return {"ok": True}
 
     @app.post("/api/ledger/attendance", status_code=201)
@@ -825,6 +1286,16 @@ def install(app):
                         != row["source_revision"]
                         for session in sessions
                         for row in session["source_events"]
+                    )
+                    expected_ids = {event for session in sessions for event in session["event_ids"]}
+                    recordings = {session["recording_id"] for session in sessions}
+                    stale = stale or any(
+                        row["id"] not in expected_ids
+                        for row in current.values()
+                        if row["job_id"] in recordings
+                        and row["status"] == "verified"
+                        and row["category"] == "observation"
+                        and row["payload"].get("schema_version") == 2
                     )
                 else:
                     stale = any(

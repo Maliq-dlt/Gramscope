@@ -242,12 +242,18 @@ async function refreshHistory(selected) {
     return jobs;
 }
 function refreshCounts() {
+    $('crossingCount').textContent = String(summary.crossings.length);
     const occupancy = summary.reviewed_occupancy || summary.occupancy;
     $('peakPeople').textContent = String(Math.max(0, ...occupancy.map(f => f.person || 0)));
     $('peakCars').textContent = String(Math.max(0, ...occupancy.map(vehicles)));
     const status = summary.review_status, latest = status?.latest;
     const latestCounts = latest ? Object.entries(latest.counts).filter(([, n]) => n > 0).map(([k, n]) => `${n} ${(objectNames[k] || k).toLowerCase()}`).join(' · ') || '0 objek' : '';
-    $('correctionCounts').textContent = status ? `${status.saved_positions} posisi koreksi disahkan · ${status.draft_positions} draft belum dihitung${latest ? ` · Terakhir detik ${latest.seconds}: ${latestCounts}` : ''}. Track dan lintasan tetap dari analisis AI awal.` : '';
+    $('correctionCounts').textContent = status ? `${status.saved_positions} posisi koreksi disahkan · ${status.draft_positions} draft belum dihitung${latest ? ` · Terakhir detik ${latest.seconds}: ${latestCounts}` : ''}. Track adalah ID sementara. Lintasan mengikuti koreksi tersimpan; video AI tetap menampilkan detector.` : '';
+    const count = (kind) => summary.tracks.filter(t => t.kind === kind).length;
+    const crossing = (kind) => summary.crossings.filter(t => t.kind === kind).length;
+    const kinds = summary.object_classes || ['person', 'car'];
+    const details = [['Durasi / frame analisis', `${summary.duration} detik / ${summary.frames}`], ...kinds.map(k => [`Track / lintasan ${(objectNames[k] || k).toLowerCase()}`, `${count(k)} / ${crossing(k)}`]), ['Waktu pemrosesan', `${summary.processing_seconds} detik`], ['Perangkat analisis', summary.device_reason || summary.device || 'CPU (analisis lama)']];
+    studioViews.details(details);
     updateMoment();
 }
 function displayResults(data) {
@@ -271,13 +277,7 @@ function displayResults(data) {
     tracked.src = mediaUrl('tracked.mp4');
     $('chatContext').textContent = `Konteks: ${data.filename}. Chat hanya membaca hasil video ini.`;
     refreshCounts();
-    $('crossingCount').textContent = String(summary.crossings.length);
     $('candidateCount').textContent = String(summary.tracks.filter(t => t.kind === 'person' && t.helmet_candidate).length);
-    const count = (kind) => summary.tracks.filter(t => t.kind === kind).length;
-    const crossing = (kind) => summary.crossings.filter(t => t.kind === kind).length;
-    const kinds = summary.object_classes || ['person', 'car'];
-    const details = [['Durasi / frame analisis', `${summary.duration} detik / ${summary.frames}`], ...kinds.map(k => [`Track / lintasan ${objectNames[k].toLowerCase()}`, `${count(k)} / ${crossing(k)}`]), ['Waktu pemrosesan', `${summary.processing_seconds} detik`], ['Perangkat analisis', summary.device_reason || summary.device || 'CPU (analisis lama)']];
-    studioViews.details(details);
     renderEvidence();
     for (const [id, name] of [['downloadTracked', 'tracked.mp4'], ['downloadSummary', 'summary_reviewed.json'], ['downloadOriginal', 'upload.bin']]) {
         $(id).href = mediaUrl(name);

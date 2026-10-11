@@ -59,6 +59,80 @@ def reviewed_summary(summary: dict) -> dict:
     }
 
 
+def reviewed_box_rows(overlays, annotations, corrections):
+    """Apply approved replacements, retaining only unambiguous existing track associations."""
+    rows = {row["frame_index"]: row for row in overlays["frames"]}
+    rows.update({row["frame_index"]: row for row in corrections["frames"]})
+    for frame in annotations["frames"]:
+        if not frame.get("complete"):
+            continue
+        candidates = rows.get(frame["frame_index"], {}).get("boxes", [])
+        boxes = []
+        claimed = set()
+        for box in frame["boxes"]:
+            from prompt_tracking import PromptTracker
+
+            matches = [
+                b
+                for b in candidates
+                if b.get("track_id") is not None
+                and b["track_id"] not in claimed
+                and b["label"] == box["label"]
+                and PromptTracker.overlap(b["bbox"], box["bbox"]) >= 0.3
+            ]
+            if len(matches) == 1:
+                claimed.add(matches[0]["track_id"])
+                boxes.append({**box, "track_id": matches[0]["track_id"]})
+        rows[frame["frame_index"]] = {"boxes": boxes}
+    return rows
+
+
+def crossing_review(summary, overlays, annotations, corrections):
+    """Recount candidate crossings from saved boxes; approval still happens in the ledger."""
+    rows = reviewed_box_rows(overlays, annotations, corrections)
+    corrected = bool(corrections["frames"] or any(f.get("complete") for f in annotations["frames"]))
+    if not rows or "line" not in summary:
+        return {**summary, "crossing_source": "original_detector"}
+    counter = Counter(summary["line"])
+    tracks = {t["id"]: dict(t) for t in summary.get("tracks", [])}
+    previous, boxes_by_frame = {}, {}
+    for index, row in sorted(rows.items()):
+        for box in row["boxes"]:
+            track = box.get("track_id")
+            if type(track) is not int or box["label"] not in OBJECT_NAMES:
+                continue
+            if track in previous and index - previous[track] > 1:
+                counter.sides.pop(track, None)
+            previous[track] = index
+            tracks[track] = {**tracks.get(track, {}), "id": track, "kind": box["label"]}
+            boxes_by_frame[index, track] = box["bbox"]
+            before = len(counter.crossings)
+            counter.update(
+                track, box["label"], (box["bbox"][1] + box["bbox"][3]) / 2, index / summary["fps"]
+            )
+            if len(counter.crossings) > before:
+                counter.crossings[-1]["bbox"] = box["bbox"]
+    if not corrected:
+        crossings = [
+            {
+                **c,
+                "bbox": boxes_by_frame.get(
+                    (min(int(c["seconds"] * summary["fps"]), summary["frames"] - 1), c["track_id"]),
+                    c.get("bbox"),
+                ),
+            }
+            for c in summary.get("crossings", [])
+        ]
+    else:
+        crossings = counter.crossings
+    return {
+        **summary,
+        "tracks": list(tracks.values()),
+        "crossings": crossings,
+        "crossing_source": "reviewer_corrected" if corrected else "original_detector",
+    }
+
+
 @dataclass
 class Counter:
     line: float

@@ -17,6 +17,7 @@ from fastapi.testclient import TestClient
 import access
 import event_ledger
 import runtime
+from fact_query import answer_ledger
 
 
 def main():
@@ -37,7 +38,13 @@ def main():
         "line": 0.5,
         "tracks": [{"id": i, "kind": k} for i, k in enumerate(["person", "car", "bus"])],
         "crossings": [
-            {"track_id": i, "kind": k, "direction": "down", "seconds": 0.55 + i * 0.4}
+            {
+                "track_id": i,
+                "kind": k,
+                "direction": "down",
+                "seconds": 0.55 + i * 0.4,
+                "bbox": [0, 0, 0.5, 1],
+            }
             for i, k in enumerate(["person", "car", "bus"])
         ],
     }
@@ -123,7 +130,30 @@ def main():
             reviewer.post("/api/ledger/query", json={**query, "end_seconds": 3}).status_code == 422
         )
         assert other.post("/api/ledger/query", json=query).status_code == 404
-        from fact_query import answer_ledger
+        report = reviewer.post("/api/ledger/report", json={"filters": query})
+        assert report.status_code == 200, report.text
+        assert report.json()["facts"] == facts
+        assert "1 kejadian crossing" in report.json()["narration"]
+        assert report.json()["narration_source"] == "deterministic_verified_facts"
+        markdown = reviewer.post(
+            "/api/ledger/report", json={"filters": query, "format": "markdown"}
+        )
+        assert markdown.status_code == 200 and "# Ringkasan CCTV" in markdown.text
+        assert (
+            "Ada 1 kejadian"
+            in answer_ledger("berapa crossing terverifikasi?", rows, "reviewer", folder.name)[
+                "answer"
+            ]
+        )
+        assert (
+            len(
+                answer_ledger("berapa crossing terverifikasi?", rows, "reviewer", folder.name)[
+                    "ledger_proof"
+                ]
+            )
+            == 1
+        )
+        assert other.post("/api/ledger/report", json={"filters": query}).status_code == 404
 
         answered = answer_ledger(
             "ledger crossing person down dari 0 sampai 1 detik", rows, "reviewer", folder.name
@@ -149,9 +179,135 @@ def main():
         fixture.store.put_document(folder / "annotations.json", {"revision": 1, "frames": []})
         assert reviewer.post(prefix + "/import", json=payload).status_code == 409
         assert reviewer.get(proof).status_code == 409
+        assert reviewer.post("/api/ledger/report", json={"filters": query}).status_code == 409
         assert all(
             r["status"] == "stale" for r in reviewer.get("/api/ledger/events").json()["events"]
         )
+        # Recounting saved correction boxes affects new candidate crossings, not old history.
+        fresh = fixture.resource("job", fixture.owner)
+        (fresh / "original.mp4").write_bytes((folder / "original.mp4").read_bytes())
+        fixture.store.put_document(fresh / "state.json", {"id": fresh.name, "status": "done"})
+        fixture.store.put_document(
+            fresh / "summary.json",
+            {**summary, "crossings": [], "tracks": [{"id": 99, "kind": "person"}]},
+        )
+        boxes = [
+            {
+                "frame_index": i,
+                "boxes": [
+                    {
+                        "label": "person",
+                        "track_id": 99,
+                        "bbox": [0.1, 0.1 + 0.03 * i, 0.4, 0.5 + 0.03 * i],
+                    }
+                ],
+            }
+            for i in range(20)
+        ]
+        fixture.store.put_document(
+            fresh / "tracking_corrections.json", {"revision": 1, "frames": boxes}
+        )
+        fresh_prefix = f"/api/ledger/jobs/{fresh.name}"
+        candidate = reviewer.get(fresh_prefix + "/preview").json()
+        assert (
+            candidate["crossing_source"] == "reviewer_corrected"
+            and len(candidate["crossings"]) == 1
+        )
+        helmet = {
+            "expected_fingerprint": candidate["source_revision"],
+            "track_id": 99,
+            "frame_index": 0,
+            "end_frame_index": 3,
+            "review": {
+                "status": "worn",
+                "association": "head_visible",
+                "head_bbox": [0.15, 0.12, 0.25, 0.2],
+            },
+            "end_head_bbox": [0.15, 0.18, 0.25, 0.26],
+        }
+        assert reviewer.post(fresh_prefix + "/helmets", json=helmet).status_code == 200
+        assert (
+            reviewer.post(
+                fresh_prefix + "/helmets", json={**helmet, "end_head_bbox": [0.8, 0.8, 0.9, 0.9]}
+            ).status_code
+            == 422
+        )
+        filtered = {
+            "recording_id": fresh.name,
+            "source_revision": candidate["source_revision"],
+            "class_name": "person",
+            "start_seconds": 0.1,
+            "end_seconds": 0.2,
+        }
+        actual = reviewer.post("/api/ledger/query", json=filtered).json()
+        assert actual["helmet_observations"]["worn"] == 1 and actual["crossing_event_count"] == 0
+        interval_id = actual["proof"][0]["event_id"]
+        assert reviewer.get(f"/api/ledger/events/{interval_id}/proof?end=true").status_code == 200
+        assert (
+            reviewer.post(
+                "/api/ledger/query", json={**filtered, "start_seconds": 0.3, "end_seconds": 0.4}
+            ).json()["helmet_observations"]["worn"]
+            == 0
+        )
+        assert (
+            reviewer.post(
+                fresh_prefix + "/import",
+                json={
+                    "schema_version": 2,
+                    "expected_fingerprint": candidate["source_revision"],
+                    "crossing_indices": [0],
+                },
+            ).status_code
+            == 200
+        )
+        crossed = reviewer.post(
+            "/api/ledger/query",
+            json={"recording_id": fresh.name, "source_revision": candidate["source_revision"]},
+        ).json()
+        crossing_id = next(
+            r["event_id"] for r in crossed["proof"] if r["symbol"] == "PERSON_ENTER_ZONE"
+        )
+        assert (
+            reviewer.post(
+                f"/api/ledger/events/{crossing_id}/retract", json={"reason": "review withdrawn"}
+            ).status_code
+            == 200
+        )
+        crossed = reviewer.post(
+            "/api/ledger/query",
+            json={"recording_id": fresh.name, "source_revision": candidate["source_revision"]},
+        ).json()
+        assert (
+            crossed["crossing_event_count"] == 0 and crossed["helmet_observations"]["unknown"] == 0
+        )
+        with TestClient(api) as viewer, TestClient(api) as anonymous:
+            fixture.login(viewer, "viewer")
+            assert viewer.post(fresh_prefix + "/helmets", json=helmet).status_code == 403
+            assert viewer.post("/api/ledger/report", json={"filters": filtered}).status_code == 200
+            assert (
+                anonymous.post("/api/ledger/report", json={"filters": filtered}).status_code == 401
+            )
+            assert (
+                viewer.post(
+                    "/api/ledger/report",
+                    json={"filters": filtered},
+                    headers={"X-CSRF-Token": "invalid"},
+                ).status_code
+                == 403
+            )
+        fixture.store.put_document(
+            fresh / "annotations.json",
+            {"revision": 2, "frames": [{"frame_index": 0, "boxes": [], "complete": True}]},
+        )
+        removed = reviewer.get(fresh_prefix + "/preview").json()
+        assert (
+            reviewer.post(
+                fresh_prefix + "/helmets",
+                json={**helmet, "expected_fingerprint": removed["source_revision"]},
+            ).status_code
+            == 422
+        ), "approved empty frame removes detector association"
+        assert "Novelty belum tersedia" in report.json()["narration"]
         assert fixture.store.verify_audit()
     print(
         "PASS: v2 people/car/bus, real crossing frame, offset, head review, duplicate, isolation and stale guards"

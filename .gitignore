@@ -31,3 +31,6 @@ verifikasi/logs/
 
 # Research checkpoints, source documents and private event exports remain local.
 extensions/results/runs/
+
+# Local browser verification traces
+.playwright-cli/

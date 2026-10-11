@@ -79,3 +79,32 @@ def test_revisions_unknown_and_invalid():
     export = exported()
     export["events"][0]["status"] = "retracted"
     assert "PERSON_ENTER_ZONE" not in event_sequences_v2(export["events"])[0]["symbols"][0]
+
+
+def test_attributed_versions_intervals_and_label_boundary():
+    export = exported()
+    # Different encodings, same attributed original source: one partition.
+    for row in export["events"]:
+        if row["job_id"] in {"a", "b"}:
+            row["payload"]["source_group_sha256"] = "f" * 64
+        if row["job_id"] == "b":
+            row["payload"]["interval_seconds"] = [
+                row["payload"]["seconds"],
+                row["payload"]["seconds"] + 0.5,
+            ]
+    sessions, split, _ = event_novelty.prepare(export, "w")
+    assert next(k for k, v in split.items() if "a" in v) == next(
+        k for k, v in split.items() if "b" in v
+    )
+    assert next(k for k, v in split.items() if "copy-a" in v) == next(
+        k for k, v in split.items() if "b" in v
+    )
+    assert any(
+        event["interval_seconds"][1] > event["seconds"]
+        for session in sessions
+        for event in session["source_events"]
+    )
+    export["labels"] = [{"recording_id": "a", "track_id": 1, "session_index": 0, "novel": True}]
+    export["label_provenance"] = []
+    with pytest.raises(ValueError, match="provenance"):
+        event_novelty.prepare(export, "w")

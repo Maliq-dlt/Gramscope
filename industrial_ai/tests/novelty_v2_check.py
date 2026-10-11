@@ -16,6 +16,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 import access
+import app  # noqa: F401  # Initialize registry before its isolated test directory is patched.
 import event_ledger
 import runtime
 
@@ -77,6 +78,20 @@ def main():
         assert other.get("/api/ledger/novelty/runs/v2-demo").status_code == 404
         event = data["sessions"][0]["terms"][0]["event_ids"][0]
         assert client.get(f"/api/ledger/events/{event}/proof").status_code == 200
+        session = data["sessions"][0]
+        report = client.post(
+            "/api/ledger/report",
+            json={
+                "filters": {
+                    "recording_id": session["recording_id"],
+                    "source_revision": session["source_revision"],
+                },
+                "run_id": "v2-demo",
+            },
+        )
+        assert report.status_code == 200, report.text
+        assert len(report.json()["novelty"]) == 1
+
         client.post(f"/api/ledger/events/{event}/retract", json={"reason": "review withdrawn"})
         assert client.get("/api/ledger/novelty/runs/v2-demo").json()["stale"]
         (directory / "explanations.json").write_text("{}")

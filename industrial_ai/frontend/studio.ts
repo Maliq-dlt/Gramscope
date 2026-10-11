@@ -12,7 +12,7 @@ type Counts = Record<string,number>;
 interface Box {label:string;name?:string|null;color?:string|null;bbox:[number,number,number,number];track_id?:number;source?:string}
 interface Frame {frame_index:number;boxes:Box[];lost?:Box[];merged?:boolean;complete?:boolean;helmets_complete?:boolean}
 interface Track {id:number;kind:string;helmet_candidate?:boolean;helmet_evidence?:string;evidence:string;evidence_seconds:number;helmet_seconds?:number;evidence_status?:string;status:string}
-interface Summary {frames:number;fps:number;duration:number;occupancy:Counts[];reviewed_occupancy?:Counts[];review_status?:{saved_positions:number;draft_positions:number;latest?:{counts:Counts;seconds:number}};crossings:{kind:string}[];tracks:Track[];object_classes?:string[];object_names?:Record<string,string>;processing_seconds:number;device_reason?:string;device?:string;model_id?:string;learning_evidence?:{checkpoint_sha256:string;training_seconds:number}}
+interface Summary {frames:number;fps:number;duration:number;occupancy:Counts[];reviewed_occupancy?:Counts[];review_status?:{saved_positions:number;draft_positions:number;latest?:{counts:Counts;seconds:number}};crossings:{kind:string}[];original_crossings?:{kind:string}[];crossing_source?:string;tracks:Track[];object_classes?:string[];object_names?:Record<string,string>;processing_seconds:number;device_reason?:string;device?:string;model_id?:string;learning_evidence?:{checkpoint_sha256:string;training_seconds:number}}
 interface Job {id:string;status:string;filename:string;summary:Summary;progress:number;message:string;model_id?:string;group:string;followup_job_id?:string}
 interface Review {revision:number;frames:Frame[]}
 interface Queue {reviewed:number;total:number;pending:number;group:string;positions:{reviewed:boolean;frame_index:number;seconds:number;reasons:string[]}[]}
@@ -343,12 +343,18 @@ async function refreshHistory(selected?:string) {
   return jobs;
 }
 function refreshCounts() {
+  $('crossingCount').textContent=String(summary!.crossings.length);
   const occupancy=summary!.reviewed_occupancy || summary!.occupancy;
   $('peakPeople').textContent=String(Math.max(0,...occupancy.map(f=>f.person || 0)));
   $('peakCars').textContent=String(Math.max(0,...occupancy.map(vehicles)));
   const status=summary!.review_status, latest=status?.latest;
   const latestCounts=latest ? Object.entries(latest.counts).filter(([,n])=>n>0).map(([k,n])=>`${n} ${(objectNames[k] || k).toLowerCase()}`).join(' · ') || '0 objek' : '';
-  $('correctionCounts').textContent=status ? `${status.saved_positions} posisi koreksi disahkan · ${status.draft_positions} draft belum dihitung${latest ? ` · Terakhir detik ${latest.seconds}: ${latestCounts}` : ''}. Track dan lintasan tetap dari analisis AI awal.` : '';
+  $('correctionCounts').textContent=status ? `${status.saved_positions} posisi koreksi disahkan · ${status.draft_positions} draft belum dihitung${latest ? ` · Terakhir detik ${latest.seconds}: ${latestCounts}` : ''}. Track adalah ID sementara. Lintasan mengikuti koreksi tersimpan; video AI tetap menampilkan detector.` : '';
+  const count = (kind:string) => summary!.tracks.filter(t => t.kind === kind).length;
+  const crossing = (kind:string) => summary!.crossings.filter(t => t.kind === kind).length;
+  const kinds=summary!.object_classes || ['person','car'];
+  const details = [['Durasi / frame analisis',`${summary!.duration} detik / ${summary!.frames}`],...kinds.map(k=>[`Track / lintasan ${(objectNames[k]||k).toLowerCase()}`,`${count(k)} / ${crossing(k)}`]),['Waktu pemrosesan',`${summary!.processing_seconds} detik`],['Perangkat analisis',summary!.device_reason || summary!.device || 'CPU (analisis lama)']];
+  studioViews.details(details);
   updateMoment();
 }
 function displayResults(data:Job) {
@@ -362,13 +368,7 @@ function displayResults(data:Job) {
   original.src = mediaUrl('original.mp4'); tracked.src = mediaUrl('tracked.mp4');
   $('chatContext').textContent = `Konteks: ${data.filename}. Chat hanya membaca hasil video ini.`;
   refreshCounts();
-  $('crossingCount').textContent = String(summary!.crossings.length);
   $('candidateCount').textContent = String(summary!.tracks.filter(t => t.kind === 'person' && t.helmet_candidate).length);
-  const count = (kind:string) => summary!.tracks.filter(t => t.kind === kind).length;
-  const crossing = (kind:string) => summary!.crossings.filter(t => t.kind === kind).length;
-  const kinds=summary!.object_classes || ['person','car'];
-  const details = [['Durasi / frame analisis',`${summary!.duration} detik / ${summary!.frames}`],...kinds.map(k=>[`Track / lintasan ${objectNames[k].toLowerCase()}`,`${count(k)} / ${crossing(k)}`]),['Waktu pemrosesan',`${summary!.processing_seconds} detik`],['Perangkat analisis',summary!.device_reason || summary!.device || 'CPU (analisis lama)']];
-  studioViews.details(details);
   renderEvidence();
   for (const [id,name] of [['downloadTracked','tracked.mp4'],['downloadSummary','summary_reviewed.json'],['downloadOriginal','upload.bin']] as const) { $(id).href = mediaUrl(name); $(id).setAttribute('download',name); }
   $('downloadSummary').href=`/api/jobs/${job!.id}/summary`;

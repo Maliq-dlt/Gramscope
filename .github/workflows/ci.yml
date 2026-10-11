@@ -102,6 +102,8 @@ jobs:
           .venv/bin/python tests/storage_check.py
           .venv/bin/python tests/profile_api_check.py
           .venv/bin/python tests/ledger_check.py
+          .venv/bin/python tests/ledger_v2_check.py
+          .venv/bin/python tests/novelty_v2_check.py
           .venv/bin/python tests/novelty_api_check.py
           .venv/bin/python tests/academic_check.py
           .venv/bin/python tests/fact_check.py

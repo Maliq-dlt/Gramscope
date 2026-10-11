@@ -300,6 +300,7 @@ def install(app, max_upload: int):
                         "/api/chat",
                         "/api/ngram/explore",
                         "/api/ledger/query",
+                        "/api/ledger/report",
                         "/api/auth/logout",
                         "/api/auth/password",
                         "/api/auth/profile",

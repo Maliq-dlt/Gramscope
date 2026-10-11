@@ -166,7 +166,10 @@ def answer_facts(message: str, summary: dict | None) -> dict | None:
             "mode": "facts",
             "evidence": [],
         }
-    tracks, crossings = summary["tracks"], summary["crossings"]
+    tracks = summary["tracks"]
+    crossings = (
+        summary.get("original_crossings", summary["crossings"]) if ai_only else summary["crossings"]
+    )
     occupancy = summary["occupancy" if ai_only else "reviewed_occupancy"]
     candidates = [t for t in tracks if t["kind"] == "person" and t["helmet_candidate"]]
     requested = set()
@@ -346,7 +349,7 @@ def answer_facts(message: str, summary: dict | None) -> dict | None:
                         or "0 objek"
                     )
                     text += f"\n\nKoreksi terbaru: {counts} pada detik {latest['seconds']:g}."
-                text += f" {status['saved_positions']} posisi disahkan; {status['draft_positions']} draft belum masuk hitungan. ID dan lintasan tetap dari analisis AI awal."
+                text += f" {status['saved_positions']} posisi disahkan; {status['draft_positions']} draft belum masuk hitungan. ID bukan identitas; lintasan mengikuti sumber hasil yang dipilih."
     evidence_limit = 3 if "ringkas" in q else 8
     if len(evidence) > evidence_limit:
         text += f"\n\n{evidence_limit} foto bukti ditampilkan; foto lainnya ada di Bukti & hasil."
@@ -412,6 +415,10 @@ def _generate_once(message: str, history: list[dict], summary: dict | None, devi
         return_dict=True,
         return_tensors="pt",
     )
+    from transformers.tokenization_utils_base import BatchEncoding
+
+    if not isinstance(inputs, BatchEncoding):
+        raise RuntimeError("Tokenizer did not return the requested tensor mapping.")  # noqa: TRY004
     if inputs["input_ids"].shape[1] > 1800:
         messages = [messages[0], messages[-1]]
         inputs = _tokenizer.apply_chat_template(
@@ -422,11 +429,13 @@ def _generate_once(message: str, history: list[dict], summary: dict | None, devi
             return_dict=True,
             return_tensors="pt",
         )
+    if not isinstance(inputs, BatchEncoding):
+        raise RuntimeError("Tokenizer did not return the requested tensor mapping.")  # noqa: TRY004
     inputs = {k: v.to(device) for k, v in inputs.items()}
     with torch.inference_mode():
         output = cast(
             torch.Tensor,
-            _model.generate(
+            _model.generate(  # ty: ignore[invalid-argument-type]  # Upstream AutoModel self protocol.
                 **inputs,
                 max_new_tokens=140,
                 do_sample=True,
@@ -437,9 +446,10 @@ def _generate_once(message: str, history: list[dict], summary: dict | None, devi
                 return_dict_in_generate=False,
             ),
         )
-    text = _tokenizer.decode(
-        output[0, inputs["input_ids"].shape[1] :], skip_special_tokens=True
-    ).strip()
+    decoded = _tokenizer.decode(output[0, inputs["input_ids"].shape[1] :], skip_special_tokens=True)
+    if not isinstance(decoded, str):
+        raise RuntimeError("Tokenizer did not return one decoded response.")  # noqa: TRY004
+    text = decoded.strip()
     if not text:
         raise RuntimeError("Model menghasilkan respons kosong.")
     return {

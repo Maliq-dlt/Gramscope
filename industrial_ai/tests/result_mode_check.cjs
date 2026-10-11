@@ -21,5 +21,10 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
  vm.runInContext(source.slice(source.indexOf('function clearResults()'),source.indexOf('async function refreshHistory(')),context);
  $('resultMode').value='corrections';context.clearResults();assert.equal($('resultMode').value,'ai');assert.equal($('resultAi').checked,true);assert.equal($('correctedOption').disabled,true);assert.equal($('resultCorrections').disabled,true);
  assert.match(source,/function displayResults\(data\) \{\s*\$\('progressArea'\)\.hidden\s*=\s*true;/,'completed display hides progress');
+ const detailRows=[];
+ Object.assign(context,{summary:{crossings:[{kind:'person'}],tracks:[],occupancy:[{person:1}],reviewed_occupancy:[{person:3}],review_status:{saved_positions:1,draft_positions:0},object_classes:['person'],duration:5,frames:50,processing_seconds:1},objectNames:{person:'Orang'},vehicles:row=>row.car||0,updateMoment(){},studioViews:{details:rows=>detailRows.push(rows)}});
+ vm.runInContext(source.slice(source.indexOf('function refreshCounts()'),source.indexOf('function displayResults(')),context);
+ context.refreshCounts();assert.equal($('crossingCount').textContent,'1');assert.equal($('peakPeople').textContent,'3');assert.match($('correctionCounts').textContent,/Lintasan mengikuti koreksi/);
+ context.summary.crossings=[];context.refreshCounts();assert.equal($('crossingCount').textContent,'0');assert.equal(detailRows.at(-1).find(row=>row[0]==='Track / lintasan orang')[1],'0 / 0','saved corrections also refresh advanced details');
  console.log('PASS: native result radios, pending export authority, completion, switching and busy/empty locks.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

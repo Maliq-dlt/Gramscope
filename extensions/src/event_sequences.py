@@ -118,6 +118,20 @@ def event_sequences_v2(rows, max_gap_seconds=30):
             raise ValueError(
                 "Version 2 requires supported symbols, explicit offset/source/revision provenance."
             )
+        group = payload.get("source_group_sha256", payload["original_source_sha256"])
+        if not isinstance(group, str) or not re.fullmatch(r"[a-f0-9]{64}", group):
+            raise ValueError("Original source group must be a SHA-256 fingerprint.")
+        interval = payload.get("interval_seconds", [payload["seconds"], payload["seconds"]])
+        if (
+            not isinstance(interval, list)
+            or len(interval) != 2
+            or any(type(v) not in (int, float) or not math.isfinite(v) for v in interval)
+            or interval[0] != payload["seconds"]
+            or not interval[0] <= interval[1] <= 86400
+        ):
+            raise ValueError(
+                "Event interval must start at its offset and have a finite ordered end."
+            )
         clean = {
             "id": row["id"],
             "symbol": row["symbol"],
@@ -125,7 +139,9 @@ def event_sequences_v2(rows, max_gap_seconds=30):
             "recording_id": row["job_id"],
             "track_id": row["track_id"],
             "source_revision": payload["source_revision"],
-            "source_group": payload["original_source_sha256"],
+            "source_group": group,
+            "original_source_sha256": payload["original_source_sha256"],
+            "interval_seconds": interval,
         }
         if row["id"] in identifiers:
             if identifiers[row["id"]] != clean:
@@ -137,7 +153,7 @@ def event_sequences_v2(rows, max_gap_seconds=30):
             row["job_id"],
             row["track_id"],
             payload["source_revision"],
-            payload["original_source_sha256"],
+            clean["source_group"],
         )
         grouped[key].append(clean)
     result = []
@@ -151,12 +167,12 @@ def event_sequences_v2(rows, max_gap_seconds=30):
                 chunks.append(chunk)
                 chunk = []
             symbols = sorted({r["symbol"] for r in bundle})
-            # ponytail: crossing-time helmet samples; add intervals with reviewed coverage.
             chunk.append(
                 {
                     "symbol": "BUNDLE:" + "|".join(symbols),
                     "seconds": seconds,
                     "event_ids": sorted(r["id"] for r in bundle),
+                    "intervals": {r["id"]: r["interval_seconds"] for r in bundle},
                 }
             )
             previous = seconds

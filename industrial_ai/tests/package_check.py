@@ -44,6 +44,7 @@ with zipfile.ZipFile(wheel) as archive:
         "assets/dashboard.css",
         "assets/THIRD_PARTY_LICENSES.txt",
         "docs/README.md",
+        "docs/EVENT_CONTRACT.md",
         "assets/brand.svg",
         "assets/crowd.png",
     ]:
@@ -58,6 +59,7 @@ with zipfile.ZipFile(wheel) as archive:
 with tarfile.open(next(output.glob("industrial_video_workspace*.tar.gz"))) as archive:
     for name in (
         "docs/README.md",
+        "docs/EVENT_CONTRACT.md",
         "assets/brand.svg",
         "assets/crowd.png",
         "app.js",

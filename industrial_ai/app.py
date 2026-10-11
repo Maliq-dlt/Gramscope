@@ -27,7 +27,7 @@ import access
 from corrections import merge_overlay, read_corrections, render_video
 from operations import WorkCancelled, check_cancel
 from review import review_queue
-from vision import OBJECT_NAMES, process_video, reviewed_summary
+from vision import OBJECT_NAMES, crossing_review, process_video, reviewed_summary
 
 MAX_UPLOAD = 250 * 1024 * 1024
 state_lock = threading.RLock()
@@ -398,8 +398,17 @@ def result_summary(folder: Path) -> dict:
     annotations = read_annotations(folder)
     summary["manual_frames"] = annotations["frames"]
     summary = reviewed_summary(summary)
+    corrections = read_corrections(folder)
+    reviewed = crossing_review(
+        summary,
+        access.read_document(folder / "overlays.json", {"frames": []}),
+        annotations,
+        corrections,
+    )
+    summary["original_crossings"] = summary["crossings"]
+    summary["crossings"] = reviewed["crossings"]
+    summary["crossing_source"] = reviewed["crossing_source"]
     state = read_state(folder)
-    corrections = access.read_document(folder / "tracking_corrections.json", {"revision": 0})
     summary["result_provenance"] = {
         "detector_source": "fine_tuned_candidate" if state.get("model_id") else "original_detector",
         "model_id": state.get("model_id"),
@@ -597,6 +606,20 @@ def start_tracking(job_id: str, request: TrackingPrompt):
             )
         except ValueError as exc:
             raise HTTPException(422, str(exc)) from exc
+        used_ids = [
+            b["track_id"]
+            for data in (analyzed_overlays(job_id), read_corrections(folder))
+            for frame in data["frames"]
+            for b in frame["boxes"]
+            if type(b.get("track_id")) is int
+        ]
+        next_id = max(used_ids, default=0) + 1
+        for item in tracker.objects:
+            if item["anchor"] is not None:
+                item["id"] = item["anchor"]
+            else:
+                item["id"] = next_id
+                next_id += 1
         metadata = {
             "revision": revision,
             "suppressed": set(request.suppressed_ids),
@@ -985,6 +1008,16 @@ async def chat(request: ChatRequest):
         request.job_id,
     )
     if ledger_answer is not None:
+        query = ledger_answer.get("facts", {}).get("filter")
+        if (
+            query
+            and summary
+            and (
+                query["start_seconds"] > summary["duration"]
+                or (query["end_seconds"] is not None and query["end_seconds"] > summary["duration"])
+            )
+        ):
+            raise HTTPException(422, "Rentang query di luar durasi video.")
         return ledger_answer
     facts = answer_facts(request.message, summary)
     if facts:

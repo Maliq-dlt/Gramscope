@@ -151,7 +151,11 @@ if folder.exists():
     assert len(reply["evidence"]) == 3
     assert "113 ID sementara" not in reply["answer"]
     assert "individu unik belum" in reply["answer"]
-    assert "20 kejadian" in reply["answer"]
+    assert len(result["original_crossings"]) == 20
+    assert result["crossing_source"] == "reviewer_corrected"
+    assert f"{len(result['crossings'])} kejadian" in reply["answer"] or not result["crossings"]
+    original_reply = facts("Ringkasan AI", result)
+    assert "20 kejadian" in original_reply["answer"]
 print(
     "PASS: contextual summary, observed classes only, explicit zero queries, short evidence and distinct track units."
 )

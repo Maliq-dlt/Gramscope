@@ -123,9 +123,24 @@ def answer_ledger(message, rows, role, job_id=None):
     else:
         proof = [
             r for r in selected if r["status"] == "verified" and r["category"] == "observation"
-        ][:20]
+        ]
         if "helm" in q:
-            text = f"Ada {current['unknown_helmet_observation_count']} observasi helm berstatus unknown. Belum dapat menyimpulkan siapa tanpa helm dari ledger ini."
+            proof = [r for r in proof if r["symbol"].startswith("HELMET_")]
+        elif "track" not in q and "orang unik" not in q and "identitas" not in q:
+            proof = [r for r in proof if r["symbol"] in {"PERSON_ENTER_ZONE", "PERSON_EXIT_ZONE"}]
+        else:
+            proof = []
+        proof = proof[:20]
+        if "helm" in q:
+            known = [
+                r for r in selected if r["status"] == "verified" and r["category"] == "observation"
+            ]
+            worn = sum(r["symbol"] == "HELMET_WORN" for r in known)
+            not_worn = sum(r["symbol"] == "HELMET_NOT_WORN" for r in known)
+            text = (
+                f"Observasi helm terverifikasi: dipakai {worn}, tidak dipakai {not_worn}, "
+                f"unknown {current['unknown_helmet_observation_count']}. Track bukan identitas; unknown bukan pelanggaran."
+            )
         elif "orang unik" in q or "identitas" in q:
             text = "Jumlah orang unik dan identitas dari track belum diketahui; track lintas rekaman tidak digabung sebagai satu orang."
         elif "track" in q:
@@ -145,7 +160,8 @@ def answer_ledger(message, rows, role, job_id=None):
     ]
     if references:
         text += "\nBukti: " + "; ".join(
-            r["event_id"] + " @ " + r["occurred_at"] for r in references
+            r["event_id"] + " @ " + (r["occurred_at"] or str(r["source"].get("seconds", "?")) + "s")
+            for r in references
         )
     return {
         "answer": text,
