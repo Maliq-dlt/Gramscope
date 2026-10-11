@@ -230,6 +230,7 @@ class Ledger:
             ]
         fingerprints = {}
         integrity = {}
+        video_integrity = {}
         for row in rows:
             row["payload"] = json.loads(row["payload"])
             row["status"] = "retracted" if row["retracted"] else "verified"
@@ -249,8 +250,14 @@ class Ledger:
                     if key not in integrity:
                         try:
                             folder = source(row["job_id"])[0]
-                            with (folder / "original.mp4").open("rb") as stream:
-                                video_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+                            if row["job_id"] not in video_integrity:
+                                with (folder / "original.mp4").open("rb") as stream:
+                                    video_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+                                video_integrity[row["job_id"]] = (
+                                    video_hash,
+                                    original_source(row["job_id"]),
+                                )
+                            video_hash, original_hash = video_integrity[row["job_id"]]
                             proof_hash = hashlib.sha256(
                                 (
                                     folder / ("ledger_" + payload["evidence_sha256"] + ".jpg")
@@ -554,7 +561,62 @@ def filtered_facts(rows, filters, role=None):
     }
 
 
+def novelty_detail(run_id):
+    from extensions.experiments import registry
+
+    from academic import read_json
+
+    try:
+        directory = registry.run_directory(run_id)
+        config = read_json(directory / "manifest.json").get("config", {})
+        if (
+            config.get("workspace_id") != access.workspace_id()
+            or config.get("experiment") != "offline-event-novelty-v2"
+        ):
+            raise HTTPException(404, "Run tidak tersedia dalam workspace ini.")
+        registry.read_run(run_id)
+        sessions = read_json(directory / "sessions.json", 16 * 2**20)
+        current = {row["id"]: row for row in Ledger(access.store()).rows()}
+        stale = any(
+            current.get(event["id"], {}).get("status") != "verified"
+            or current[event["id"]]["payload"].get("source_revision") != event["source_revision"]
+            or current[event["id"]]["symbol"] != event["symbol"]
+            for session in sessions
+            for event in session["source_events"]
+        )
+        return {
+            "run_id": run_id,
+            "stale": stale,
+            "summary": read_json(directory / "summary.json"),
+            "sessions": read_json(directory / "explanations.json", 16 * 2**20),
+        }
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        raise HTTPException(409, "Run belum lengkap atau integritasnya gagal.") from error
+
+
 def install(app):
+    @app.get("/api/ledger/novelty/runs/{run_id}")
+    def run_detail(run_id: str):
+        return novelty_detail(run_id)
+
+    @app.get("/api/ledger/export")
+    def export_events():
+        rows = [
+            row
+            for row in Ledger(access.store()).rows()
+            if row["status"] == "verified"
+            and row["category"] == "observation"
+            and row["payload"].get("schema_version") == 2
+        ]
+        # Private authenticated export only; identity-bearing attendance never enters event training.
+        return {
+            "schema_version": 2,
+            "workspace_id": access.workspace_id(),
+            "events": rows,
+            "label_provenance": None,
+            "labels": [],
+        }
+
     @app.post("/api/ledger/query")
     def query(request: FactFilter):
         if request.recording_id:
@@ -579,6 +641,8 @@ def install(app):
             "crossings": summary.get("crossings", []),
             "tracks": summary.get("tracks", []),
             "duration": summary["duration"],
+            "fps": summary["fps"],
+            "frames": summary["frames"],
         }
 
     @app.get("/api/ledger/events/{event_id}/proof")
@@ -746,21 +810,32 @@ def install(app):
             try:
                 config = read_json(folder / "manifest.json").get("config", {})
                 if (
-                    config.get("experiment") != "offline-event-novelty-v1"
+                    config.get("experiment")
+                    not in {"offline-event-novelty-v1", "offline-event-novelty-v2"}
                     or config.get("workspace_id") != access.workspace_id()
                 ):
                     continue
                 registry.read_run(folder.name)
                 sessions = read_json(folder / "sessions.json", 16 * 2**20)
-                stale = any(
-                    current.get(event, {}).get("status") != "verified"
-                    or current[event]["symbol"] != symbol
-                    or current[event]["occurred_at"] != when
-                    for session in sessions
-                    for event, symbol, when in zip(
-                        session["event_ids"], session["symbols"], session["times"], strict=True
+                if config.get("schema_version") == 2:
+                    stale = any(
+                        current.get(row["id"], {}).get("status") != "verified"
+                        or current[row["id"]]["symbol"] != row["symbol"]
+                        or current[row["id"]]["payload"].get("source_revision")
+                        != row["source_revision"]
+                        for session in sessions
+                        for row in session["source_events"]
                     )
-                )
+                else:
+                    stale = any(
+                        current.get(event, {}).get("status") != "verified"
+                        or current[event]["symbol"] != symbol
+                        or current[event]["occurred_at"] != when
+                        for session in sessions
+                        for event, symbol, when in zip(
+                            session["event_ids"], session["symbols"], session["times"], strict=True
+                        )
+                    )
                 runs.append(
                     {
                         "run_id": folder.name,

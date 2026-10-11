@@ -16,7 +16,7 @@ from core.src.ngram import events
 from core.src.preprocess import BOS, EOS, UNK
 from extensions.experiments import registry
 from extensions.src.cli import ALGORITHM_VERSION
-from extensions.src.event_sequences import SYMBOLS, event_sequences
+from extensions.src.event_sequences import SYMBOLS, event_sequences, event_sequences_v2
 from extensions.src.models import CountBank, evaluate_counts
 from extensions.src.pipeline import candidates, tune
 
@@ -41,6 +41,8 @@ def prepare(export, workspace_id, seed=42, max_gap_seconds=30):
         raise ValueError("Export must contain an events list")
     if not 1 <= len(export["events"]) <= MAX_EVENTS:
         raise ValueError("Export requires 1..100000 events")
+    if export.get("schema_version") == 2:
+        return prepare_v2(export, workspace_id, seed, max_gap_seconds)
     rows, identifiers = [], {}
     for row in export["events"]:
         if not isinstance(row, dict) or row.get("workspace_id") != workspace_id:
@@ -125,6 +127,64 @@ def prepare(export, workspace_id, seed=42, max_gap_seconds=30):
     return sessions, split, labels
 
 
+def prepare_v2(export, workspace_id, seed, max_gap_seconds):
+    if any(
+        not isinstance(row, dict) or row.get("workspace_id") != workspace_id
+        for row in export["events"]
+    ):
+        raise ValueError("Every event must belong to the explicit workspace")
+    sessions = event_sequences_v2(export["events"], max_gap_seconds)
+    by_recording = {}
+    for session in sessions:
+        previous = by_recording.setdefault(
+            session["recording_id"], (session["source_group"], session["source_revision"])
+        )
+        if previous != (session["source_group"], session["source_revision"]):
+            raise ValueError("A recording must use one original source and revision per run")
+    groups = sorted({row["source_group"] for row in sessions})
+    if len(groups) < 3:
+        raise ValueError(
+            "At least three independent original source hashes required; copies share a split"
+        )
+    random.Random(seed).shuffle(groups)
+    train_end = min(int(0.8 * len(groups)), len(groups) - 2)
+    dev_end = train_end + max(1, int(0.1 * len(groups)))
+    group_split = {
+        "train": groups[:train_end],
+        "dev": groups[train_end:dev_end],
+        "test": groups[dev_end:],
+    }
+    split = {
+        name: sorted({row["recording_id"] for row in sessions if row["source_group"] in selected})
+        for name, selected in group_split.items()
+    }
+    labels = {}
+    supplied = export.get("labels", [])
+    provenance = export.get("label_provenance", {})
+    if not isinstance(supplied, list) or (
+        supplied
+        and (
+            provenance.get("independent") is not True
+            or not provenance.get("source")
+            or not provenance.get("rubric")
+        )
+    ):
+        raise ValueError("Novelty labels require independent source and frozen rubric provenance")
+    keys = {session_key(row) for row in sessions}
+    for label in supplied:
+        if (
+            not isinstance(label, dict)
+            or set(label) != {"recording_id", "track_id", "session_index", "novel"}
+            or type(label["novel"]) is not bool
+        ):
+            raise ValueError("Invalid novelty label")
+        key = session_key(label)
+        if key not in keys or key in labels:
+            raise ValueError("Label must identify exactly one session")
+        labels[key] = label["novel"]
+    return sessions, split, labels
+
+
 def quantile95(values):
     """Linear interpolation at (N-1)*.95, including the single-session case."""
     values = sorted(values)
@@ -171,40 +231,50 @@ def run_novelty(run_id, export, workspace_id, seed=42, max_gap_seconds=30):
         name: [row for row in sessions if row["recording_id"] in ids] for name, ids in split.items()
     }
     train = [row["symbols"] for row in partitions["train"]]
-    vocabulary = sorted(SYMBOLS | {EOS, UNK})
+    version2 = export.get("schema_version") == 2
+    alphabet = (
+        {symbol for row in partitions["train"] for symbol in row["symbols"]}
+        if version2
+        else SYMBOLS
+    )
+    methods = (
+        ("add_k", "kneser_ney", "witten_bell", "modified_kneser_ney")
+        if version2
+        else ("kneser_ney", "witten_bell")
+    )
+    vocabulary = sorted(alphabet | {EOS, UNK})
     bank = CountBank.from_counts(
         vocabulary,
         {n: Counter(gram for sentence in train for gram in events(sentence, n)) for n in (1, 2, 3)},
         min_count=1,
     )
     config = {
-        "experiment": "offline-event-novelty-v1",
-        "tokenizer": TOKENIZER,
+        "experiment": "offline-event-novelty-v2" if version2 else "offline-event-novelty-v1",
+        "schema_version": 2 if version2 else 1,
+        "tokenizer": "ledger-bundles-v2" if version2 else TOKENIZER,
         "algorithm": ALGORITHM_VERSION,
         "workspace_id": workspace_id,
         "source_sha256": registry.fingerprint(export),
         "seed": seed,
         "max_gap_seconds": max_gap_seconds,
         "split": split,
-        "split_policy": "seeded recording groups; floor 80/10/10 with >=1 dev and test",
+        "split_policy": "seeded original source hash groups; copies share partitions"
+        if version2
+        else "seeded recording groups; floor 80/10/10 with >=1 dev and test",
         "unit": "observed recording/track session separated by event gaps",
-        "alphabet": sorted(SYMBOLS),
+        "alphabet": sorted(alphabet),
         "vocabulary": vocabulary,
         "boundaries": {"context": BOS, "predicted_end": EOS, "reserved_unknown": UNK},
         "loss_units": "natural-log NLL per predicted symbol, including one EOS per session",
         "selection": "minimum token-weighted dev CE; model name breaks ties",
         "threshold": "linear 95th percentile of dev session CE; alert when CE > threshold",
         "frequency_baseline": "alert if any adjacent symbol pair has training count < 2",
-        "grid": {
-            f"{n}-{method}": candidates(n, method)
-            for n in (1, 2, 3)
-            for method in ("kneser_ney", "witten_bell")
-        },
+        "grid": {f"{n}-{method}": candidates(n, method) for n in (1, 2, 3) for method in methods},
         "label_provenance": export.get("label_provenance") if labels else None,
         "test_policy": "exploratory offline evaluation; prior exposure unknown",
         "limitations": [
             "Local export status is trusted input, not cryptographic proof of reviewer approval.",
-            "Recording IDs must denote independent sources; renamed copies are not detectable.",
+            "Source hashes group copies in v2; v1 recording independence is user-declared.",
             "No duration features; event gaps do not establish camera coverage or exposure hours.",
             "Session scores require the full offline sequence, not causal live detection.",
             "No hazard, attendance or identity inference; independent labels are user-declared.",
@@ -231,7 +301,7 @@ def run_novelty(run_id, export, workspace_id, seed=42, max_gap_seconds=30):
         directory / "counts.json",
         {
             "schema": "event-counts-v1",
-            "tokenizer": TOKENIZER,
+            "tokenizer": "ledger-bundles-v2" if version2 else TOKENIZER,
             "vocabulary": vocabulary,
             "raw": {
                 str(n): [[list(gram), count] for gram, count in sorted(counts.items())]
@@ -241,7 +311,9 @@ def run_novelty(run_id, export, workspace_id, seed=42, max_gap_seconds=30):
     )
     trained, calibration = {}, {}
     for n in (1, 2, 3):
-        for method in ("kneser_ney", "witten_bell"):
+        for method in methods:
+            if version2 and method == "add_k" and n != 1:
+                continue
             name = f"{n}-{method}"
             model, winner, trials = tune(
                 bank,
@@ -299,6 +371,63 @@ def run_novelty(run_id, export, workspace_id, seed=42, max_gap_seconds=30):
         },
     }
     registry.atomic_json(directory / "predictions.json", predictions)
+    if version2:
+        import time
+
+        explanations, costs = [], []
+        for row in sessions:
+            model = trained[best]
+            started = time.perf_counter()
+            mapped = model.map_sentence(row["symbols"])
+            terms = []
+            for index, gram in enumerate(events(mapped, model.n)):
+                probability = model.score_mapped(gram[-1], gram[:-1])
+                terms.append(
+                    {
+                        "symbol": row["symbols"][index] if index < len(row["symbols"]) else EOS,
+                        "mapped_symbol": gram[-1],
+                        "context": list(gram[:-1]),
+                        "probability": probability,
+                        "log_probability": math.log(probability) if probability else None,
+                        "nll": -math.log(probability) if probability else None,
+                        "event_ids": row["bundles"][index]["event_ids"]
+                        if index < len(row["bundles"])
+                        else [],
+                        "seconds": row["times"][index] if index < len(row["times"]) else None,
+                    }
+                )
+            cached = next(
+                (item for item in predictions[best] if session_key(item) == session_key(row)), None
+            )
+            loss = cached["session_ce"] if cached is not None else session_loss(model, row)
+            costs.append((time.perf_counter() - started) * 1000)
+            explanations.append(
+                {
+                    **row,
+                    "partition": next(
+                        name for name, ids in split.items() if row["recording_id"] in ids
+                    ),
+                    "model": best,
+                    "threshold": calibration[best]["threshold"],
+                    "session_ce": loss,
+                    "needs_review": loss > calibration[best]["threshold"],
+                    "terms": terms,
+                }
+            )
+        ordered = sorted(costs)
+        summary["scoring_ms"] = {
+            "p50": ordered[int((len(ordered) - 1) * 0.5)],
+            "p95": ordered[int((len(ordered) - 1) * 0.95)],
+            "samples": len(ordered),
+        }
+        summary["threshold"] = calibration[best]["threshold"]
+        summary["schema_version"] = 2
+        summary["source_groups"] = sorted({row["source_group"] for row in sessions})
+        summary["limitations"] = [
+            "Full-session offline; novelty needs review, not hazard.",
+            "Labels absent unless supplied; false alerts/hour requires camera exposure.",
+        ]
+        registry.atomic_json(directory / "explanations.json", explanations)
     registry.atomic_json(directory / "summary.json", summary)
     registry.complete_stage(run_id, "event_novelty")
     return directory

@@ -80,27 +80,29 @@ Dependency: 2.1. Scope: M, 3–5 file. Verifikasi: chat orang hanya bukti orang,
 
 #### 3.1 Kontrak urutan dan label
 
-- [ ] Adapter schema baru mendukung simbol orang/kendaraan/helm yang disahkan; unit per sumber/track/session, bundling simultan, EOS/gap/unknown eksplisit dan versioned.
-- [ ] Training mengambil ledger valid milik workspace dengan source revisions; edit/retract membuat run turunan stale. Identitas/nama tidak menjadi token prediksi atau manifest publik.
-- [ ] Train/dev/test dipisah sumber asli, reviewer event bukan otomatis label novelty; label novelty memakai rubrik/provenance independen. Exposure kamera tidak disimpulkan dari jeda event.
+- [x] Adapter schema baru mendukung simbol orang/kendaraan/helm yang disahkan; unit per sumber/track/session, bundling simultan, EOS/gap/unknown eksplisit dan versioned.
+- [x] Training mengambil ledger valid milik workspace dengan source revisions; edit/retract membuat run turunan stale. Identitas/nama tidak menjadi token prediksi atau manifest publik.
+- [x] Train/dev/test dipisah sumber asli, reviewer event bukan otomatis label novelty; label novelty memakai rubrik/provenance independen. Exposure kamera tidak disimpulkan dari jeda event.
 
 Dependency: checkpoint 1, 0.2; bisa bersamaan dengan 2.1 setelah kontrak shared stabil. Scope: M, 3–5 file. Verifikasi: duplicate/gap/simultaneous/version mismatch/retraction dan isolasi workspace; `extensions/tests/test_event_novelty.py`, `industrial_ai/tests/novelty_api_check.py`. Lokasi: `extensions/src/event_sequences.py`, `experiments/event_novelty.py`, ledger export, tests.
 
 #### 3.2 Eksperimen dan kalibrasi urutan
 
-- [ ] Reuse runner/registry; bandingkan frequency/unigram, KN/WB dan MKN secara dev-only dengan fixed split/units; jangan mengasumsikan MKN terbaik.
-- [ ] Threshold disimpan dengan model/schema/source/code fingerprints; test dijalankan sekali setelah pemilihan, reports lama tetap utuh.
-- [ ] Laporkan precision/recall berlabel serta false alert/jam hanya bila exposure diketahui; delay/live tidak diklaim dari full-session offline. Ukur biaya scoring/runner terpisah dari detector.
+- [x] Reuse runner/registry; bandingkan frequency/unigram, KN/WB dan MKN secara dev-only dengan fixed split/units; jangan mengasumsikan MKN terbaik.
+- [x] Threshold disimpan dengan model/schema/source/code fingerprints; test dijalankan sekali setelah pemilihan, reports lama tetap utuh.
+- [x] Laporkan precision/recall berlabel serta false alert/jam hanya bila exposure diketahui; delay/live tidak diklaim dari full-session offline. Ukur biaya scoring/runner terpisah dari detector.
 
 Dependency: 3.1. Scope: M, 3–5 file. Verifikasi: normalisasi, holdout sentinel, threshold boundaries, immutable receipts dan meaningful baseline; labelled replay baru memakai run ID baru. Lokasi: existing event runner/tests, benchmark/report akademik.
 
 #### 3.3 Penjelasan skor kembali ke video
 
-- [ ] Pengguna memilih run/revisi/rekaman; UI menunjukkan model, threshold, urutan simbol, P/logP dan kontribusi NLL dengan definisi satuan, lalu membuka event/frame bukti.
-- [ ] Urutan jarang diberi label perlu review; no-helmet terverifikasi ditampilkan terpisah dan tidak dibatalkan oleh skor novelty rendah.
-- [ ] Raw JSON/provenance menjadi detail lanjutan; empty/stale/corrupt run dan unsupported simbol jelas tanpa hasil palsu.
+- [x] Pengguna memilih run/revisi/rekaman; UI menunjukkan model, threshold, urutan simbol, P/logP dan kontribusi NLL dengan definisi satuan, lalu membuka event/frame bukti.
+- [x] Urutan jarang diberi label perlu review; no-helmet terverifikasi ditampilkan terpisah dan tidak dibatalkan oleh skor novelty rendah.
+- [x] Raw JSON/provenance menjadi detail lanjutan; empty/stale/corrupt run dan unsupported simbol jelas tanpa hasil palsu.
 
 Dependency: 3.2, 2.2. Scope: M, 3–5 file. Verifikasi: parity UI/Python, source/revision race, keyboard/mobile, unknown/gap/stale; existing Academic Lab/novelty API regressions. Lokasi: `industrial_ai/academic.py` atau read-only novelty API, `frontend/NgramLab.tsx`/`EventLedger.tsx`, UI/API checks.
+
+**Bukti fase 3:** academic169, novelty v1/v2 HTTP, v2 source-copy grouping, bundle/EOS/NLL parity and immutable run tests. Precision/recall camera independen serta false alerts/hour tetap unavailable karena label/exposure tidak tersedia.
 
 **Checkpoint 3:** dari video yang direview sampai penjelasan N-gram dapat digunakan end-to-end; improvement/hazard claims hanya mengikuti label dan bukti nyata.
 
