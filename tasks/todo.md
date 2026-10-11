@@ -60,17 +60,17 @@ Dependency: 1.1, 1.2. Scope: M, 3–5 file. Verifikasi: fixture asosiasi helm da
 
 #### 2.1 Filter fakta yang eksplisit
 
-- [ ] Query terstruktur mendukung rekaman/revisi, kelas, arah crossing dan rentang offset video dengan aturan boundary terdokumentasi; nol berbeda dengan tidak ada coverage.
-- [ ] API/UI memakai filter sama; stale/retracted/unknown tidak dipakai sebagai fakta pasti; count disertai satuan dan filter.
-- [ ] Bahasa chat hanya memetakan bentuk pertanyaan yang benar-benar didukung; filter ambigu/negasi/identitas/compound unsupported meminta klarifikasi atau ditolak, tidak fallback ke agregat semua rekaman.
+- [x] Query terstruktur mendukung rekaman/revisi, kelas, arah crossing dan rentang offset video dengan aturan boundary terdokumentasi; nol berbeda dengan tidak ada coverage.
+- [x] API/UI memakai filter sama; stale/retracted/unknown tidak dipakai sebagai fakta pasti; count disertai satuan dan filter.
+- [x] Bahasa chat hanya memetakan bentuk pertanyaan yang benar-benar didukung; filter ambigu/negasi/identitas/compound unsupported meminta klarifikasi atau ditolak, tidak fallback ke agregat semua rekaman.
 
 Dependency: checkpoint 1. Scope: M, 3–5 file. Verifikasi: rentang boundary, kelas orang vs kendaraan, out-of-range, stale/retract dan akses; `tests/fact_check.py` dan ledger HTTP checks. Lokasi: `industrial_ai/fact_query.py`, `event_ledger.py`, `chat.py`/`app.py` hanya integrasi minimum, factual regressions.
 
 #### 2.2 Bukti dan posisi video sinkron
 
-- [ ] Jawaban menyertakan event ID, sumber/revisi dan offset; klik bukti membuka frame/waktu pada rekaman dan mode hasil yang benar.
-- [ ] Pergantian rekaman/revisi saat request berlangsung tidak menempelkan jawaban atau bukti lama ke sumber baru; hilang/corrupt evidence tampil sebagai unavailable.
-- [ ] Keyboard/mobile/fullscreen tetap dapat dipakai; detail teknis diletakkan di panel lanjutan tanpa menghapus informasi penting.
+- [x] Jawaban menyertakan event ID, sumber/revisi dan offset; klik bukti membuka frame/waktu pada rekaman dan mode hasil yang benar.
+- [x] Pergantian rekaman/revisi saat request berlangsung tidak menempelkan jawaban atau bukti lama ke sumber baru; hilang/corrupt evidence tampil sebagai unavailable.
+- [x] Keyboard/mobile/fullscreen tetap dapat dipakai; detail teknis diletakkan di panel lanjutan tanpa menghapus informasi penting.
 
 Dependency: 2.1. Scope: M, 3–5 file. Verifikasi: chat orang hanya bukti orang, response race, seek/bounds, keyboard/mobile dan media regression. Lokasi: `industrial_ai/frontend/ChatPanel.tsx`, `EventLedger.tsx`, `VideoPanel.tsx` atau controller `studio.ts`, existing UI checks.
 

@@ -3,7 +3,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 
 interface EvidenceRow {key:number;href:string;imageAlt:string;title:string;detail:string;seek:()=>void}
-interface MessageRow {role:string;text:string;detail:string;links:{href:string;text:string}[]}
+interface MessageRow {role:string;text:string;detail:string;links:{href:string;text:string;event_id?:string}[]}
 interface OverlayRow {bbox:[number,number,number,number];color:string;selected:boolean;text:string}
 interface BoxRow {text:string;color:string;disabled:boolean;edit:()=>void;remove:()=>void}
 interface QueueRow {frame:number;text:string;disabled:boolean;current:boolean;select:()=>Promise<void>}
@@ -28,7 +28,7 @@ export const studioViews: StudioViews = {
  details(rows) { render('resultDetails', rows.map(([label,value],i) => <Fragment key={`${label}-${i}`}><dt>{label}</dt><dd>{value}</dd></Fragment>)); },
  appendMessage(row) {
   messages.push(row);
-  const container=render('messages',messages.map((item,i)=><div key={i} className={`message ${item.role}`}>{item.text}{item.detail&&<small>{item.detail}</small>}{item.links.map((link,j)=><a key={j} href={link.href} target="_blank" rel="noopener">{link.text}</a>)}</div>));
+  const container=render('messages',messages.map((item,i)=><div key={i} className={`message ${item.role}`}>{item.text}{item.detail&&<small>{item.detail}</small>}{item.links.map((link,j)=>link.event_id?<button key={j} className="button button--tertiary button--sm" type="button" onClick={()=>document.dispatchEvent(new CustomEvent('ledger-proof',{detail:{event_id:link.event_id}}))}>{link.text}</button>:<a key={j} href={link.href} target="_blank" rel="noopener">{link.text}</a>)}</div>));
   document.dispatchEvent(new CustomEvent('workspace-message',{detail:container.lastElementChild}));
   container.scrollTop=container.scrollHeight;
  },

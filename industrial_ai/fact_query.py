@@ -4,10 +4,55 @@ from __future__ import annotations
 
 import re
 
-from event_ledger import facts
+from event_ledger import FactFilter, facts, filtered_facts
+
+
+def answer_filtered(message, rows, job_id):
+    """Bounded grammar: explicit class/direction/offset; never infer missing filters."""
+    q = " ".join(message.lower().strip().rstrip("?!.").split())
+    if not q.startswith("ledger crossing"):
+        return None
+    match = re.fullmatch(
+        r"ledger crossing (person|car|bus|truck|motorcycle|bicycle)(?: (up|down))?(?: dari (\d+(?:\.\d+)?) sampai (\d+(?:\.\d+)?) detik)?",
+        q,
+    )
+    if not match or not job_id:
+        return {
+            "answer": "Filter belum didukung. Pilih rekaman, lalu gunakan 'ledger crossing person down dari 0 sampai 10 detik'.",
+            "mode": "facts",
+            "evidence": [],
+            "ledger_proof": [],
+        }
+    kind, direction, start, end = match.groups()
+    try:
+        filters = FactFilter.model_validate(
+            {
+                "recording_id": job_id,
+                "class_name": kind,
+                "direction": direction,
+                "start_seconds": float(start or 0),
+                "end_seconds": float(end) if end else None,
+            }
+        )
+    except ValueError:
+        return {
+            "answer": "Rentang belum didukung: awal harus lebih kecil dari akhir.",
+            "mode": "facts",
+            "evidence": [],
+            "ledger_proof": [],
+        }
+    result = filtered_facts(rows, filters)
+    text = f"Ada {result['crossing_event_count']} kejadian crossing {kind} terverifikasi pada filter ini."
+    if not result["has_verified_coverage"]:
+        text += " Belum ada coverage terverifikasi; angka nol tidak berarti video kosong."
+    proof = [r for r in result["proof"] if r["symbol"].endswith(("_ENTER_ZONE", "_EXIT_ZONE"))]
+    return {"answer": text, "mode": "facts", "evidence": [], "ledger_proof": proof, "facts": result}
 
 
 def answer_ledger(message, rows, role, job_id=None):
+    filtered = answer_filtered(message, rows, job_id)
+    if filtered is not None:
+        return filtered
     q = " ".join(message.lower().strip().rstrip("?!.").split())
     attendance = bool(
         re.search(

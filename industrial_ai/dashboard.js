@@ -463,8 +463,8 @@ $('playBoth').onclick = () => { if (!original.paused || !tracked.paused)
 else
     playComparison(); };
 $('restartVideos').onclick = () => { pauseComparison(); original.currentTime = 0; tracked.currentTime = 0; updateMoment(); };
-function addMessage(role, text, detail = '', evidence = []) {
-    studioViews.appendMessage({ role, text, detail, links: evidence.map(item => ({ href: mediaUrl(item.file), text: `Bukti ${(objectNames[item.kind] || item.kind).toLowerCase()} ID #${item.track_id} · ${timestamp(item.seconds)}` })) });
+function addMessage(role, text, detail = '', evidence = [], proof = []) {
+    studioViews.appendMessage({ role, text, detail, links: [...evidence.map(item => ({ href: mediaUrl(item.file), text: `Bukti ${(objectNames[item.kind] || item.kind).toLowerCase()} ID #${item.track_id} · ${timestamp(item.seconds)}` })), ...proof.map(item => ({ href: '#', text: `${item.symbol || 'Kejadian'} · ${item.source.seconds ?? '?'}s`, event_id: item.event_id }))] });
 }
 $('clearChat').onclick = resetChat;
 // Dotted sphere adapted from anark17r/ai-thiking-orb-and-input, confined to chat.
@@ -584,7 +584,7 @@ $('chatForm').onsubmit = async (event) => {
         if (current !== generation)
             return;
         const label = data.mode === 'reviewed' ? 'Hitungan AI + koreksi pengguna' : data.mode === 'facts' ? 'Data analisis AI tersimpan' : data.mode === 'manual' ? 'Koreksi manual pengguna' : data.mode === 'guide' ? 'Panduan kemampuan aplikasi' : `${data.mode === 'lora' ? 'Qwen lokal + LoRA pilot' : 'Qwen lokal · base model'} · ${data.seconds} detik${data.device ? ' · ' + (data.device.startsWith('cuda') ? 'GPU' : 'CPU') : ''}`;
-        addMessage('assistant', data.answer, label + (data.truncated ? ' · batas panjang respons tercapai' : ''), data.evidence);
+        addMessage('assistant', data.answer, label + (data.truncated ? ' · batas panjang respons tercapai' : ''), data.evidence, data.ledger_proof || []);
         chatHistory.push({ role: 'user', content: message }, { role: 'assistant', content: data.answer.slice(0, 2000) });
         chatHistory = chatHistory.slice(-6);
     }

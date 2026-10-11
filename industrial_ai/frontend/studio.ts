@@ -1,6 +1,6 @@
 'use strict';
 interface EvidenceRow {key:number;href:string;imageAlt:string;title:string;detail:string;seek:()=>void}
-interface MessageRow {role:string;text:string;detail:string;links:{href:string;text:string}[]}
+interface MessageRow {role:string;text:string;detail:string;links:{href:string;text:string;event_id?:string}[]}
 interface OverlayRow {bbox:[number,number,number,number];color:string;selected:boolean;text:string}
 interface BoxRow {text:string;color:string;disabled:boolean;edit:()=>void;remove:()=>void}
 interface QueueRow {frame:number;text:string;disabled:boolean;current:boolean;select:()=>Promise<void>}
@@ -16,7 +16,7 @@ interface Summary {frames:number;fps:number;duration:number;occupancy:Counts[];r
 interface Job {id:string;status:string;filename:string;summary:Summary;progress:number;message:string;model_id?:string;group:string;followup_job_id?:string}
 interface Review {revision:number;frames:Frame[]}
 interface Queue {reviewed:number;total:number;pending:number;group:string;positions:{reviewed:boolean;frame_index:number;seconds:number;reasons:string[]}[]}
-interface ChatReply {mode:string;answer:string;truncated?:boolean;seconds:number;device?:string;evidence:{file:string;kind:string;track_id:number;seconds:number}[]}
+interface ChatReply {ledger_proof?:{event_id:string;symbol?:string;source:{seconds?:number}}[];mode:string;answer:string;truncated?:boolean;seconds:number;device?:string;evidence:{file:string;kind:string;track_id:number;seconds:number}[]}
 interface Health {vision_ready:boolean;chat_ready:boolean;device:string;adapter_ready?:boolean}
 interface TrackingStep extends Review {next_frame:number;ended:boolean}
 interface TrackingStart {id:string;revision:number;frame:Frame}
@@ -455,8 +455,8 @@ for (const [source,other] of [[original,tracked],[tracked,original]]) {
 original.addEventListener('timeupdate',() => {if(!original.paused && !tracked.paused && Math.abs(original.currentTime-tracked.currentTime)>.3) tracked.currentTime=original.currentTime; updateMoment();});
 $('playBoth').onclick=()=>{if(!original.paused || !tracked.paused) pauseComparison(); else playComparison();};
 $('restartVideos').onclick=()=>{pauseComparison();original.currentTime=0;tracked.currentTime=0;updateMoment();};
-function addMessage(role:string,text:string,detail='',evidence:ChatReply['evidence']=[]) {
- studioViews.appendMessage({role,text,detail,links:evidence.map(item=>({href:mediaUrl(item.file),text:`Bukti ${(objectNames[item.kind]||item.kind).toLowerCase()} ID #${item.track_id} · ${timestamp(item.seconds)}`}))});
+function addMessage(role:string,text:string,detail='',evidence:ChatReply['evidence']=[],proof:NonNullable<ChatReply['ledger_proof']>=[]) {
+ studioViews.appendMessage({role,text,detail,links:[...evidence.map(item=>({href:mediaUrl(item.file),text:`Bukti ${(objectNames[item.kind]||item.kind).toLowerCase()} ID #${item.track_id} · ${timestamp(item.seconds)}`})),...proof.map(item=>({href:'#',text:`${item.symbol||'Kejadian'} · ${item.source.seconds??'?'}s`,event_id:item.event_id}))]});
 }
 $('clearChat').onclick = resetChat;
 // Dotted sphere adapted from anark17r/ai-thiking-orb-and-input, confined to chat.
@@ -519,7 +519,7 @@ $('chatForm').onsubmit = async event => {
     const data=await api<ChatReply>('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,device:$('deviceMode').value,job_id:summary ? job!.id : null,history:chatHistory.slice(-6)})});
     if (current!==generation) return;
     const label=data.mode==='reviewed' ? 'Hitungan AI + koreksi pengguna' : data.mode==='facts' ? 'Data analisis AI tersimpan' : data.mode==='manual' ? 'Koreksi manual pengguna' : data.mode==='guide' ? 'Panduan kemampuan aplikasi' : `${data.mode==='lora' ? 'Qwen lokal + LoRA pilot' : 'Qwen lokal · base model'} · ${data.seconds} detik${data.device ? ' · '+(data.device.startsWith('cuda') ? 'GPU' : 'CPU') : ''}`;
-    addMessage('assistant',data.answer,label+(data.truncated ? ' · batas panjang respons tercapai' : ''),data.evidence); chatHistory.push({role:'user',content:message},{role:'assistant',content:data.answer.slice(0,2000)}); chatHistory=chatHistory.slice(-6);
+    addMessage('assistant',data.answer,label+(data.truncated ? ' · batas panjang respons tercapai' : ''),data.evidence,data.ledger_proof||[]); chatHistory.push({role:'user',content:message},{role:'assistant',content:data.answer.slice(0,2000)}); chatHistory=chatHistory.slice(-6);
   } catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason)); showError('chatError',error.message); }
   finally { sending=false; $('sendChat').disabled=false; $('clearChat').disabled=false; syncControls(); $('chatStatus').textContent=''; stopThinkingOrb(); }
 };

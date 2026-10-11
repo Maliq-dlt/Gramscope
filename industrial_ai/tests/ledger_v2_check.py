@@ -97,6 +97,55 @@ def main():
         assert 40 < frame.mean() < 60 and row["payload"]["frame_index"] == 5
         assert other.get(proof).status_code == 404
         assert other.get(prefix + "/preview").status_code == 404
+        query = {
+            "recording_id": folder.name,
+            "source_revision": preview["source_revision"],
+            "class_name": "person",
+            "start_seconds": 0.55,
+            "end_seconds": 0.95,
+        }
+        result = reviewer.post("/api/ledger/query", json=query)
+        assert result.status_code == 200, result.text
+        facts = result.json()
+        assert facts["crossing_event_count"] == 1 and facts["helmet_observations"]["not_worn"] == 1
+        assert all(item["source"]["class_name"] == "person" for item in facts["proof"])
+        assert (
+            reviewer.post("/api/ledger/query", json={**query, "start_seconds": 0.56}).json()[
+                "has_verified_coverage"
+            ]
+            is False
+        )
+        assert (
+            reviewer.post("/api/ledger/query", json={**query, "end_seconds": 0.55}).status_code
+            == 422
+        )
+        assert (
+            reviewer.post("/api/ledger/query", json={**query, "end_seconds": 3}).status_code == 422
+        )
+        assert other.post("/api/ledger/query", json=query).status_code == 404
+        from fact_query import answer_ledger
+
+        answered = answer_ledger(
+            "ledger crossing person down dari 0 sampai 1 detik", rows, "reviewer", folder.name
+        )
+        assert "Ada 1 kejadian" in answered["answer"] and len(answered["ledger_proof"]) == 1
+        for bad in [
+            "ledger crossing person selain bus",
+            "ledger crossing person -1",
+            "ledger crossing person down dan car",
+        ]:
+            assert answer_ledger(bad, rows, "reviewer", folder.name)["ledger_proof"] == []
+        changed = {
+            **payload,
+            "helmet_reviews": {
+                "0": {
+                    "status": "worn",
+                    "association": "head_visible",
+                    "head_bbox": [0.1, 0.1, 0.3, 0.3],
+                }
+            },
+        }
+        assert reviewer.post(prefix + "/import", json=changed).status_code == 409
         fixture.store.put_document(folder / "annotations.json", {"revision": 1, "frames": []})
         assert reviewer.post(prefix + "/import", json=payload).status_code == 409
         assert reviewer.get(proof).status_code == 409

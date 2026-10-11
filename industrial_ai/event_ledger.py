@@ -452,7 +452,7 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
         for symbol in symbols:
             entries.append(
                 {
-                    "source_key": f"v2:{job_id}:{fingerprint}:{index}:{symbol}",
+                    "source_key": f"v2:{job_id}:{fingerprint}:{index}:{'helmet' if symbol.startswith('HELMET_') else symbol}",
                     "source_fingerprint": fingerprint,
                     "job_id": job_id,
                     "track_id": crossing["track_id"],
@@ -470,7 +470,103 @@ def import_v2(job_id, request, folder, summary, metadata, fingerprint):
         raise HTTPException(409, str(error)) from error
 
 
+class FactFilter(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    recording_id: str | None = None
+    source_revision: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    class_name: Literal["person", "car", "bus", "truck", "motorcycle", "bicycle"] | None = None
+    direction: Literal["up", "down"] | None = None
+    start_seconds: float = Field(default=0, ge=0, le=86400, allow_inf_nan=False)
+    end_seconds: float | None = Field(default=None, gt=0, le=86400, allow_inf_nan=False)
+
+    @model_validator(mode="after")
+    def valid_range(self):
+        if self.end_seconds is not None and self.end_seconds <= self.start_seconds:
+            raise ValueError("Range must satisfy start < end.")
+        if self.source_revision and not self.recording_id:
+            raise ValueError("Revision requires a recording.")
+        return self
+
+
+def filtered_facts(rows, filters, role=None):
+    selected, excluded = [], []
+    for row in rows:
+        if row["category"] != "observation":
+            continue
+        payload = row["payload"]
+        if filters.recording_id and row["job_id"] != filters.recording_id:
+            continue
+        if filters.source_revision and payload.get("source_revision") != filters.source_revision:
+            continue
+        kind = payload.get(
+            "class_name", "person" if row["symbol"].startswith(("PERSON_", "HELMET_")) else None
+        )
+        if filters.class_name and kind != filters.class_name:
+            continue
+        if filters.direction and payload.get("direction") != filters.direction:
+            continue
+        seconds = payload.get("seconds")
+        if type(seconds) not in (int, float) or not math.isfinite(seconds):
+            continue
+        if seconds < filters.start_seconds or (
+            filters.end_seconds is not None and seconds >= filters.end_seconds
+        ):
+            continue
+        (selected if row["status"] == "verified" else excluded).append(row)
+    crossings = [row for row in selected if row["symbol"].endswith(("_ENTER_ZONE", "_EXIT_ZONE"))]
+    helmets = {
+        name: sum(row["symbol"] == symbol for row in selected)
+        for name, symbol in (
+            ("worn", "HELMET_WORN"),
+            ("not_worn", "HELMET_NOT_WORN"),
+            ("unknown", "HELMET_UNKNOWN"),
+        )
+    }
+    return {
+        "schema_version": 2,
+        "filter": filters.model_dump(),
+        "boundary": "start <= seconds < end",
+        "count_unit": "verified crossing events",
+        "crossing_event_count": len(crossings),
+        "observed_track_count": len({(r["job_id"], r["track_id"]) for r in crossings}),
+        "helmet_observations": helmets,
+        "unique_object_count": None,
+        "coverage": "reviewed events only; not exhaustive video coverage"
+        if selected
+        else "no verified observations in this filter",
+        "has_verified_coverage": bool(selected),
+        "excluded_stale_or_retracted": len(excluded),
+        "proof": [
+            {
+                "event_id": row["id"],
+                "recording_id": row["job_id"],
+                "symbol": row["symbol"],
+                "occurred_at": row["occurred_at"],
+                "source": row["payload"],
+            }
+            for row in selected
+        ],
+        "limitations": [
+            "Track bukan identitas atau objek unik.",
+            "Nol crossing tidak membuktikan video kosong.",
+            "Unknown helm bukan pelanggaran; novelty bukan bahaya.",
+        ],
+    }
+
+
 def install(app):
+    @app.post("/api/ledger/query")
+    def query(request: FactFilter):
+        if request.recording_id:
+            _, summary, _, fingerprint = source(request.recording_id)
+            if request.source_revision and request.source_revision != fingerprint:
+                raise HTTPException(409, "Revisi query sudah stale.")
+            if request.start_seconds > summary["duration"] or (
+                request.end_seconds is not None and request.end_seconds > summary["duration"]
+            ):
+                raise HTTPException(422, "Rentang query di luar durasi video.")
+        return filtered_facts(Ledger(access.store()).rows(), request)
+
     @app.get("/api/ledger/jobs/{job_id}/preview")
     def preview(job_id: str):
         _, summary, metadata, fingerprint = source(job_id)
