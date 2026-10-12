@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "tsc -p frontend/tsconfig.auth.json && tsc -p frontend/tsconfig.studio.json && tsc -p frontend/tsconfig.json && tsc -p frontend/tsconfig.motion.json && esbuild frontend/main.tsx --jsx=automatic --bundle --minify --format=iife --target=es2020 --outfile=app.js && esbuild frontend/motion.ts --bundle --minify --format=iife --target=es2020 --outfile=motion.js && tailwindcss -i ui.css -o assets/dashboard.css --minify",
-    "check": "node --check app.js && node tests/ui_react_check.cjs && node tests/live_views_check.cjs && node tests/ngram_lab_check.cjs && node --check dashboard.js && node --check theme.js && node tests/playback_check.cjs && node tests/tracking_playback_check.cjs && node tests/auth_check.cjs && node tests/result_mode_check.cjs && node tests/profile_check.cjs && node tests/animation_check.cjs && node --check motion.js && node tests/motion_check.cjs",
+    "check": "node --check app.js && node tests/ui_react_check.cjs && node tests/live_views_check.cjs && node tests/process_progress_check.cjs && node tests/ngram_lab_check.cjs && node --check dashboard.js && node --check theme.js && node tests/playback_check.cjs && node tests/tracking_playback_check.cjs && node tests/auth_check.cjs && node tests/result_mode_check.cjs && node tests/profile_check.cjs && node tests/animation_check.cjs && node --check motion.js && node tests/motion_check.cjs",
     "setup": "powershell -NoProfile -File ./instal.ps1",
     "start": "powershell -NoProfile -File ./jalankan.ps1",
     "typecheck": "tsc -p frontend/tsconfig.auth.json --noEmit && tsc -p frontend/tsconfig.studio.json --noEmit && tsc -p frontend/tsconfig.json && tsc -p frontend/tsconfig.motion.json"
@@ -20,7 +20,9 @@
   },
   "dependencies": {
     "framer-motion": "14.1.0",
+    "gsap": "3.15.0",
     "lenis": "1.3.26",
+    "lucide-react": "1.55.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   }

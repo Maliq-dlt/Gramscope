@@ -1,4 +1,5 @@
 'use strict';
+let uploadLimitMib = 250;
 function $(id) { const node = document.getElementById(id); if (!node)
     throw Error(`Missing element ${id}`); return node; }
 let job = null, summary = null, pollTimer, chatHistory = [], generation = 0;
@@ -28,13 +29,13 @@ function syncControls() {
     $('cancelJob').disabled = job?.status === 'cancelling';
     for (const button of document.querySelectorAll('[data-view]'))
         button.disabled = uploading || reviewBusy;
-    $('profileButton').disabled = uploading || sending || reviewBusy;
+    $('profileButton').disabled = uploading || reviewBusy;
     syncResultSwitch();
 }
 async function setView(view) {
     if (view === currentView)
         return true;
-    if (reviewBusy || uploading || sending)
+    if (reviewBusy || uploading)
         return false;
     if (currentView === 'annotation' && !(await persistReview(false)))
         return false;
@@ -59,7 +60,7 @@ async function setView(view) {
     $('analysisPane').hidden = view !== 'analysis';
     $('evidencePane').hidden = view !== 'evidence';
     $('reviewPanel').hidden = view !== 'annotation';
-    $('pageTitle').textContent = { analysis: 'Analisis video', evidence: 'Bukti & hasil', annotation: 'Anotasi manual', profile: 'Profil', ngram: 'Lab N-gram' }[view];
+    $('pageTitle').textContent = { analysis: 'Analisis video', evidence: 'Bukti & hasil', annotation: 'Anotasi manual', profile: 'Profil', ngram: 'Chatbot N-gram' }[view];
     for (const button of document.querySelectorAll('[data-view]')) {
         if (button.dataset.view === view)
             button.setAttribute('aria-current', 'page');
@@ -75,7 +76,7 @@ async function setView(view) {
 for (const button of document.querySelectorAll('[data-view]'))
     button.onclick = () => setView(button.dataset.view);
 for (const id of ['newVideoButton', 'emptyUploadButton'])
-    $(id).onclick = () => { showError('uploadError', ''); $('uploadDialog').showModal(); };
+    $(id).onclick = () => { showError('uploadError', ''); document.getElementById('uploadProcessView').hidden = true; document.getElementById('uploadTransferStatus').hidden = true; $('uploadDialog').showModal(); };
 $('closeUpload').onclick = () => $('uploadDialog').close();
 $('uploadDialog').addEventListener('cancel', event => { if (uploading)
     event.preventDefault(); });
@@ -198,8 +199,8 @@ function validateApi(url, value) {
     }
     return data;
 }
-async function api(url, options) {
-    const response = await workspaceAuth.request(url, options), data = await response.json();
+async function api(url, options, onUpload) {
+    const response = await workspaceAuth.request(url, options, onUpload), data = await response.json();
     if (!response.ok) {
         const detail = typeof data === 'object' && data !== null && 'detail' in data ? data.detail : undefined;
         throw Error(typeof detail === 'string' ? detail : 'Input tidak valid. Periksa isian dan coba lagi.');
@@ -327,6 +328,7 @@ async function selectJob(id) {
             $('currentFile').textContent = data.filename;
             syncControls();
             $('progressArea').hidden = false;
+            studioViews.process('jobProcessView', { kind: 'analysis', status: data.status, value: data.progress, title: data.filename });
             $('jobProgress').value = data.progress;
             $('jobStatus').textContent = data.message;
             syncControls();
@@ -348,6 +350,7 @@ async function selectJob(id) {
             const error = reason instanceof Error ? reason : new Error(String(reason));
             if (current === generation) {
                 showError('uploadError', error.message);
+                studioViews.process('jobProcessView', { kind: 'analysis', status: 'interrupted', value: null });
                 syncControls();
             }
         }
@@ -361,13 +364,17 @@ $('uploadForm').onsubmit = async (event) => {
     const file = $('videoFile').files?.[0];
     if (!file)
         return;
-    if (file.size > 250 * 1024 * 1024) {
-        showError('uploadError', 'Ukuran video maksimal 250 MB.');
+    if (file.size > uploadLimitMib * 1024 * 1024) {
+        showError('uploadError', `Ukuran video maksimal ${uploadLimitMib} MiB.`);
         return;
     }
     uploading = true;
     syncControls();
-    $('progressArea').hidden = false;
+    document.getElementById('uploadProcessView').hidden = false;
+    document.getElementById('uploadTransferStatus').hidden = false;
+    studioViews.process('uploadProcessView', { kind: 'upload', status: 'uploading', value: 0, title: file.name });
+    $('progressArea').hidden = true;
+    document.getElementById('uploadTransferStatus').textContent = 'Mengirim video ke workspace…';
     $('jobStatus').textContent = 'Mengunggah video…';
     $('jobProgress').removeAttribute('value');
     const form = new FormData();
@@ -376,7 +383,7 @@ $('uploadForm').onsubmit = async (event) => {
     form.append('device', $('deviceMode').value);
     form.append('model_id', $('analysisModel').value);
     try {
-        const data = await api('/api/jobs', { method: 'POST', body: form });
+        const data = await api('/api/jobs', { method: 'POST', body: form }, value => { const status = value !== null && value >= 100 ? 'validating' : 'uploading'; studioViews.process('uploadProcessView', { kind: 'upload', status, value: status === 'validating' ? null : value, title: file.name }); document.getElementById('uploadTransferStatus').textContent = status === 'validating' ? 'Video terkirim. Server sedang memeriksa rekaman…' : 'Mengirim video ke workspace…'; });
         $('uploadDialog').close();
         uploading = false;
         await setView('analysis');
@@ -386,7 +393,9 @@ $('uploadForm').onsubmit = async (event) => {
     catch (reason) {
         const error = reason instanceof Error ? reason : new Error(String(reason));
         showError('uploadError', error.message);
-        $('uploadDialog').close();
+        studioViews.process('uploadProcessView', { kind: 'upload', status: 'error', value: null, title: file.name });
+        document.getElementById('uploadTransferStatus').textContent = error.message;
+        $('progressArea').hidden = true;
         $('jobProgress').value = 0;
     }
     finally {
@@ -535,12 +544,31 @@ function startLoginCrowd() {
                 crowdAnimId = null;
                 return;
             }
-            const time = orbMotion.matches ? 0 : (now - started) / 1000;
-            ctx.clearRect(0, 0, 900, 280);
-            for (let i = 0; i < 12; i++) {
-                const h = 138 + (i % 4) * 20, w = sw / sh * h, x = ((i * 89 + time * (18 + (i % 3) * 7)) % 1080) - 100, y = 280 - h - 8 - Math.abs(Math.sin(time * 5 + i)) * 4, index = (i * 7 + 3) % 105;
-                ctx.drawImage(image, (index % 15) * sw, Math.floor(index / 15) * sh, sw, sh, x, y, w, h);
+            const width = canvas.clientWidth, height = canvas.clientHeight, dpr = Math.min(devicePixelRatio || 1, 2);
+            if (canvas.width !== Math.round(width * dpr) || canvas.height !== Math.round(height * dpr)) {
+                canvas.width = Math.round(width * dpr);
+                canvas.height = Math.round(height * dpr);
             }
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            const time = orbMotion.matches ? 0 : (now - started) / 1000;
+            ctx.clearRect(0, 0, width, height);
+            for (let layer = 0; layer < 3; layer++) {
+                const count = 10 + layer, h0 = height * (.82 + layer * .12), direction = layer % 2 ? -1 : 1;
+                ctx.globalAlpha = .6 + layer * .2;
+                for (let i = 0; i < count; i++) {
+                    const h = h0 + (i % 3) * height * .03, w = sw / sh * h, span = width + w, x = ((i * span / count + layer * 67 + direction * time * (10 + layer * 5)) % span + span) % span - w;
+                    // Sprite cells have transparent foot padding; crop past the viewport to fill its bottom.
+                    const y = height - (2 - layer) * height * .13 + h * .16 + 8 - h - Math.sin(time * 1.7 + i + layer) * 5, index = (i * 13 + layer * 23 + 3) % 105;
+                    ctx.save();
+                    if (direction < 0) {
+                        ctx.translate(x + w, y);
+                        ctx.scale(-1, 1);
+                    }
+                    ctx.drawImage(image, (index % 15) * sw, Math.floor(index / 15) * sh, sw, sh, direction < 0 ? 0 : x, direction < 0 ? 0 : y, w, h);
+                    ctx.restore();
+                }
+            }
+            ctx.globalAlpha = 1;
             crowdAnimId = orbMotion.matches ? null : requestAnimationFrame(render);
         }
         render(started);
@@ -579,11 +607,14 @@ $('chatForm').onsubmit = async (event) => {
     $('chatInput').value = '';
     $('chatStatus').textContent = 'AI sedang menyiapkan jawaban…';
     startThinkingOrb();
+    studioViews.thinking(true);
     try {
         const data = await api('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message, device: $('deviceMode').value, job_id: summary ? job.id : null, history: chatHistory.slice(-6) }) });
         if (current !== generation)
             return;
         const label = data.mode === 'reviewed' ? 'Hitungan AI + koreksi pengguna' : data.mode === 'facts' ? 'Data analisis AI tersimpan' : data.mode === 'manual' ? 'Koreksi manual pengguna' : data.mode === 'guide' ? 'Panduan kemampuan aplikasi' : `${data.mode === 'lora' ? 'Qwen lokal + LoRA pilot' : 'Qwen lokal · base model'} · ${data.seconds} detik${data.device ? ' · ' + (data.device.startsWith('cuda') ? 'GPU' : 'CPU') : ''}`;
+        studioViews.thinking(false);
+        stopThinkingOrb();
         addMessage('assistant', data.answer, label + (data.truncated ? ' · batas panjang respons tercapai' : ''), data.evidence, data.ledger_proof || []);
         chatHistory.push({ role: 'user', content: message }, { role: 'assistant', content: data.answer.slice(0, 2000) });
         chatHistory = chatHistory.slice(-6);
@@ -593,6 +624,7 @@ $('chatForm').onsubmit = async (event) => {
         showError('chatError', error.message);
     }
     finally {
+        studioViews.thinking(false);
         sending = false;
         $('sendChat').disabled = false;
         $('clearChat').disabled = false;
@@ -1161,7 +1193,7 @@ $('saveReview').onclick = async () => {
     try {
         const queue = await refreshQueue();
         if (queue?.pending)
-            learningStatus(`Koreksi tersimpan. ${queue.pending} posisi ${queue.group === 'objects' ? 'objek' : 'helm'} belum disahkan. Training dimulai setelah antrean selesai.`);
+            learningStatus(`Koreksi tersimpan. ${queue.pending} posisi ${queue.group === 'objects' ? 'objek' : 'helm'} belum disahkan. Training dimulai setelah antrean selesai.`, 0, 'waiting');
         else {
             startExport(false);
             await startLearning(job.id, $('reviewGroup').value);
@@ -1415,23 +1447,24 @@ async function refreshTraining(resume = true) {
     if (active && resume)
         pollTraining(active.id);
 }
-function learningStatus(message, progress = 0) { $('learningProgress').hidden = false; $('learningProgressBar').value = progress; $('learningStatus').textContent = message; }
+function learningStatus(message, progress = 0, status = 'processing', kind = 'training') { studioViews.process('learningProcessView', { kind, status, value: status === 'waiting' || status === 'interrupted' ? null : progress }); $('learningProgress').hidden = false; $('learningProgressBar').value = progress; $('learningStatus').textContent = message; }
 async function startLearning(source, group) {
     const current = generation;
     try {
         $('showLearnedResult').hidden = true;
+        learningStatus('Memeriksa koreksi yang disahkan…', 0, 'queued');
         const data = await api(`/api/jobs/${source}/learn`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ group, device: $('deviceMode').value }) });
         if (current !== generation)
             return;
         if (data.status === 'waiting') {
-            learningStatus(data.message);
+            learningStatus(data.message, 0, 'waiting');
             return;
         }
         pollTraining(data.id, data.result_job_id);
     }
     catch (reason) {
         const error = reason instanceof Error ? reason : new Error(String(reason));
-        learningStatus('Koreksi tersimpan. ' + error.message + ' Klik Coba belajar lagi untuk mencoba kembali.');
+        learningStatus('Koreksi tersimpan. ' + error.message + ' Klik Coba belajar lagi untuk mencoba kembali.', 0, 'interrupted');
     }
 }
 async function pollTraining(id, resultJobId = null, current = generation) {
@@ -1442,7 +1475,7 @@ async function pollTraining(id, resultJobId = null, current = generation) {
         const data = await api('/api/training/' + id);
         if (current !== generation)
             return;
-        learningStatus(data.message, data.progress);
+        learningStatus(data.message, data.progress, data.status);
         $('cancelLearning').hidden = !['queued', 'processing', 'cancelling'].includes(data.status);
         $('cancelLearning').disabled = data.status === 'cancelling';
         $('cancelLearning').onclick = async () => { try {
@@ -1457,7 +1490,7 @@ async function pollTraining(id, resultJobId = null, current = generation) {
             return;
         }
         if (['error', 'cancelled'].includes(data.status)) {
-            learningStatus(data.message);
+            learningStatus(data.message, data.progress, data.status);
             $('cancelLearning').hidden = true;
             return;
         }
@@ -1468,13 +1501,13 @@ async function pollTraining(id, resultJobId = null, current = generation) {
         if (resultJobId || data.result_job_id) {
             const result = await api('/api/jobs/' + (resultJobId || data.result_job_id));
             if (['queued', 'processing', 'cancelling'].includes(result.status)) {
-                learningStatus('Belajar selesai. ' + result.message, result.progress);
+                learningStatus('Belajar selesai. ' + result.message, result.progress, result.status, 'reanalysis');
                 trainingPoll = setTimeout(() => pollTraining(id, resultJobId, current), 1500);
                 return;
             }
             if (current !== generation)
                 return;
-            learningStatus(result.status === 'done' ? 'Belajar dan analisis ulang selesai. Hasil baru siap dilihat; koreksi tetap bisa ditanya.' : result.message, 100);
+            learningStatus(result.status === 'done' ? 'Belajar dan analisis ulang selesai. Hasil baru siap dilihat; koreksi tetap bisa ditanya.' : result.message, result.progress, result.status, 'reanalysis');
             $('showLearnedResult').hidden = result.status !== 'done';
             $('showLearnedResult').onclick = async () => { if (!(await persistReview(false)))
                 return; await setView('analysis'); await refreshHistory(result.id); await selectJob(result.id); };
@@ -1482,13 +1515,13 @@ async function pollTraining(id, resultJobId = null, current = generation) {
                 await setView('analysis');
                 await refreshHistory(result.id);
                 await selectJob(result.id);
-                learningStatus(`Fine-tuning dan analisis ulang selesai · checkpoint ${data.checkpoint_sha256?.slice(0, 12)}. Hasil baru sedang ditampilkan.`, 100);
+                learningStatus(`Fine-tuning dan analisis ulang selesai · checkpoint ${data.checkpoint_sha256?.slice(0, 12)}. Hasil baru sedang ditampilkan.`, 100, 'done', 'reanalysis');
             }
         }
     }
     catch (reason) {
         const error = reason instanceof Error ? reason : new Error(String(reason));
-        learningStatus(error.message);
+        learningStatus(error.message, 0, 'interrupted');
     }
 }
 $('analysisModel').onchange = () => { $('modelHelp').textContent = $('analysisModel').value ? 'Kandidat pilot dipilih. Klik Analisis ulang untuk mencoba pada video ini.' : 'Model dasar dipilih. Hasil lama tetap tersimpan.'; };
@@ -1508,6 +1541,8 @@ syncMetadata();
     await workspaceAuth.ready;
     try {
         const health = await api('/api/health');
+        uploadLimitMib = health.max_upload_mib || 250;
+        $('uploadLimits').textContent = `MP4, MOV, AVI, MKV, WEBM, M4V · maks. ${uploadLimitMib} MiB, 2 menit, 4K.`;
         $('systemStatus').textContent = health.vision_ready && health.chat_ready ? `Model lokal siap · ${health.device.startsWith('cuda') ? 'RTX / CUDA' : 'CPU'}${health.adapter_ready ? ' · LoRA' : ''}` : 'Model belum lengkap · lihat README';
         await refreshTraining();
         const jobs = await refreshHistory();

@@ -20,3 +20,5 @@ dist
 *.egg-info
 .ruff_cache
 .code-review-graph
+
+.secrets/

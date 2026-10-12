@@ -99,7 +99,7 @@ jobs:
         run: |
           .venv/bin/ruff check .
           .venv/bin/ruff format --check .
-          .venv/bin/ty check access.py storage.py app.py vision.py review.py operations.py corrections.py detector_training.py video_finetune.py setup_models.py academic.py event_ledger.py fact_query.py detector_benchmark.py prepare_tracking_reference.py tracking_benchmark.py prepare_sh17.py sh17_quality.py prepare_meva_reference.py meva_diagnostics.py ppe_accuracy_study.py ppe_comparison.py cvat_reference.py continuous_tracking_study.py prepare_continuous_reference.py mot_tracking_study.py
+          .venv/bin/ty check access.py storage.py app.py vision.py review.py operations.py corrections.py detector_training.py video_finetune.py setup_models.py academic.py ngram_chat.py event_ledger.py fact_query.py detector_benchmark.py prepare_tracking_reference.py tracking_benchmark.py prepare_sh17.py sh17_quality.py prepare_meva_reference.py meva_diagnostics.py ppe_accuracy_study.py ppe_comparison.py cvat_reference.py continuous_tracking_study.py prepare_continuous_reference.py mot_tracking_study.py
           .venv/bin/python tests/storage_check.py
           .venv/bin/python tests/profile_api_check.py
           .venv/bin/python tests/ledger_check.py
@@ -107,6 +107,8 @@ jobs:
           .venv/bin/python tests/novelty_v2_check.py
           .venv/bin/python tests/novelty_api_check.py
           .venv/bin/python tests/academic_check.py
+          .venv/bin/python tests/ngram_chat_check.py
+          .venv/bin/python tests/cloudflare_check.py
           .venv/bin/python tests/fact_check.py
           .venv/bin/python tests/security_check.py
           .venv/bin/python tests/deployment_check.py

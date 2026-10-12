@@ -45,3 +45,14 @@ serta konfigurasi kompilasinya. Bundle `app.js`, `auth.js`, `dashboard.js` dan
 Backend Python mempertahankan modul yang ada; hasil, model dan bukti verifikasi
 berada pada lokasi semula. Dokumentasi menjadi pintu masuk tanpa perlu landing
 page tambahan untuk pemakaian studio lokal.
+
+## Chatbot N-gram dan publikasi Cloudflare
+
+Chatbot N-gram mencocokkan pertanyaan dengan dataset Q&A memakai TF-IDF fitur kata
+unigram hingga trigram dan cosine. Jawaban disalin dari pasangan terpilih tanpa LLM.
+Jejak pencocokan dan dataset tersedia di tab chat/data; impor JSON dipakai dalam
+sesi halaman, bukan disimpan otomatis. Unduh dataset dan log sebelum reload.
+Ambang demo belum dikalibrasi pada domain pengguna; skor similarity bukan akurasi.
+Eksperimen model bahasa sebelumnya tetap ada pada panel Analisis & eksperimen N-gram.
+
+Panduan aplikasi lengkap di Cloudflare: [CLOUDFLARE.md](CLOUDFLARE.md).

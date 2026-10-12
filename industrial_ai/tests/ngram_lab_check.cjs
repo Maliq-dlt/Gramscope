@@ -15,7 +15,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
  context.persistReview=async()=>true;
  assert.equal(await context.setView('ngram'),true);
  assert.equal($('ngramPane').hidden,false);assert.equal($('videoWorkspace').hidden,true);
- assert.equal($('pageTitle').textContent,'Lab N-gram');assert.equal(context.original.currentTime,4.2);
+ assert.equal($('pageTitle').textContent,'Chatbot N-gram');assert.equal(context.original.currentTime,4.2);
  assert.equal(await context.setView('profile'),true);assert.equal($('ngramPane').hidden,true);
  assert.equal(await context.setView('ngram'),true);assert.equal($('ngramPane').hidden,false);
  assert.equal(await context.setView('analysis'),true);assert.equal($('ngramPane').hidden,true);assert.equal($('videoWorkspace').hidden,false);

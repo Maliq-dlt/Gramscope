@@ -15,7 +15,7 @@ function syncScroll(): void {
     autoRaf: true, lerp: .22, respectReducedMotion: true, overscroll: false,
     virtualScroll: ({ deltaY, event }) => {
       if (event.type !== 'wheel' || event.ctrlKey || !(event.target instanceof HTMLElement) ||
-          event.target.closest('[data-lenis-prevent], dialog, #authGate, #messages, #reviewPanel, textarea, select')) return false;
+          event.target.closest('[data-lenis-prevent], dialog, #authGate, #messages, #ngchatMessages, #reviewPanel, textarea, select')) return false;
       const direction = Math.sign(deltaY);
       if (direction && wheelDirection && direction !== wheelDirection) {
         // Discard the old target when input reverses; continue smoothly from the current visible position.
@@ -24,19 +24,19 @@ function syncScroll(): void {
       if (direction) wheelDirection = direction;
       return true;
     },
-    prevent: node => Boolean(node.closest('[data-lenis-prevent], dialog, #authGate, #messages, #reviewPanel, textarea, select'))
+    prevent: node => Boolean(node.closest('[data-lenis-prevent], dialog, #authGate, #messages, #ngchatMessages, #reviewPanel, textarea, select'))
   });
   else if (!active && scroll) { scroll.destroy(); scroll = undefined; wheelDirection = 0; }
 }
 function clearEntrances(): void {
   for (const [element, control] of entrances) {
-    control.stop(); element.style.removeProperty('opacity'); element.style.removeProperty('transform');
+    control.cancel(); element.style.removeProperty('opacity'); element.style.removeProperty('transform');
   }
   entrances.clear();
 }
 function enter(element: HTMLElement, delay = 0): void {
-  if (reduced.matches || document.fullscreenElement) return;
-  entrances.get(element)?.stop();
+  if (reduced.matches || document.fullscreenElement || !element.getClientRects().length) return;
+  entrances.get(element)?.cancel();
   const control = animate(element, { opacity: [0, 1], transform: ['translateY(8px)', 'translateY(0px)'] },
     { duration: .38, delay, ease: [.22, 1, .36, 1] });
   entrances.set(element, control);

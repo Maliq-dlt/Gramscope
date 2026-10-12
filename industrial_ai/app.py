@@ -29,7 +29,10 @@ from operations import WorkCancelled, check_cancel
 from review import review_queue
 from vision import OBJECT_NAMES, crossing_review, process_video, reviewed_summary
 
-MAX_UPLOAD = 250 * 1024 * 1024
+MAX_UPLOAD_MIB = int(os.environ.get("INSIGHT_MAX_UPLOAD_MIB", "250"))
+if not 1 <= MAX_UPLOAD_MIB <= 250:
+    raise RuntimeError("INSIGHT_MAX_UPLOAD_MIB harus antara 1 dan 250.")
+MAX_UPLOAD = MAX_UPLOAD_MIB * 1024 * 1024
 state_lock = threading.RLock()
 compute_lock = threading.Lock()
 executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="local-ai")
@@ -231,8 +234,11 @@ access.install(app, MAX_UPLOAD)
 import academic
 import event_ledger
 import fact_query
+import ngram_chat
 
 academic.install(app)
+
+ngram_chat.install(app)
 event_ledger.install(app)
 
 
@@ -252,6 +258,8 @@ def ui_asset(name: str):
         "app.js",
         "brand.svg",
         "crowd.png",
+        "creation-of-adam.webp",
+        "creation-of-adam.mp4",
     }:
         raise HTTPException(404, "File UI tidak ditemukan.")
     path = runtime.INDEX.parent / (name if name.endswith(".js") else "assets/" + name)
@@ -269,6 +277,7 @@ def health():
         "device": runtime.select_device()[0],
         "device_reason": runtime.select_device()[1],
         "busy": compute_lock.locked(),
+        "max_upload_mib": MAX_UPLOAD_MIB,
     }
 
 
@@ -294,7 +303,7 @@ async def upload_video(
     if Path(name).suffix.lower() not in {".mp4", ".mov", ".avi", ".mkv", ".webm", ".m4v"}:
         raise HTTPException(415, "Pilih MP4, MOV, AVI, MKV, WEBM, atau M4V.")
     if file.size is not None and file.size > MAX_UPLOAD:
-        raise HTTPException(413, "Ukuran video maksimal 250 MB.")
+        raise HTTPException(413, f"Ukuran video maksimal {MAX_UPLOAD_MIB} MiB.")
     if not all((runtime.MODELS / n).is_file() for n in ("yolo26n.pt", "helmet.pt")):
         raise HTTPException(503, "Jalankan setup_models.py terlebih dahulu.")
     if not compute_lock.acquire(blocking=False):
@@ -320,7 +329,7 @@ async def upload_video(
             while chunk := await file.read(1024 * 1024):
                 size += len(chunk)
                 if size > MAX_UPLOAD:
-                    raise HTTPException(413, "Ukuran video maksimal 250 MB.")
+                    raise HTTPException(413, f"Ukuran video maksimal {MAX_UPLOAD_MIB} MiB.")
                 target.write(chunk)
         if not size:
             raise HTTPException(422, "File video kosong.")

@@ -78,7 +78,8 @@ def main():
             headers=headers,
         )
         try:
-            response = client.open(query, timeout=5)
+            # Password rotation verifies and hashes scrypt; allow two expensive operations.
+            response = client.open(query, timeout=15 if path == "/api/auth/password" else 5)
         except HTTPError as error:
             response = error
         with response:

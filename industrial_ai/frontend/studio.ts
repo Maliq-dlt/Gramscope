@@ -5,8 +5,10 @@ interface OverlayRow {bbox:[number,number,number,number];color:string;selected:b
 interface BoxRow {text:string;color:string;disabled:boolean;edit:()=>void;remove:()=>void}
 interface QueueRow {frame:number;text:string;disabled:boolean;current:boolean;select:()=>Promise<void>}
 interface OptionRow {value:string;text:string}
-interface StudioViews {evidence(rows:EvidenceRow[]):void;details(rows:string[][]):void;appendMessage(row:MessageRow):void;clearMessages():void;overlay(rows:OverlayRow[]):void;boxes(rows:BoxRow[]):void;queue(rows:QueueRow[]):void;options(id:string,rows:OptionRow[]):void}
+interface ProcessState {kind:"upload"|"analysis"|"training"|"reanalysis";status:string;value:number|null;title?:string}
+interface StudioViews {process(id:string,state:ProcessState):void;thinking(active:boolean):void;evidence(rows:EvidenceRow[]):void;details(rows:string[][]):void;appendMessage(row:MessageRow):void;clearMessages():void;overlay(rows:OverlayRow[]):void;boxes(rows:BoxRow[]):void;queue(rows:QueueRow[]):void;options(id:string,rows:OptionRow[]):void}
 declare const studioViews:StudioViews;
+let uploadLimitMib = 250;
 type View = 'analysis'|'evidence'|'annotation'|'profile'|'ngram';
 type Counts = Record<string,number>;
 interface Box {label:string;name?:string|null;color?:string|null;bbox:[number,number,number,number];track_id?:number;source?:string}
@@ -17,7 +19,7 @@ interface Job {id:string;status:string;filename:string;summary:Summary;progress:
 interface Review {revision:number;frames:Frame[]}
 interface Queue {reviewed:number;total:number;pending:number;group:string;positions:{reviewed:boolean;frame_index:number;seconds:number;reasons:string[]}[]}
 interface ChatReply {ledger_proof?:{event_id:string;symbol?:string;source:{seconds?:number}}[];mode:string;answer:string;truncated?:boolean;seconds:number;device?:string;evidence:{file:string;kind:string;track_id:number;seconds:number}[]}
-interface Health {vision_ready:boolean;chat_ready:boolean;device:string;adapter_ready?:boolean}
+interface Health {max_upload_mib?:number;vision_ready:boolean;chat_ready:boolean;device:string;adapter_ready?:boolean}
 interface TrackingStep extends Review {next_frame:number;ended:boolean}
 interface TrackingStart {id:string;revision:number;frame:Frame}
 interface ExportState {status:string;progress:number;message:string;media_url:string;filename:string}
@@ -25,7 +27,7 @@ interface TrainingJob {id:string;status:string;group:string;progress:number;mess
 interface LearnReply {id:string;status:string;message:string;result_job_id?:string}
 type ApiResponse=Job|Review|Queue|ChatReply|Health|TrackingStep|TrackingStart|ExportState|TrainingJob|LearnReply|{id:string}|{boxes:Box[]}|Record<string,unknown>;
 
-declare const workspaceAuth:{ready:Promise<void>;request(input:RequestInfo|URL,init?:RequestInit):Promise<Response>;resetPasswordForm():void;finishLoading(error?:string):Promise<void>};
+declare const workspaceAuth:{ready:Promise<void>;request(input:RequestInfo|URL,init?:RequestInit,onUpload?:(value:number|null)=>void):Promise<Response>;resetPasswordForm():void;finishLoading(error?:string):Promise<void>};
 interface StudioDom {
  'loginTransitionLoader':HTMLElement;
  'loginTransitionStatus':HTMLElement;
@@ -48,6 +50,7 @@ interface StudioDom {
  'authError':HTMLElement;
  'videoWorkspace':HTMLElement;
  'ngramPane':HTMLElement;
+ 'uploadLimits':HTMLElement;
  'workspaceTitle':HTMLElement;
  'newVideoButton':HTMLButtonElement;
  'historySelect':HTMLSelectElement;
@@ -238,12 +241,12 @@ function syncControls() {
   $('cancelJob').hidden=!['queued','processing','cancelling'].includes(job?.status||'');
   $('cancelJob').disabled=job?.status==='cancelling';
   for(const button of document.querySelectorAll<HTMLButtonElement>('[data-view]')) button.disabled=uploading || reviewBusy;
-  $('profileButton').disabled=uploading || sending || reviewBusy;
+  $('profileButton').disabled=uploading || reviewBusy;
   syncResultSwitch();
 }
 async function setView(view:View) {
   if(view===currentView) return true;
-  if(reviewBusy || uploading || sending) return false;
+  if(reviewBusy || uploading) return false;
   if(currentView==='annotation' && !(await persistReview(false))) return false;
   if(view==='annotation' && !summary) {showError('uploadError','Pilih rekaman yang selesai dianalisis untuk membuat anotasi.'); return false;}
   if(document.fullscreenElement===$('reviewPanel')) await document.exitFullscreen();
@@ -254,7 +257,7 @@ async function setView(view:View) {
   currentView=view; reviewVideo.pause();
   $('videoWorkspace').hidden=view==='profile'||view==='ngram'; $('profilePane').hidden=view!=='profile'; $('ngramPane').hidden=view!=='ngram';
   $('analysisPane').hidden=view!=='analysis'; $('evidencePane').hidden=view!=='evidence'; $('reviewPanel').hidden=view!=='annotation';
-  $('pageTitle').textContent={analysis:'Analisis video',evidence:'Bukti & hasil',annotation:'Anotasi manual',profile:'Profil',ngram:'Lab N-gram'}[view];
+  $('pageTitle').textContent={analysis:'Analisis video',evidence:'Bukti & hasil',annotation:'Anotasi manual',profile:'Profil',ngram:'Chatbot N-gram'}[view];
   for(const button of document.querySelectorAll<HTMLButtonElement>('[data-view]')) {if(button.dataset.view===view) button.setAttribute('aria-current','page'); else button.removeAttribute('aria-current');}
   syncControls();
   document.dispatchEvent?.(new Event('workspace-view'));
@@ -262,7 +265,7 @@ async function setView(view:View) {
   return true;
 }
 for(const button of document.querySelectorAll<HTMLButtonElement>('[data-view]')) button.onclick=()=>setView(button.dataset.view as View);
-for(const id of ['newVideoButton','emptyUploadButton'] as const) $(id).onclick=()=>{showError('uploadError','');$('uploadDialog').showModal();};
+for(const id of ['newVideoButton','emptyUploadButton'] as const) $(id).onclick=()=>{showError('uploadError','');document.getElementById('uploadProcessView')!.hidden=true;document.getElementById('uploadTransferStatus')!.hidden=true;$('uploadDialog').showModal();};
 $('closeUpload').onclick=()=>$('uploadDialog').close();
 $('uploadDialog').addEventListener('cancel',event=>{if(uploading) event.preventDefault();});
 const original = $('originalVideo'), tracked = $('trackedVideo');
@@ -312,8 +315,8 @@ function validateApi(url:string,value:unknown):Record<string,unknown>{
   else if(path.endsWith('/learn')){requireFields(data,{status:'string'});requireFields(data,data.status==='waiting'?{message:'string'}:{id:'string'});}
   return data;
 }
-async function api<T extends ApiResponse=Record<string,unknown>>(url:string, options?:RequestInit):Promise<T> {
-  const response=await workspaceAuth.request(url,options),data:unknown=await response.json();
+async function api<T extends ApiResponse=Record<string,unknown>>(url:string, options?:RequestInit,onUpload?:(value:number|null)=>void):Promise<T> {
+  const response=await workspaceAuth.request(url,options,onUpload),data:unknown=await response.json();
   if(!response.ok){const detail=typeof data==='object'&&data!==null&&'detail'in data?data.detail:undefined;throw Error(typeof detail==='string'?detail:'Input tidak valid. Periksa isian dan coba lagi.');}
   return validateApi(url,data) as unknown as T;
 }
@@ -394,12 +397,12 @@ async function selectJob(id:string) {
     try {
       const data = await api<Job>(`/api/jobs/${id}`);
       if (current !== generation) return;
-      job = data; $('currentFile').textContent=data.filename; syncControls(); $('progressArea').hidden = false; $('jobProgress').value = data.progress; $('jobStatus').textContent = data.message;
+      job = data; $('currentFile').textContent=data.filename; syncControls(); $('progressArea').hidden = false; studioViews.process('jobProcessView',{kind:'analysis',status:data.status,value:data.progress,title:data.filename}); $('jobProgress').value = data.progress; $('jobStatus').textContent = data.message;
       syncControls();
       if (data.status === 'done') { displayResults(data); await refreshHistory(id); }
       else if (['error','cancelled'].includes(data.status)) { $('comparisonBadge').textContent = 'Analisis gagal'; showError('uploadError',data.message); await refreshHistory(id); }
       else { $('comparisonBadge').textContent = 'Sedang diproses'; pollTimer = setTimeout(check,1500); }
-    } catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason)); if (current === generation) { showError('uploadError',error.message); syncControls(); } }
+    } catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason)); if (current === generation) { showError('uploadError',error.message); studioViews.process('jobProcessView',{kind:'analysis',status:'interrupted',value:null}); syncControls(); } }
   }
   await check();
 }
@@ -408,11 +411,11 @@ $('uploadForm').onsubmit = async event => {
   event.preventDefault(); showError('uploadError','');
   const file = $('videoFile').files?.[0];
   if (!file) return;
-  if (file.size > 250*1024*1024) { showError('uploadError','Ukuran video maksimal 250 MB.'); return; }
-  uploading=true; syncControls(); $('progressArea').hidden = false; $('jobStatus').textContent = 'Mengunggah video…'; $('jobProgress').removeAttribute('value');
+  if (file.size > uploadLimitMib*1024*1024) { showError('uploadError',`Ukuran video maksimal ${uploadLimitMib} MiB.`); return; }
+  uploading=true; syncControls(); document.getElementById('uploadProcessView')!.hidden=false; document.getElementById('uploadTransferStatus')!.hidden=false; studioViews.process('uploadProcessView',{kind:'upload',status:'uploading',value:0,title:file.name}); $('progressArea').hidden = true; document.getElementById('uploadTransferStatus')!.textContent='Mengirim video ke workspace…'; $('jobStatus').textContent = 'Mengunggah video…'; $('jobProgress').removeAttribute('value');
   const form = new FormData(); form.append('file',file); form.append('line',String(Number($('countLine').value)/100)); form.append('device',$('deviceMode').value); form.append('model_id',$('analysisModel').value);
-  try { const data = await api<{id:string}>('/api/jobs',{method:'POST',body:form}); $('uploadDialog').close(); uploading=false; await setView('analysis'); await refreshHistory(data.id); await selectJob(data.id); }
-  catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason)); showError('uploadError',error.message); $('uploadDialog').close(); $('jobProgress').value = 0; }
+  try { const data = await api<{id:string}>('/api/jobs',{method:'POST',body:form},value=>{const status=value!==null&&value>=100?'validating':'uploading'; studioViews.process('uploadProcessView',{kind:'upload',status,value:status==='validating'?null:value,title:file.name}); document.getElementById('uploadTransferStatus')!.textContent=status==='validating'?'Video terkirim. Server sedang memeriksa rekaman…':'Mengirim video ke workspace…';}); $('uploadDialog').close(); uploading=false; await setView('analysis'); await refreshHistory(data.id); await selectJob(data.id); }
+  catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason)); showError('uploadError',error.message); studioViews.process('uploadProcessView',{kind:'upload',status:'error',value:null,title:file.name}); document.getElementById('uploadTransferStatus')!.textContent=error.message; $('progressArea').hidden=true; $('jobProgress').value = 0; }
   finally {uploading=false; syncControls();}
 };
 $('historySelect').onchange = () => { showError('uploadError',''); selectJob($('historySelect').value); };
@@ -498,8 +501,24 @@ function startLoginCrowd() {
   const sw=image.naturalWidth/15,sh=image.naturalHeight/7,started=performance.now();
   function render(now:number){
    if(current!==crowdGeneration || !crowdWanted || $('loginTransitionLoader').hidden){crowdAnimId=null;return;}
-   const time=orbMotion.matches?0:(now-started)/1000;ctx!.clearRect(0,0,900,280);
-   for(let i=0;i<12;i++){const h=138+(i%4)*20,w=sw/sh*h,x=((i*89+time*(18+(i%3)*7))%1080)-100,y=280-h-8-Math.abs(Math.sin(time*5+i))*4,index=(i*7+3)%105;ctx!.drawImage(image,(index%15)*sw,Math.floor(index/15)*sh,sw,sh,x,y,w,h);}
+   const width=canvas.clientWidth,height=canvas.clientHeight,dpr=Math.min(devicePixelRatio||1,2);
+   if(canvas.width!==Math.round(width*dpr)||canvas.height!==Math.round(height*dpr)){canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);}
+   ctx!.setTransform(dpr,0,0,dpr,0,0);
+   const time=orbMotion.matches?0:(now-started)/1000;ctx!.clearRect(0,0,width,height);
+   for(let layer=0;layer<3;layer++){
+    const count=10+layer,h0=height*(.82+layer*.12),direction=layer%2 ? -1 : 1;
+    ctx!.globalAlpha=.6+layer*.2;
+    for(let i=0;i<count;i++){
+     const h=h0+(i%3)*height*.03,w=sw/sh*h,span=width+w,x=((i*span/count+layer*67+direction*time*(10+layer*5))%span+span)%span-w;
+     // Sprite cells have transparent foot padding; crop past the viewport to fill its bottom.
+     const y=height-(2-layer)*height*.13+h*.16+8-h-Math.sin(time*1.7+i+layer)*5,index=(i*13+layer*23+3)%105;
+     ctx!.save();
+     if(direction<0){ctx!.translate(x+w,y);ctx!.scale(-1,1);}
+     ctx!.drawImage(image,(index%15)*sw,Math.floor(index/15)*sh,sw,sh,direction<0?0:x,direction<0?0:y,w,h);
+     ctx!.restore();
+    }
+   }
+   ctx!.globalAlpha=1;
    crowdAnimId=orbMotion.matches?null:requestAnimationFrame(render);
   }
   render(started);
@@ -514,14 +533,15 @@ $('chatForm').onsubmit = async event => {
   event.preventDefault(); if(currentView==='annotation'){if(trackingWanted || !reviewVideo.paused)await pauseReview();if(!(await persistReview(false)))return;} let message=$('chatInput').value.trim(); if(currentView==='annotation' && !/\b(detik|second|menit|minute)\b/i.test(message) && /(berapa|jumlah|siapa)/i.test(message)) message+=` pada detik ${(reviewFrame/summary!.fps).toFixed(2)}`; if (!message || sending) return;
   sending=true; syncControls(); const current=generation; $('sendChat').disabled=true; $('clearChat').disabled=true; $('historySelect').disabled=true; showError('chatError','');
   addMessage('user',message); $('chatInput').value=''; $('chatStatus').textContent='AI sedang menyiapkan jawaban…';
-  startThinkingOrb();
+  startThinkingOrb(); studioViews.thinking(true);
   try {
     const data=await api<ChatReply>('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message,device:$('deviceMode').value,job_id:summary ? job!.id : null,history:chatHistory.slice(-6)})});
     if (current!==generation) return;
     const label=data.mode==='reviewed' ? 'Hitungan AI + koreksi pengguna' : data.mode==='facts' ? 'Data analisis AI tersimpan' : data.mode==='manual' ? 'Koreksi manual pengguna' : data.mode==='guide' ? 'Panduan kemampuan aplikasi' : `${data.mode==='lora' ? 'Qwen lokal + LoRA pilot' : 'Qwen lokal · base model'} · ${data.seconds} detik${data.device ? ' · '+(data.device.startsWith('cuda') ? 'GPU' : 'CPU') : ''}`;
+    studioViews.thinking(false); stopThinkingOrb();
     addMessage('assistant',data.answer,label+(data.truncated ? ' · batas panjang respons tercapai' : ''),data.evidence,data.ledger_proof||[]); chatHistory.push({role:'user',content:message},{role:'assistant',content:data.answer.slice(0,2000)}); chatHistory=chatHistory.slice(-6);
   } catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason)); showError('chatError',error.message); }
-  finally { sending=false; $('sendChat').disabled=false; $('clearChat').disabled=false; syncControls(); $('chatStatus').textContent=''; stopThinkingOrb(); }
+  finally { studioViews.thinking(false); sending=false; $('sendChat').disabled=false; $('clearChat').disabled=false; syncControls(); $('chatStatus').textContent=''; stopThinkingOrb(); }
 };
 $('chatInput').addEventListener('keydown',event => { if (event.key==='Enter' && !event.shiftKey) {event.preventDefault(); $('chatForm').requestSubmit();} });
 for (const button of document.querySelectorAll<HTMLButtonElement>('[data-question]')) button.onclick = () => { $('chatInput').value=button.dataset.question||''; $('chatForm').requestSubmit(); };
@@ -804,7 +824,7 @@ $('saveReview').onclick=async()=>{
   if(!(await persistReview(true)))return;
   try {
     const queue=await refreshQueue();
-    if(queue?.pending) learningStatus(`Koreksi tersimpan. ${queue.pending} posisi ${queue.group==='objects'?'objek':'helm'} belum disahkan. Training dimulai setelah antrean selesai.`);
+    if(queue?.pending) learningStatus(`Koreksi tersimpan. ${queue.pending} posisi ${queue.group==='objects'?'objek':'helm'} belum disahkan. Training dimulai setelah antrean selesai.`,0,'waiting');
     else {startExport(false); await startLearning(job!.id,$('reviewGroup').value);}
   }catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason));showError('reviewError',error.message);}
 };
@@ -908,43 +928,43 @@ async function refreshTraining(resume=true) {
   const active=jobs.find(j=>j.followup_job_id && ['queued','processing','cancelling'].includes(j.status));
   if(active && resume) pollTraining(active.id);
 }
-function learningStatus(message:string,progress=0){$('learningProgress').hidden=false;$('learningProgressBar').value=progress;$('learningStatus').textContent=message;}
+function learningStatus(message:string,progress=0,status='processing',kind:ProcessState['kind']='training'){studioViews.process('learningProcessView',{kind,status,value:status==='waiting'||status==='interrupted'?null:progress});$('learningProgress').hidden=false;$('learningProgressBar').value=progress;$('learningStatus').textContent=message;}
 async function startLearning(source:string,group:string){
   const current=generation;
   try{
-    $('showLearnedResult').hidden=true;
+    $('showLearnedResult').hidden=true; learningStatus('Memeriksa koreksi yang disahkan…',0,'queued');
     const data=await api<LearnReply>(`/api/jobs/${source}/learn`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({group,device:$('deviceMode').value})});
     if(current!==generation)return;
-    if(data.status==='waiting'){learningStatus(data.message);return;}
+    if(data.status==='waiting'){learningStatus(data.message,0,'waiting');return;}
     pollTraining(data.id,data.result_job_id);
-  }catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason));learningStatus('Koreksi tersimpan. '+error.message+' Klik Coba belajar lagi untuk mencoba kembali.');}
+  }catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason));learningStatus('Koreksi tersimpan. '+error.message+' Klik Coba belajar lagi untuk mencoba kembali.',0,'interrupted');}
 }
 async function pollTraining(id:string,resultJobId:string|null=null,current=generation){
   if(current!==generation)return;clearTimeout(trainingPoll);
   try{
-    const data=await api<TrainingJob>('/api/training/'+id);if(current!==generation)return;learningStatus(data.message,data.progress);
+    const data=await api<TrainingJob>('/api/training/'+id);if(current!==generation)return;learningStatus(data.message,data.progress,data.status);
     $('cancelLearning').hidden=!['queued','processing','cancelling'].includes(data.status);$('cancelLearning').disabled=data.status==='cancelling';$('cancelLearning').onclick=async()=>{try{await api<TrainingJob>('/api/training/'+id+'/cancel',{method:'POST'});}catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason));learningStatus(error.message);}};
     if(['queued','processing','cancelling'].includes(data.status)){trainingPoll=setTimeout(()=>pollTraining(id,resultJobId,current),1500);return;}
-    if(['error','cancelled'].includes(data.status)){learningStatus(data.message);$('cancelLearning').hidden=true;return;}
+    if(['error','cancelled'].includes(data.status)){learningStatus(data.message,data.progress,data.status);$('cancelLearning').hidden=true;return;}
     $('cancelLearning').hidden=true;await refreshTraining(false);if(current!==generation)return;
     if(resultJobId || data.result_job_id){
       const result=await api<Job>('/api/jobs/'+(resultJobId || data.result_job_id));
-      if(['queued','processing','cancelling'].includes(result.status)){learningStatus('Belajar selesai. '+result.message,result.progress);trainingPoll=setTimeout(()=>pollTraining(id,resultJobId,current),1500);return;}
+      if(['queued','processing','cancelling'].includes(result.status)){learningStatus('Belajar selesai. '+result.message,result.progress,result.status,'reanalysis');trainingPoll=setTimeout(()=>pollTraining(id,resultJobId,current),1500);return;}
       if(current!==generation)return;
-      learningStatus(result.status==='done' ? 'Belajar dan analisis ulang selesai. Hasil baru siap dilihat; koreksi tetap bisa ditanya.' : result.message,100);
+      learningStatus(result.status==='done' ? 'Belajar dan analisis ulang selesai. Hasil baru siap dilihat; koreksi tetap bisa ditanya.' : result.message,result.progress,result.status,'reanalysis');
       $('showLearnedResult').hidden=result.status!=='done';$('showLearnedResult').onclick=async()=>{if(!(await persistReview(false)))return;await setView('analysis');await refreshHistory(result.id);await selectJob(result.id);};
       if(result.status==='done' && data.followup_job_id===job?.id && !reviewDirty && !reviewBusy && !trackingWanted && reviewVideo.paused && !sending){
         await setView('analysis');await refreshHistory(result.id);await selectJob(result.id);
-        learningStatus(`Fine-tuning dan analisis ulang selesai · checkpoint ${data.checkpoint_sha256?.slice(0,12)}. Hasil baru sedang ditampilkan.`,100);
+        learningStatus(`Fine-tuning dan analisis ulang selesai · checkpoint ${data.checkpoint_sha256?.slice(0,12)}. Hasil baru sedang ditampilkan.`,100,'done','reanalysis');
       }
     }
-  }catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason));learningStatus(error.message);}
+  }catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason));learningStatus(error.message,0,'interrupted');}
 }
 $('analysisModel').onchange=()=>{$('modelHelp').textContent=$('analysisModel').value ? 'Kandidat pilot dipilih. Klik Analisis ulang untuk mencoba pada video ini.' : 'Model dasar dipilih. Hasil lama tetap tersimpan.';};
 $('reanalyzeButton').onclick=async()=>{if(!job || !summary)return; showError('uploadError',''); try {const data=await api<{id:string}>(`/api/jobs/${job!.id}/reanalyze`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model_id:$('analysisModel').value,device:$('deviceMode').value})});await setView('analysis');await refreshHistory(data.id);await selectJob(data.id);}catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason));showError('uploadError',error.message);}};
 syncMetadata();
 (async () => {
   await workspaceAuth.ready;
-  try { const health=await api<Health>('/api/health'); $('systemStatus').textContent=health.vision_ready && health.chat_ready ? `Model lokal siap · ${health.device.startsWith('cuda') ? 'RTX / CUDA' : 'CPU'}${health.adapter_ready ? ' · LoRA' : ''}` : 'Model belum lengkap · lihat README'; await refreshTraining(); const jobs=await refreshHistory(); if (jobs.length) { const preferred=jobs.find(j=>['queued','processing','cancelling'].includes(j.status)) || jobs.find(j=>j.status==='done') || jobs[0]; $('historySelect').value=preferred.id; await selectJob(preferred.id); } await workspaceAuth.finishLoading(); }
+  try { const health=await api<Health>('/api/health'); uploadLimitMib=health.max_upload_mib||250; $('uploadLimits').textContent=`MP4, MOV, AVI, MKV, WEBM, M4V · maks. ${uploadLimitMib} MiB, 2 menit, 4K.`; $('systemStatus').textContent=health.vision_ready && health.chat_ready ? `Model lokal siap · ${health.device.startsWith('cuda') ? 'RTX / CUDA' : 'CPU'}${health.adapter_ready ? ' · LoRA' : ''}` : 'Model belum lengkap · lihat README'; await refreshTraining(); const jobs=await refreshHistory(); if (jobs.length) { const preferred=jobs.find(j=>['queued','processing','cancelling'].includes(j.status)) || jobs.find(j=>j.status==='done') || jobs[0]; $('historySelect').value=preferred.id; await selectJob(preferred.id); } await workspaceAuth.finishLoading(); }
   catch(reason:unknown) {const error=reason instanceof Error?reason:new Error(String(reason)); $('systemStatus').textContent='Server tidak terhubung'; showError('uploadError',error.message); workspaceAuth.finishLoading('Studio belum dapat dimuat. '+error.message); }
 })();

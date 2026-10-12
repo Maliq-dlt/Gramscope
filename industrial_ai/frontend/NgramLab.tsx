@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { EventLedger } from './EventLedger';
+import { NgramChat } from './NgramChat';
 
 declare const workspaceAuth: {request(input: RequestInfo | URL, init?: RequestInit): Promise<Response>};
 interface Catalog { methods: string[]; models: {id:string;name:string;n:number;method:string;corpus:string}[]; runs:{run_id:string;summary:Record<string,unknown>}[]; boundary:string; validation?:{source:string;training_sentences:number;discount:number;padding:string;epsilon:string;rows:{n:number;queries:number;max_absolute_difference:number;mean_absolute_difference:number;default_epsilon_max_difference:number}[]} }
@@ -20,7 +21,7 @@ async function request<T>(url:string,init?:RequestInit):Promise<T> {
  if(!response.ok) throw new Error(typeof data.detail==='string'?data.detail:'Permintaan Lab gagal.');
  return data as T;
 }
-export function NgramLab() {
+function NgramResearch() {
  const [catalog,setCatalog]=useState<Catalog|null>(null),[result,setResult]=useState<Exploration|null>(null);
  const [runs,setRuns]=useState<ResearchRuns|null>(null);
  const [modelId,setModelId]=useState('demo'),[method,setMethod]=useState('add_k'),[order,setOrder]=useState(2);
@@ -93,4 +94,8 @@ export function NgramLab() {
   <details><summary>Validasi historis terhadap NLTK</summary>{catalog?.validation?<><p className="hint">{catalog.validation.source}. Pembandingan ini hanya ordinary Kneser–Ney; bukan bukti ekuivalensi Modified Kneser–Ney atau run baru.</p><p>{catalog.validation.training_sentences} kalimat train · discount {catalog.validation.discount}</p><p className="hint">Padding: {catalog.validation.padding}. Epsilon: {catalog.validation.epsilon}.</p><div className="ngram-table"><table><caption>Perbedaan absolut peluang terhadap referensi ordinary KN</caption><thead><tr><th>n</th><th>Query</th><th>Maksimum</th><th>Rata-rata</th><th>Maks ε default</th></tr></thead><tbody>{catalog.validation.rows.map(row=><tr key={row.n}><td>{row.n}</td><td>{row.queries}</td><td>{number(row.max_absolute_difference)}</td><td>{number(row.mean_absolute_difference)}</td><td>{number(row.default_epsilon_max_difference)}</td></tr>)}</tbody></table></div></>:<p className="hint">Artefak validasi historis belum tersedia.</p>}</details>
   <EventLedger />
  </section>;
+}
+
+export function NgramLab() {
+ return <><NgramChat/><details className="ngram-research"><summary>Analisis & eksperimen N-gram</summary><NgramResearch/></details></>;
 }
