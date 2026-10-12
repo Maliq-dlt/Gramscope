@@ -32,13 +32,13 @@ requires = ["setuptools>=83"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["app", "vision", "chat", "runtime", "setup_models", "fine_tune_chat", "detector_training", "prompt_tracking", "corrections", "video_finetune", "operations", "review", "access", "storage", "academic", "event_ledger", "fact_query"]
+py-modules = ["app", "vision", "chat", "runtime", "setup_models", "fine_tune_chat", "detector_training", "prompt_tracking", "corrections", "video_finetune", "operations", "review", "access", "storage", "academic", "event_ledger", "fact_query", "ngram_chat"]
 
 [tool.setuptools.data-files]
-"share/industrial-video-workspace" = ["index.html", "dashboard.js", "auth.js", "theme.js", "motion.js", "app.js", "Dockerfile", "compose.yaml", "Caddyfile.example", ".dockerignore"]
-"share/industrial-video-workspace/frontend" = ["frontend/App.tsx", "frontend/main.tsx", "frontend/studio.ts", "frontend/Account.tsx", "frontend/Annotation.tsx", "frontend/ChatPanel.tsx", "frontend/VideoPanel.tsx", "frontend/Workspace.tsx", "frontend/LiveViews.tsx", "frontend/NgramLab.tsx", "frontend/EventLedger.tsx", "frontend/auth.ts", "frontend/motion.ts", "frontend/tsconfig.auth.json", "frontend/tsconfig.studio.json", "frontend/tsconfig.json", "frontend/tsconfig.motion.json"]
-"share/industrial-video-workspace/docs" = ["docs/HARDENING.md", "docs/VERIFICATION_SECURITY.md", "docs/README.md", "docs/EVENT_CONTRACT.md", "docs/DATA_POLICY.md", "docs/TRACKING_ACCURACY.md"]
-"share/industrial-video-workspace/assets" = ["assets/dashboard.css", "assets/brand.svg", "assets/crowd.png", "assets/THIRD_PARTY_LICENSES.txt"]
+"share/industrial-video-workspace" = ["index.html", "dashboard.js", "auth.js", "theme.js", "motion.js", "app.js", "Dockerfile", "compose.yaml", "compose.cloudflare.yaml", "cloudflare.env.example", "Caddyfile.example", ".dockerignore"]
+"share/industrial-video-workspace/frontend" = ["frontend/App.tsx", "frontend/main.tsx", "frontend/studio.ts", "frontend/Account.tsx", "frontend/Annotation.tsx", "frontend/ChatPanel.tsx", "frontend/VideoPanel.tsx", "frontend/Workspace.tsx", "frontend/LiveViews.tsx", "frontend/ProcessProgress.tsx", "frontend/NgramLab.tsx", "frontend/NgramChat.tsx", "frontend/EventLedger.tsx", "frontend/auth.ts", "frontend/motion.ts", "frontend/tsconfig.auth.json", "frontend/tsconfig.studio.json", "frontend/tsconfig.json", "frontend/tsconfig.motion.json"]
+"share/industrial-video-workspace/docs" = ["docs/HARDENING.md", "docs/CLOUDFLARE.md", "docs/VERIFICATION_SECURITY.md", "docs/README.md", "docs/EVENT_CONTRACT.md", "docs/DATA_POLICY.md", "docs/TRACKING_ACCURACY.md"]
+"share/industrial-video-workspace/assets" = ["assets/dashboard.css", "assets/brand.svg", "assets/crowd.png", "assets/creation-of-adam.webp", "assets/creation-of-adam.mp4", "assets/THIRD_PARTY_LICENSES.txt"]
 
 [tool.ruff]
 line-length = 100

@@ -1,0 +1,23 @@
+# Merge with compose.yaml: the app stays on the internal Docker network.
+services:
+  app:
+    environment:
+      INSIGHT_PUBLIC_URL: "https://${CF_HOSTNAME:?Set CF_HOSTNAME in .env.cloudflare}"
+      INSIGHT_HOSTS: "${CF_HOSTNAME:?Set CF_HOSTNAME in .env.cloudflare}"
+      INSIGHT_MAX_UPLOAD_MIB: "95"
+  proxy:
+    profiles: [direct-https]
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    command: [tunnel, --no-autoupdate, run, --token-file, /run/secrets/tunnel_token]
+    secrets: [tunnel_token]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+secrets:
+  tunnel_token:
+    file: "${CLOUDFLARE_TUNNEL_TOKEN_FILE:?Set path to a local token file}"

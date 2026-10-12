@@ -2,12 +2,15 @@
 const assert=require('node:assert/strict');
 const markup=require('./ui_markup.cjs');
 const ids=[...markup.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]),known=new Set(ids);
-assert.equal(ids.length,197,'original studio controls and N-gram lab IDs survive React rendering');
+assert.equal(ids.length,217,'original studio controls plus the landing page IDs survive React rendering');
 assert.equal(known.size,ids.length,'live studio IDs must be unique');
 for(const [,refs] of markup.matchAll(/(?:for|aria-labelledby|aria-describedby)="([^"]+)"/g))for(const id of refs.split(/\s+/))assert(known.has(id),`accessible reference ${id} must resolve`);
 for(const id of ['loginPassword','currentPassword','newPassword','confirmPassword'])assert(new RegExp(`<input[^>]*id="${id}"[^>]*type="password"`).test(markup),'password controls remain masked');
 assert(!/<script|on(?:click|submit)=|dangerouslySetInnerHTML/.test(markup),'view markup never includes executable strings');
 assert(/id="authGate"[^>]*hidden/.test(markup),'login stays hidden until the real session verdict to prevent refresh flash');
+assert(/id="landingPage"[^>]*hidden/.test(markup),'landing waits for the real session verdict');
+for(const [,target] of markup.matchAll(/href="#([^"]+)"/g))assert(target==='login'||known.has(target),`landing anchor ${target} resolves`);
+assert.equal((markup.match(/href="#login"/g)||[]).length,3,'header, hero and closing all reach real login');
 assert(/id="resultAi"[^>]*checked/.test(markup),'model result is selected initially');
 assert(/id="reviewSvg"/.test(markup)&&/id="reviewVideo"/.test(markup),'annotation media and overlay retain their roots');
-console.log('PASS: React SSR preserves 197 unique controls, accessible labels, password privacy and annotation/result contracts.');
+console.log('PASS: React SSR preserves 217 unique controls, accessible labels, password privacy and annotation/result contracts.');

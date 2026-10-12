@@ -361,6 +361,8 @@ def install(app, max_upload: int):
                     if value["role"] == "viewer" and path not in {
                         "/api/chat",
                         "/api/ngram/explore",
+                        "/api/ngram/chat",
+                        "/api/ngram/chat/data",
                         "/api/ledger/query",
                         "/api/ledger/report",
                         "/api/auth/logout",

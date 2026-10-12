@@ -59,8 +59,9 @@ export function Workspace() {
                 </details>
               </div>
               <div id="learningProgress" className="progress-area" hidden>
+                <div id="learningProcessView" className="process-view"></div>
                 <progress
-                  id="learningProgressBar"
+                  id="learningProgressBar" className="sr-only" aria-hidden="true"
                   max="100"
                   value="0"
                   aria-label="Kemajuan belajar dan analisis ulang"
@@ -83,8 +84,9 @@ export function Workspace() {
                 </button>
               </div>
               <div id="progressArea" className="progress-area" hidden>
+                <div id="jobProcessView" className="process-view"></div>
                 <progress
-                  id="jobProgress"
+                  id="jobProgress" className="sr-only" aria-hidden="true"
                   max="100"
                   value="0"
                   aria-label="Kemajuan analisis"

@@ -1,9 +1,10 @@
-import { AccountGate, Profile } from './Account';
+import { AccountGate, Landing, Profile } from './Account';
 import { Workspace } from './Workspace';
 import { NgramLab } from './NgramLab';
 
 export function App() {
  return (<>
+   <Landing />
    <AccountGate />
    <a className="skip-link" href="#mainContent">Lewati navigasi</a>
    <Sidebar />
@@ -49,7 +50,7 @@ export function Sidebar() {
                 <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5M9 9h6v6H9z" /></svg
               >Anotasi manual
             </button>
-            <button className="button nav-item" data-view="ngram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h5M8 16h8" /></svg>Lab N-gram</button>
+            <button className="button nav-item" data-view="ngram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8M8 12h5M8 16h8" /></svg>Chatbot N-gram</button>
           </nav>
           <div className="sidebar-bottom">
             <span className="local-dot"></span> Semua data di perangkat ini<span
@@ -109,6 +110,8 @@ export function UploadDialog() {
               ✕
             </button>
           </div>
+          <div id="uploadProcessView" className="process-view" hidden></div>
+          <p id="uploadTransferStatus" className="hint" role="status" hidden></p>
           <form id="uploadForm">
             <label htmlFor="videoFile">Pilih rekaman</label>
             <div className="file-box">
@@ -122,7 +125,7 @@ export function UploadDialog() {
               />
             </div>
             <p className="hint" id="uploadHelp">
-              MP4, MOV, AVI, MKV, WEBM, M4V · maks. 250 MB, 2 menit, 4K.
+              <span id="uploadLimits">MP4, MOV, AVI, MKV, WEBM, M4V · maks. 250 MiB, 2 menit, 4K.</span>
             </p>
             <details className="count-settings">
               <summary>Garis counting</summary>

@@ -36,7 +36,12 @@ with zipfile.ZipFile(wheel) as archive:
         "frontend/VideoPanel.tsx",
         "frontend/Workspace.tsx",
         "frontend/LiveViews.tsx",
+        "frontend/ProcessProgress.tsx",
         "frontend/NgramLab.tsx",
+        "frontend/NgramChat.tsx",
+        "compose.cloudflare.yaml",
+        "cloudflare.env.example",
+        "docs/CLOUDFLARE.md",
         "frontend/EventLedger.tsx",
         "motion.js",
         "frontend/motion.ts",
@@ -48,6 +53,8 @@ with zipfile.ZipFile(wheel) as archive:
         "docs/DATA_POLICY.md",
         "assets/brand.svg",
         "assets/crowd.png",
+        "assets/creation-of-adam.webp",
+        "assets/creation-of-adam.mp4",
     ]:
         entry = next(
             p for p in archive.namelist() if p.endswith("/share/industrial-video-workspace/" + name)
@@ -64,6 +71,8 @@ with tarfile.open(next(output.glob("industrial_video_workspace*.tar.gz"))) as ar
         "docs/DATA_POLICY.md",
         "assets/brand.svg",
         "assets/crowd.png",
+        "assets/creation-of-adam.webp",
+        "assets/creation-of-adam.mp4",
         "app.js",
         "motion.js",
         "frontend/motion.ts",
@@ -81,7 +90,12 @@ with tarfile.open(next(output.glob("industrial_video_workspace*.tar.gz"))) as ar
         "frontend/VideoPanel.tsx",
         "frontend/Workspace.tsx",
         "frontend/LiveViews.tsx",
+        "frontend/ProcessProgress.tsx",
         "frontend/NgramLab.tsx",
+        "frontend/NgramChat.tsx",
+        "compose.cloudflare.yaml",
+        "cloudflare.env.example",
+        "docs/CLOUDFLARE.md",
         "frontend/EventLedger.tsx",
     ):
         member = next(p for p in archive.getmembers() if p.name.endswith("/" + name))

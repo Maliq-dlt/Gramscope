@@ -20,6 +20,7 @@
 *.safetensors
 *.onnx
 *.mp4
+!/assets/creation-of-adam.mp4
 *.avi
 *.mov
 *.mkv
@@ -39,3 +40,5 @@
 !/reports/validation_protocol_20261011.json
 !/reports/tracking_protocol_20261011.json
 !/reports/VALIDATION_20261011.md
+
+.secrets/

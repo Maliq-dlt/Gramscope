@@ -29,3 +29,5 @@ extensions/reports/**
 !extensions/results/
 extensions/results/**
 !extensions/results/nltk_comparison.json
+
+**/.secrets
