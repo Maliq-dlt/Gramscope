@@ -89,3 +89,42 @@ Sumber resmi (diakses 12 Oktober 2026):
 - [Published application](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/)
 - [Upload limit](https://developers.cloudflare.com/support/troubleshooting/http-status-codes/4xx-client-error/error-413/)
 - [Containers storage](https://developers.cloudflare.com/containers/concepts/architecture/)
+
+## Uji coba Windows tanpa domain (Quick Tunnel)
+
+Untuk laptop yang sudah memiliki akun, data dan model lokal, jalankan connector
+Windows langsung ke studio. Ini mempertahankan model GPU lokal; Docker tidak
+perlu dijalankan untuk mode ini. URL `trycloudflare.com` berubah setiap peluncuran
+serta berhenti ketika proses/komputer ditutup. Mode ini untuk uji coba, bukan hosting
+permanen. Login aplikasi dan CSRF tetap diperlukan untuk membuka data.
+
+Connector resmi yang dipakai launcher dipin ke versi **2026.10.0** dan hash rilis
+GitHub diverifikasi sebelum dijalankan. Dari root repository:
+
+```powershell
+. ./industrial_ai/setup_lokal.ps1
+New-Item -ItemType Directory -Path .cache/cloudflared -Force
+Invoke-WebRequest https://github.com/cloudflare/cloudflared/releases/download/2026.10.0/cloudflared-windows-amd64.exe -OutFile .cache/cloudflared/cloudflared-2026.10.0.exe
+./industrial_ai/cloudflare_lokal.ps1
+```
+
+Selesaikan upload/analisis/training, lalu tutup server lokal lama sebelum menjalankan
+launcher. Launcher menolak port yang sudah terpakai; tidak menutup server lain.
+Ia membuat URL sementara, mengatur origin HTTPS/allowlist Host/batas 95 MiB, lalu
+menjalankan satu studio pada loopback port 8765 menggunakan akun dan model yang sudah tersedia.
+Buka URL yang dicetak dan login dengan akun studio biasa. **Ctrl+C** menutup studio
+serta Tunnel. Untuk kembali ke mode lokal, jalankan `industrial_ai/jalankan.ps1`.
+
+Log dan URL terakhir ada di `.tmp/cloudflare/`, binary di `.cache/cloudflared/`;
+semuanya tetap lokal dan tidak masuk Git. Tidak ada token akun yang diperlukan.
+Untuk memperbarui connector, ambil rilis resmi dan ganti pin versi/hash pada launcher.
+
+Pemeriksaan HTTP nyata setelah URL siap:
+
+```powershell
+./industrial_ai/.venv/Scripts/python.exe industrial_ai/tests/quick_tunnel_check.py https://URL-ANDA.trycloudflare.com
+```
+
+Check ini memverifikasi halaman/aset HTTPS, penolakan akses tanpa login dan origin
+login/CSRF. Ia tidak memverifikasi inference video/Qwen atau login dengan akun nyata.
+Sumber: [Quick Tunnels](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/do-more-with-tunnels/trycloudflare/).
